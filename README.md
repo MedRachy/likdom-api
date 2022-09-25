@@ -1,10 +1,10 @@
 [x] install jetstream
-[] add private remote to github repo
+[x] remote as private repo to github
 [x] run first migration
 
 <!-- users -->
 
-[] user ressources
+[x] user ressources
 [] get the logged in user data
 [] update user : name , email , adresse , ville
 [] update password
@@ -13,7 +13,6 @@
 
 <!-- user authentication & autorization -->
 
-[] authenticate user
-[] register user
+[] create token after registration and authentication
 [] google auth
 [] facebook auth
