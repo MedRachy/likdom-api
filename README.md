@@ -13,6 +13,11 @@
 
 <!-- user authentication & autorization -->
 
-[] create token after registration and authentication
+[x] api/AuthController@login & api/AuthController@register
 [] google auth
 [] facebook auth
+
+<!-- testing -->
+
+[x] test authentication login & register
+[] test get logged in user data
