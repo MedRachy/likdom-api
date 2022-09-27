@@ -22,7 +22,8 @@ Route::post('/register', [AuthController::class, 'register']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::get('/user/{id}', [UsersController::class, 'show']);
+    Route::get('/user', [UsersController::class, 'show']);
+    Route::post('/user/update_password', [UsersController::class, 'update_password']);
 });
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

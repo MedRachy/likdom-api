@@ -5,10 +5,13 @@ namespace Tests\Feature;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\TestCase;
 use Laravel\Jetstream\Features;
 use Laravel\Jetstream\Jetstream;
+use Laravel\Sanctum\Sanctum;
+
 
 class UserControllerTest extends TestCase
 {
@@ -32,7 +35,7 @@ class UserControllerTest extends TestCase
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature(),
         ]);
 
-        $response->assertStatus(200)
+        $response->assertOk(200)
             ->assertJson(
                 fn (AssertableJson $json) =>
                 $json->has('access-token')
@@ -54,7 +57,7 @@ class UserControllerTest extends TestCase
             'email' => $user->email,
             'password' => 'password',
         ]);
-        $response->assertStatus(200)
+        $response->assertOk(200)
             ->assertJson(
                 fn (AssertableJson $json) =>
                 $json->has('access-token')
@@ -76,8 +79,35 @@ class UserControllerTest extends TestCase
         $response->assertStatus(422);
     }
 
-    public function test_api_get_logged_in_user_data_using_token()
+    public function test_api_get_logged_in_user_data()
     {
-        // 
+        if (!Features::hasApiFeatures()) {
+            return $this->markTestSkipped('API support is not enabled.');
+        }
+
+        $user = User::factory()->create(['email' => 'TesteUser@gmail.com']);
+        Sanctum::actingAs($user,  ['*']);
+
+        $response = $this->getJson('/api/user');
+
+        $response->assertOk()
+            ->assertJsonPath('data.email', 'TesteUser@gmail.com');
+    }
+
+
+    public function test_api_password_can_be_updated()
+    {
+        if (!Features::hasApiFeatures()) {
+            return $this->markTestSkipped('API support is not enabled.');
+        }
+
+        Sanctum::actingAs($user = User::factory()->create());
+
+        $response = $this->postJson('/api/user/update_password', [
+            'current_password' => 'password',
+            'password' => 'new-password',
+            'password_confirmation' => 'new-password',
+        ]);
+        $this->assertTrue(Hash::check('new-password', $user->fresh()->password));
     }
 }
