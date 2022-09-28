@@ -3,6 +3,7 @@
 namespace App\Actions\Fortify;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
@@ -18,18 +19,29 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
      */
     public function update($user, array $input)
     {
+        if (isset($input['name']) && isset($input['email'])) {
+            $this->updateNameEmail($user, $input);
+        } elseif (isset($input['ville']) && isset($input['adresse'])) {
+            $this->updateAdresseVille($user, $input);
+        }
+    }
+
+    protected function updateNameEmail($user, array $input)
+    {
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
-            'photo' => ['nullable', 'mimes:jpg,jpeg,png', 'max:1024'],
+            // 'photo' => ['nullable', 'mimes:jpg,jpeg,png', 'max:1024'],
         ])->validateWithBag('updateProfileInformation');
 
         if (isset($input['photo'])) {
             $user->updateProfilePhoto($input['photo']);
         }
 
-        if ($input['email'] !== $user->email &&
-            $user instanceof MustVerifyEmail) {
+        if (
+            $input['email'] !== $user->email &&
+            $user instanceof MustVerifyEmail
+        ) {
             $this->updateVerifiedUser($user, $input);
         } else {
             $user->forceFill([
@@ -37,6 +49,19 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
                 'email' => $input['email'],
             ])->save();
         }
+    }
+
+    protected function updateAdresseVille($user, array $input)
+    {
+        Validator::make($input, [
+            'adresse' => ['required', 'string', 'max:255'],
+            'ville' => ['required', 'string', 'max:255'],
+        ])->validateWithBag('updateProfileInformation');
+
+        $user->forceFill([
+            'adresse' => $input['adresse'],
+            'ville' => $input['ville'],
+        ])->save();
     }
 
     /**

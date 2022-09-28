@@ -6,10 +6,11 @@
 
 [x] user ressources
 [x] get the logged in user data
-[] update user : name , email , adresse , ville
-[x] update password
-[] reset password
+[x] update user : name , email
+[x] update user : adresse , ville
 [] update user phone number : using nexmo sms verification
+[x] update password
+[0] reset password (same as web )
 [] delete user account
 
 <!-- user authentication & autorization -->
@@ -22,7 +23,10 @@
 
 [x] test authentication login & register
 [x] test get logged in user data
+[x] test update user : name , email
+[x] test update user email : must_be_unique
+[x] test update user : adresse , ville
 [x] test update password : can_be_updated
-[] test update password : must_match
-[] test update password : must_be_correct
-[] test reset password
+[x] test update password : must_match
+[x] test update password : must_be_correct
+[0] test reset password same as web

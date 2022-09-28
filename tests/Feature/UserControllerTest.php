@@ -94,7 +94,6 @@ class UserControllerTest extends TestCase
             ->assertJsonPath('data.email', 'TesteUser@gmail.com');
     }
 
-
     public function test_api_password_can_be_updated()
     {
         if (!Features::hasApiFeatures()) {
@@ -103,11 +102,86 @@ class UserControllerTest extends TestCase
 
         Sanctum::actingAs($user = User::factory()->create());
 
-        $response = $this->postJson('/api/user/update_password', [
+        $response = $this->postJson('/api/user/update-password', [
             'current_password' => 'password',
             'password' => 'new-password',
             'password_confirmation' => 'new-password',
         ]);
         $this->assertTrue(Hash::check('new-password', $user->fresh()->password));
+    }
+    public function test_api_new_password_must_match()
+    {
+        if (!Features::hasApiFeatures()) {
+            return $this->markTestSkipped('API support is not enabled.');
+        }
+
+        Sanctum::actingAs($user = User::factory()->create());
+
+        $response = $this->postJson('/api/user/update-password', [
+            'current_password' => 'password',
+            'password' => 'new-password',
+            'password_confirmation' => 'wrong-password',
+        ]);
+        $response->assertStatus(400);
+        $response->assertJsonPath('message.password.0', 'The password confirmation does not match.');
+    }
+
+    public function test_api_current_password_must_be_correct()
+    {
+        if (!Features::hasApiFeatures()) {
+            return $this->markTestSkipped('API support is not enabled.');
+        }
+
+        Sanctum::actingAs($user = User::factory()->create());
+
+        $response = $this->postJson('/api/user/update-password', [
+            'current_password' => 'wrong-password',
+            'password' => 'new-password',
+            'password_confirmation' => 'new-password',
+        ]);
+        $response->assertStatus(400);
+        $response->assertJsonPath('message.current_password.0', 'The provided password does not match your current password.');
+    }
+
+    public function test_api_update_user_name_email()
+    {
+        Sanctum::actingAs($user = User::factory()->create());
+
+        $response = $this->postJson('/api/user/update', [
+            'email' => 'newEmail@gmail.com',
+            'name' => 'new-name',
+        ]);
+
+        $response->assertOk();
+        $this->assertEquals('new-name', $user->fresh()->name);
+        $this->assertEquals('newEmail@gmail.com', $user->fresh()->email);
+    }
+
+    public function test_api_update_user_email_must_be_unique()
+    {
+        Sanctum::actingAs($user = User::factory()->create());
+        $Testuser = User::factory()->create(['email' => 'Testuser@gmail.com']);
+
+        $response = $this->postJson('/api/user/update', [
+            'email' => $Testuser->email,
+            'name' => 'new-name',
+        ]);
+
+        $response->assertStatus(400);
+        $response->assertJsonPath('message.email.0', 'The email has already been taken.');
+    }
+
+    public function test_api_update_user_adresse_ville()
+    {
+        Sanctum::actingAs($user = User::factory()->create());
+
+        $response = $this->postJson('/api/user/update-adresse', [
+            'adresse' => 'Rachidia 1 NR 225',
+            'ville' => 'Mohammedia',
+        ]);
+
+        $response->assertOk();
+        $this->assertEquals('Rachidia 1 NR 225', $user->fresh()->adresse);
+        $this->assertEquals('Mohammedia', $user->fresh()->ville);
     }
 }
