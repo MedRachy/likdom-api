@@ -24,8 +24,8 @@ class User extends Authenticatable
         'name',
         'email',
         'phone',
-        'adresse',
-        'ville',
+        'city',
+        'business_name',
         'role',
         'phone_verified',
         'password',
@@ -52,12 +52,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
-     */
-    // protected $appends = [
-    //     'profile_photo_url',
-    // ];
+    // a user can create many subscriptions
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class);
+    }
 }
