@@ -1,6 +1,11 @@
 [x] install jetstream
 [x] remote as private repo to github
 [x] run first migration
+[x] migrate all tables
+
+<!-- user authentication & autorization -->
+
+[x] api/AuthController@login & api/AuthController@register
 
 <!-- users -->
 
@@ -13,13 +18,20 @@
 [0] reset password (same as web )
 [] delete user account
 
-<!-- user authentication & autorization -->
+<!-- Subsciptions -->
 
-[x] api/AuthController@login & api/AuthController@register
-[] google auth
-[] facebook auth
+[] subscription ressources
+[] create subscription
+[] get user subscription  
+[] get all valider / en_attente subscriptions
+[] get all terminer subscriptions
+[] confirme subscription
+[] update subscription statut
+[] delete subscription
+[] attache / detache subscription with employees
+[] add subscription to records
 
-<!-- testing -->
+<!-- user testing -->
 
 [x] test authentication login & register
 [x] test get logged in user data
