@@ -23,7 +23,10 @@ class CreateSubscriptionsTable extends Migration
                 ->on('offers');
 
             $table->string('service')->nullable();
+            $table->boolean('just_once')->nullable()->default(false);
+
             $table->date('start_date')->nullable();
+            $table->time('start_time', $precision = 0)->nullable();
             $table->date('end_date')->nullable();
             $table->json('passages')->nullable();
 

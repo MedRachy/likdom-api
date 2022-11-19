@@ -18,7 +18,9 @@ class Subscription extends Model
         'user_id',
         'offer_id',
         'service',
+        'just_once',
         'start_date',
+        'start_time',
         'end_date',
         'passages',
         'nbr_hours',
@@ -36,6 +38,7 @@ class Subscription extends Model
      * @var array
      */
     protected $casts = [
+        'just_once' => 'boolean',
         'products' => 'boolean',
         'confirmed' => 'boolean',
         'location' => 'array',

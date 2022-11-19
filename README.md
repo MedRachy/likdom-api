@@ -1,13 +1,14 @@
 ## END POINTS
 
-[] Offers Page
+[x] Offers Pages
 
--   listing part offers :
--   listing pro offers :
+-   get part offers : api/offers/part
+-   get pro offers : api/offers/pro
 
-[] Subscription Page
+[] Subscription just once
 
--   create subscription :
+-   get available hours :
+-   create subscription : /subscription/create/once
 -   get total price :
 
 [] Recap
