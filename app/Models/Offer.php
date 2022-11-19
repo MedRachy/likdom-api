@@ -15,9 +15,11 @@ class Offer extends Model
      * @var string[]
      */
     protected $fillable = [
+        'label',
         'name',
         'description',
         'nbr_passages',
+        'start_price'
     ];
 
     // an offer have many subscriptions
