@@ -19,15 +19,15 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
+            'phone' => 'required',
             'password' => 'required',
         ]);
 
-        $user = User::where('email', $request->email)->first();
+        $user = User::where('phone', $request->phone)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
+                'phone' => ['The provided credentials are incorrect.'],
             ]);
         }
 
@@ -41,6 +41,7 @@ class AuthController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'phone' => ['required', 'string', 'size:13', 'unique:users'],
             'password' => $this->passwordRules(),
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
         ]);
@@ -48,6 +49,7 @@ class AuthController extends Controller
         $user = User::create([
             'name' => $request['name'],
             'email' => $request['email'],
+            'phone' => $request['phone'],
             'password' => Hash::make($request['password']),
         ]);
 

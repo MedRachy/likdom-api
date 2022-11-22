@@ -5,58 +5,48 @@ namespace Tests\Feature;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
-use Laravel\Jetstream\Http\Livewire\UpdatePasswordForm;
-use Livewire\Livewire;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class UpdatePasswordTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_password_can_be_updated()
+    public function test_api_password_can_be_updated()
     {
-        $this->actingAs($user = User::factory()->create());
+        Sanctum::actingAs($user = User::factory()->create());
 
-        Livewire::test(UpdatePasswordForm::class)
-                ->set('state', [
-                    'current_password' => 'password',
-                    'password' => 'new-password',
-                    'password_confirmation' => 'new-password',
-                ])
-                ->call('updatePassword');
-
+        $response = $this->postJson('/api/user/update-password', [
+            'current_password' => 'password',
+            'password' => 'new-password',
+            'password_confirmation' => 'new-password',
+        ]);
         $this->assertTrue(Hash::check('new-password', $user->fresh()->password));
     }
 
-    public function test_current_password_must_be_correct()
+    public function test_api_new_password_must_match()
     {
-        $this->actingAs($user = User::factory()->create());
+        Sanctum::actingAs($user = User::factory()->create());
 
-        Livewire::test(UpdatePasswordForm::class)
-                ->set('state', [
-                    'current_password' => 'wrong-password',
-                    'password' => 'new-password',
-                    'password_confirmation' => 'new-password',
-                ])
-                ->call('updatePassword')
-                ->assertHasErrors(['current_password']);
-
-        $this->assertTrue(Hash::check('password', $user->fresh()->password));
+        $response = $this->postJson('/api/user/update-password', [
+            'current_password' => 'password',
+            'password' => 'new-password',
+            'password_confirmation' => 'wrong-password',
+        ]);
+        $response->assertStatus(400);
+        $response->assertJsonPath('message.password.0', 'The password confirmation does not match.');
     }
 
-    public function test_new_passwords_must_match()
+    public function test_api_current_password_must_be_correct()
     {
-        $this->actingAs($user = User::factory()->create());
+        Sanctum::actingAs($user = User::factory()->create());
 
-        Livewire::test(UpdatePasswordForm::class)
-                ->set('state', [
-                    'current_password' => 'password',
-                    'password' => 'new-password',
-                    'password_confirmation' => 'wrong-password',
-                ])
-                ->call('updatePassword')
-                ->assertHasErrors(['password']);
-
-        $this->assertTrue(Hash::check('password', $user->fresh()->password));
+        $response = $this->postJson('/api/user/update-password', [
+            'current_password' => 'wrong-password',
+            'password' => 'new-password',
+            'password_confirmation' => 'new-password',
+        ]);
+        $response->assertStatus(400);
+        $response->assertJsonPath('message.current_password.0', 'The provided password does not match your current password.');
     }
 }

@@ -4,33 +4,38 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Laravel\Jetstream\Http\Livewire\UpdateProfileInformationForm;
-use Livewire\Livewire;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class ProfileInformationTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_current_profile_information_is_available()
+    public function test_api_update_user_name_email()
     {
-        $this->actingAs($user = User::factory()->create());
+        Sanctum::actingAs($user = User::factory()->create());
 
-        $component = Livewire::test(UpdateProfileInformationForm::class);
+        $response = $this->postJson('/api/user/update', [
+            'email' => 'newEmail@gmail.com',
+            'name' => 'new-name',
+        ]);
 
-        $this->assertEquals($user->name, $component->state['name']);
-        $this->assertEquals($user->email, $component->state['email']);
+        $response->assertOk();
+        $this->assertEquals('new-name', $user->fresh()->name);
+        $this->assertEquals('newEmail@gmail.com', $user->fresh()->email);
     }
 
-    public function test_profile_information_can_be_updated()
+    public function test_api_update_user_email_must_be_unique()
     {
-        $this->actingAs($user = User::factory()->create());
+        Sanctum::actingAs($user = User::factory()->create());
+        $Testuser = User::factory()->create(['email' => 'Testuser@gmail.com']);
 
-        Livewire::test(UpdateProfileInformationForm::class)
-                ->set('state', ['name' => 'Test Name', 'email' => 'test@example.com'])
-                ->call('updateProfileInformation');
+        $response = $this->postJson('/api/user/update', [
+            'email' => $Testuser->email,
+            'name' => 'new-name',
+        ]);
 
-        $this->assertEquals('Test Name', $user->fresh()->name);
-        $this->assertEquals('test@example.com', $user->fresh()->email);
+        $response->assertStatus(400);
+        $response->assertJsonPath('message.email.0', 'The email has already been taken.');
     }
 }

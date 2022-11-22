@@ -21,9 +21,10 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
     {
         if (isset($input['name']) && isset($input['email'])) {
             $this->updateNameEmail($user, $input);
-        } elseif (isset($input['ville']) && isset($input['adresse'])) {
-            $this->updateAdresseVille($user, $input);
         }
+        // elseif (isset($input['ville']) && isset($input['adresse'])) {
+        //     $this->updateAdresseVille($user, $input);
+        // }
     }
 
     protected function updateNameEmail($user, array $input)
@@ -34,9 +35,9 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             // 'photo' => ['nullable', 'mimes:jpg,jpeg,png', 'max:1024'],
         ])->validateWithBag('updateProfileInformation');
 
-        if (isset($input['photo'])) {
-            $user->updateProfilePhoto($input['photo']);
-        }
+        // if (isset($input['photo'])) {
+        //     $user->updateProfilePhoto($input['photo']);
+        // }
 
         if (
             $input['email'] !== $user->email &&
@@ -51,18 +52,18 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
         }
     }
 
-    protected function updateAdresseVille($user, array $input)
-    {
-        Validator::make($input, [
-            'adresse' => ['required', 'string', 'max:255'],
-            'ville' => ['required', 'string', 'max:255'],
-        ])->validateWithBag('updateProfileInformation');
+    // protected function updateAdresseVille($user, array $input)
+    // {
+    //     Validator::make($input, [
+    //         'adresse' => ['required', 'string', 'max:255'],
+    //         'ville' => ['required', 'string', 'max:255'],
+    //     ])->validateWithBag('updateProfileInformation');
 
-        $user->forceFill([
-            'adresse' => $input['adresse'],
-            'ville' => $input['ville'],
-        ])->save();
-    }
+    //     $user->forceFill([
+    //         'adresse' => $input['adresse'],
+    //         'ville' => $input['ville'],
+    //     ])->save();
+    // }
 
     /**
      * Update the given verified user's profile information.

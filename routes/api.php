@@ -26,16 +26,20 @@ Route::get('/offers/pro', [OffersController::class, 'pro_offers']);
 Route::get('/offers/part', [OffersController::class, 'part_offers']);
 
 // get available hours
-Route::get('/get/available/hours/{date}', [SubscriptionsController::class, 'get_available_hours']);
+// Route::get('/get/availability/{date}', [SubscriptionsController::class, 'get_date_availability']);
+// get total price : subscription just once  
+Route::get('/get_total_price/{nbr_hours}/{nbr_employees}', [SubscriptionsController::class, 'get_total_price']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [UsersController::class, 'show']);
     Route::post('/user/update', [UsersController::class, 'update']);
-    Route::post('/user/update-adresse', [UsersController::class, 'update']);
+    // Route::post('/user/update-adresse', [UsersController::class, 'update']);
     Route::post('/user/update-password', [UsersController::class, 'update_password']);
     // subscriptions 
     Route::post('/subscription/create/once', [SubscriptionsController::class, 'store_once']);
+    Route::get('/recap/{id}', [SubscriptionsController::class, 'recap']);
+    Route::put('/confirm/{id}', [SubscriptionsController::class, 'to_confirm']);
 });
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

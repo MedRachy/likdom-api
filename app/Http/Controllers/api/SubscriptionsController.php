@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\SubscriptionResource;
 use App\Models\Employee;
 use App\Models\Subscription;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class SubscriptionsController extends Controller
 {
@@ -19,9 +21,9 @@ class SubscriptionsController extends Controller
         // validation 
         $request->validate([
             'start_date' => 'required|date|after:now',
-            'start_time' => 'required',
-            'nbr_hours' => 'required',
-            'nbr_employees' => 'required',
+            'start_time' => 'required|string',
+            'nbr_hours' => 'required|integer',
+            'nbr_employees' => 'required|integer',
             'location' => 'required',
         ]);
 
@@ -38,44 +40,64 @@ class SubscriptionsController extends Controller
         return new SubscriptionResource($subscription);
     }
 
-    public function get_available_hours($date)
+    public function recap($id)
     {
-        $hours = collect([
-            '08:00',
-            '09:00',
-            '10:00',
-            '11:00',
-            '14:00',
-            '15:00',
-            '16:00',
-            '17:00',
-        ]);
-
-        $employees = Employee::where('availability', 'available')->get();
-        // TODO : filter by city
-
-        foreach ($employees as $employee) {
-            // if at least one employee dont have a subscription 
-            if (!$employee->subscriptions()->exists()) {
-                return $hours;
+        $subscription = Subscription::find($id);
+        if ($subscription) {
+            if (!Gate::allows('access-sub', $subscription)) {
+                // return response('forbidden', 403);
+                return  response()->json(['message' => 'Not authorized.'], 403);
             }
-
-            foreach ($employee->subscriptions as $subscription) {
-                // if no subscription planned for that date 
-                if ($subscription->start_debut != $date) {
-                    return $hours;
-                } else {
-                    $start_time = $subscription->start_time;
-                    $end_time = $start_time + $subscription->nbr_hours;
-                    // reject subscription hours from Hours list
-                    $hours = $hours->reject(function ($value) use ($start_time, $end_time) {
-                        if ($value >= $start_time || $value <= $end_time) {
-                            return true;
-                        }
-                    });
-                }
+            // only access for confirmation or repeter 
+            if ($subscription->confirmed && $subscription->statut != "concluded") {
+                return  response()->json(['message' => 'Not authorized.'], 403);
             }
+            return new SubscriptionResource($subscription);
+        } else {
+            return  response()->json(['message' => 'Not found.'], 404);
         }
-        return $hours;
     }
+
+    public function to_confirm($id)
+    {
+        $subscription = Subscription::find($id);
+        if ($subscription) {
+            if (!Gate::allows('access-sub', $subscription)) {
+                // return response('forbidden', 403);
+                return  response()->json(['message' => 'Not authorized.'], 403);
+            }
+            $subscription->update([
+                'confirmed' => true,
+            ]);
+            return  response()->json(['message' => 'confirmed'], 200);
+        } else {
+            return  response()->json(['message' => 'Not found.'], 404);
+        }
+    }
+
+    public function get_total_price($nbr_hours = 2, $nbr_employees = 1)
+    {
+        $total_price = 0;
+        $hour_price = 75;
+
+        if ($nbr_hours >= 2 && $nbr_employees >= 1) {
+            $total_price = $nbr_hours * $hour_price;
+            $total_price = $total_price * $nbr_employees;
+            return  response()->json(['total_price' => $total_price], 200);
+        } else {
+            return  response()->json(['message' => 'unvalid inputs'], 403);
+        }
+    }
+    // public function get_date_availability($date)
+    // {
+
+    //     $subscriptions = Subscription::where('just_once', 1)
+    //         ->where('start_date', $date)->get();
+
+    //     if ($subscriptions->count() === 0) {
+    //         return response()->json([
+    //             'message' => 'date selected is available'
+    //         ]);
+    //     }
+    // }
 }

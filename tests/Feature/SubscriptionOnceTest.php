@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Models\Employee;
+use App\Models\Subscription;
 use App\Models\User;
 use Laravel\Sanctum\Sanctum;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -18,17 +20,18 @@ class SubscriptionOnceTest extends TestCase
      */
     public function test_can_store_subscription()
     {
-        Sanctum::actingAs($user = User::factory()->create());
+        $user = User::factory()->create();
+        Sanctum::actingAs($user, ['*']);
 
         $location = [
             'long' => 1234,
             'lat' => 5678
         ];
 
-        $response = $this->postJson('/api/subscription/create/once', [
+        $this->postJson('/api/subscription/create/once', [
             'start_date' => '2022-11-30',
             'start_time' => '09:00',
-            'nbr_hours' => '02:00',
+            'nbr_hours' => '2:0',
             'nbr_employees' => 1,
             'location' => json_encode($location)
         ]);
@@ -39,14 +42,79 @@ class SubscriptionOnceTest extends TestCase
         ]);
     }
 
-    public function test_get_available_hours()
+    public function test_recap_page_cannot_be_rendred_if_not_authenticated()
     {
-        $date = '2022-11-30';
-        // employee factory
-        // subscription factory 
+        $subscription = Subscription::factory()
+            ->for(User::factory())
+            ->justOnce()
+            ->create();
+        $response = $this->getJson('/api/recap/' . $subscription->id);
+        $response->assertStatus(401)
+            ->assertJsonPath('message', 'Unauthenticated.');
+    }
 
-        $response = $this->getJson('/api/get/available/hours/' . $date);
+    public function test_recap_page_cannot_be_rendred_if_sub_dont_belong_to_authenticated_user()
+    {
 
-        $response->dump();
+        $user1 = User::factory()->create();
+        $user2 = User::factory()->create();
+        Sanctum::actingAs($user1);
+        $subscription = Subscription::factory()
+            ->for($user2)
+            ->justOnce()
+            ->create();
+        $response = $this->getJson('/api/recap/' . $subscription->id);
+
+        $response->assertStatus(403)
+            ->assertJsonPath('message', 'Not authorized.');
+    }
+
+    public function test_recap_page_is_rendred()
+    {
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
+        $subscription = Subscription::factory()
+            ->for($user)
+            ->justOnce()
+            ->create();
+        $response = $this->getJson('/api/recap/' . $subscription->id);
+
+        $response->assertStatus(200)
+            ->assertJsonPath('data.id', $subscription->id);
+    }
+
+    public function test_confirm_subscription()
+    {
+        $user = User::factory()->create();
+        Sanctum::actingAs($user, ['*']);
+        $subscription = Subscription::factory()
+            ->for($user)
+            ->justOnce()
+            ->create();
+        $response = $this->putJson('/api/confirm/' . $subscription->id);
+
+        $response->assertStatus(200)
+            ->assertJsonPath('message', 'confirmed');
+        $this->assertEquals(1, $subscription->fresh()->confirmed);
+    }
+
+    public function test_get_total_price()
+    {
+        // --------- valid inputs : 
+        $nbr_hours = 2;
+        $nbr_employees = 1;
+        // total expected = 150 
+        $response =  $this->getJson('/api/get_total_price/' . $nbr_hours . '/' . $nbr_employees);
+
+        $response->assertStatus(200)
+            ->assertJsonPath('total_price', 150);
+        // ---------- unvalid inputs : 
+        $nbr_hours = 1;
+        $nbr_employees = 0;
+        // total expected = 150 
+        $response =  $this->getJson('/api/get_total_price/' . $nbr_hours . '/' . $nbr_employees);
+
+        $response->assertStatus(403)
+            ->assertJsonPath('message', 'unvalid inputs');
     }
 }

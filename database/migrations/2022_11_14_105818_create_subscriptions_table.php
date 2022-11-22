@@ -30,7 +30,7 @@ class CreateSubscriptionsTable extends Migration
             $table->date('end_date')->nullable();
             $table->json('passages')->nullable();
 
-            $table->time('nbr_hours', $precision = 0)->nullable();
+            $table->smallInteger('nbr_hours')->nullable();
             $table->smallInteger('nbr_employees')->nullable();
             $table->json('location')->nullable();
             $table->boolean('products')->nullable()->default(false);
