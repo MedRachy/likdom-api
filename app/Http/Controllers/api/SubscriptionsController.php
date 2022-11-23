@@ -14,7 +14,62 @@ use Illuminate\Support\Facades\Gate;
 class SubscriptionsController extends Controller
 {
 
-    public function store_once(Request $request)
+    public function get_all_sub()
+    {
+        // get all pending or valid subscriptions :
+        $subscriptions = Subscription::where('user_id', Auth::id())
+            ->where('status', '!=', 'concluded')
+            ->with('offer')
+            ->latest()
+            ->get();
+
+        return new SubscriptionResource($subscriptions);
+    }
+
+    public function get_all_concluded_sub()
+    {
+        // get all pending or valid subscriptions :
+        $subscriptions = Subscription::where('user_id', Auth::id())
+            ->where('status', 'concluded')
+            ->with('offer')
+            ->latest()
+            ->get();
+
+        return new SubscriptionResource($subscriptions);
+    }
+
+    public function store_sub(Request $request)
+    {
+        // dump($request->passages);
+        // dd(json_decode($request->passages));
+        // validation 
+        $request->validate([
+            'start_date' => 'required|date|after:tomorrow',
+            'nbr_hours' => 'required|integer',
+            'nbr_employees' => 'required|integer',
+            'nbr_months' => 'required|integer',
+            'passages' => 'required',
+            'location' => 'required',
+            'city' => 'required',
+            'price' => 'required'
+        ]);
+
+        $subscription = Subscription::create([
+            'user_id' => Auth::id(),
+            'start_date' => $request->start_date,
+            'nbr_hours' => $request->nbr_hours,
+            'nbr_employees' => $request->nbr_employees,
+            'passages' => json_decode($request->passages),
+            'location' => json_decode($request->location),
+            'nbr_months' => $request->nbr_months,
+            'city' => $request->city,
+            'price' => $request->price,
+        ]);
+
+        return new SubscriptionResource($subscription);
+    }
+
+    public function store_reserv(Request $request)
     {
         // autorization 
 
@@ -25,6 +80,8 @@ class SubscriptionsController extends Controller
             'nbr_hours' => 'required|integer',
             'nbr_employees' => 'required|integer',
             'location' => 'required',
+            'city' => 'required',
+            'price' => 'required'
         ]);
 
         $subscription = Subscription::create([
@@ -34,7 +91,9 @@ class SubscriptionsController extends Controller
             'nbr_hours' => $request->nbr_hours,
             'nbr_employees' => $request->nbr_employees,
             'location' => json_decode($request->location),
+            'city' => $request->city,
             'just_once' => true,
+            'price' => $request->price,
         ]);
 
         return new SubscriptionResource($subscription);
@@ -42,7 +101,9 @@ class SubscriptionsController extends Controller
 
     public function recap($id)
     {
-        $subscription = Subscription::find($id);
+        $subscription = Subscription::where('id', $id)
+            ->with('offer')
+            ->first();
         if ($subscription) {
             if (!Gate::allows('access-sub', $subscription)) {
                 // return response('forbidden', 403);
@@ -88,16 +149,34 @@ class SubscriptionsController extends Controller
             return  response()->json(['message' => 'unvalid inputs'], 403);
         }
     }
-    // public function get_date_availability($date)
-    // {
 
-    //     $subscriptions = Subscription::where('just_once', 1)
-    //         ->where('start_date', $date)->get();
+    public function get_pro_total_price($nbr_hours = 1, $nbr_employees = 1, $nbr_passages = 1)
+    {
+        $total_price = 0;
+        $hour_price = 75;
 
-    //     if ($subscriptions->count() === 0) {
-    //         return response()->json([
-    //             'message' => 'date selected is available'
-    //         ]);
-    //     }
-    // }
+        if ($nbr_hours >= 2 && $nbr_employees >= 1 && $nbr_passages  >= 1) {
+            $total_hours = $nbr_passages * 4;
+            $total_price = $nbr_hours * $hour_price * $total_hours;
+            $total_price = $total_price * $nbr_employees;
+            return  response()->json(['total_price' => $total_price], 200);
+        } else {
+            return  response()->json(['message' => 'unvalid inputs'], 403);
+        }
+    }
+
+    public function get_part_total_price($nbr_hours = 2, $nbr_employees = 1, $nbr_passages = 1)
+    {
+        $total_price = 0;
+        $hour_price = 55;
+
+        if ($nbr_hours >= 2 && $nbr_employees >= 1 && $nbr_passages  >= 1) {
+            $total_hours = $nbr_passages * 4;
+            $total_price = $nbr_hours * $hour_price * $total_hours;
+            $total_price = $total_price * $nbr_employees;
+            return  response()->json(['total_price' => $total_price], 200);
+        } else {
+            return  response()->json(['message' => 'unvalid inputs'], 403);
+        }
+    }
 }

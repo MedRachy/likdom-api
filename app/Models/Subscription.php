@@ -26,9 +26,11 @@ class Subscription extends Model
         'nbr_hours',
         'nbr_employees',
         'location',
+        'city',
         'products',
         'confirmed',
         'status',
+        'nbr_months',
         'price',
     ];
 

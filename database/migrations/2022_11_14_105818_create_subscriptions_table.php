@@ -26,16 +26,18 @@ class CreateSubscriptionsTable extends Migration
             $table->boolean('just_once')->nullable()->default(false);
 
             $table->date('start_date')->nullable();
-            $table->time('start_time', $precision = 0)->nullable();
+            $table->string('start_time')->nullable();
             $table->date('end_date')->nullable();
             $table->json('passages')->nullable();
 
             $table->smallInteger('nbr_hours')->nullable();
             $table->smallInteger('nbr_employees')->nullable();
             $table->json('location')->nullable();
+            $table->string('city')->nullable();
             $table->boolean('products')->nullable()->default(false);
             $table->boolean('confirmed')->nullable()->default(false);
             $table->string('status')->nullable()->default('pending');
+            $table->smallInteger('nbr_months')->nullable();
             $table->float('price')->nullable();
             $table->timestamps();
         });

@@ -21,27 +21,26 @@ use Illuminate\Support\Facades\Route;
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 
-// offers 
+// get offers 
 Route::get('/offers/pro', [OffersController::class, 'pro_offers']);
 Route::get('/offers/part', [OffersController::class, 'part_offers']);
 
-// get available hours
-// Route::get('/get/availability/{date}', [SubscriptionsController::class, 'get_date_availability']);
-// get total price : subscription just once  
+// get total price 
 Route::get('/get_total_price/{nbr_hours}/{nbr_employees}', [SubscriptionsController::class, 'get_total_price']);
+Route::get('/get_pro_total_price/{nbr_hours}/{nbr_employees}/{nbr_passages}', [SubscriptionsController::class, 'get_pro_total_price']);
+Route::get('/get_part_total_price/{nbr_hours}/{nbr_employees}/{nbr_passages}', [SubscriptionsController::class, 'get_part_total_price']);
 
 Route::middleware('auth:sanctum')->group(function () {
+    // user account
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [UsersController::class, 'show']);
     Route::post('/user/update', [UsersController::class, 'update']);
-    // Route::post('/user/update-adresse', [UsersController::class, 'update']);
     Route::post('/user/update-password', [UsersController::class, 'update_password']);
     // subscriptions 
-    Route::post('/subscription/create/once', [SubscriptionsController::class, 'store_once']);
+    Route::get('/get/subscriptions', [SubscriptionsController::class, 'get_all_sub']);
+    Route::get('/get/subscriptions/concluded', [SubscriptionsController::class, 'get_all_concluded_sub']);
+    Route::post('/create/subscription', [SubscriptionsController::class, 'store_sub']);
+    Route::post('/create/reservation', [SubscriptionsController::class, 'store_reserv']);
     Route::get('/recap/{id}', [SubscriptionsController::class, 'recap']);
     Route::put('/confirm/{id}', [SubscriptionsController::class, 'to_confirm']);
 });
-
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });

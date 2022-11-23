@@ -28,59 +28,20 @@ class SubscriptionOnceTest extends TestCase
             'lat' => 5678
         ];
 
-        $this->postJson('/api/subscription/create/once', [
+        $this->postJson('/api/create/reservation', [
             'start_date' => '2022-11-30',
             'start_time' => '09:00',
-            'nbr_hours' => '2:0',
+            'nbr_hours' => 2,
             'nbr_employees' => 1,
-            'location' => json_encode($location)
+            'location' => json_encode($location),
+            'city' => 'Mohammedia',
+            'price' => 230
         ]);
 
         $this->assertDatabaseHas('subscriptions', [
             'user_id' => $user->id,
             'start_date' => '2022-11-30',
         ]);
-    }
-
-    public function test_recap_page_cannot_be_rendred_if_not_authenticated()
-    {
-        $subscription = Subscription::factory()
-            ->for(User::factory())
-            ->justOnce()
-            ->create();
-        $response = $this->getJson('/api/recap/' . $subscription->id);
-        $response->assertStatus(401)
-            ->assertJsonPath('message', 'Unauthenticated.');
-    }
-
-    public function test_recap_page_cannot_be_rendred_if_sub_dont_belong_to_authenticated_user()
-    {
-
-        $user1 = User::factory()->create();
-        $user2 = User::factory()->create();
-        Sanctum::actingAs($user1);
-        $subscription = Subscription::factory()
-            ->for($user2)
-            ->justOnce()
-            ->create();
-        $response = $this->getJson('/api/recap/' . $subscription->id);
-
-        $response->assertStatus(403)
-            ->assertJsonPath('message', 'Not authorized.');
-    }
-
-    public function test_recap_page_is_rendred()
-    {
-        $user = User::factory()->create();
-        Sanctum::actingAs($user);
-        $subscription = Subscription::factory()
-            ->for($user)
-            ->justOnce()
-            ->create();
-        $response = $this->getJson('/api/recap/' . $subscription->id);
-
-        $response->assertStatus(200)
-            ->assertJsonPath('data.id', $subscription->id);
     }
 
     public function test_confirm_subscription()
@@ -98,7 +59,7 @@ class SubscriptionOnceTest extends TestCase
         $this->assertEquals(1, $subscription->fresh()->confirmed);
     }
 
-    public function test_get_total_price()
+    public function test_get_subscription_total_price()
     {
         // --------- valid inputs : 
         $nbr_hours = 2;
