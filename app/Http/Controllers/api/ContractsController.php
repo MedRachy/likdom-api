@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Contract;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,7 +22,7 @@ class ContractsController extends Controller
             'capital' => 'required'
         ]);
 
-        Contract::create([
+        $contract = Contract::create([
             'user_id' => Auth::id(),
             'subscription_id' => $request->subscription_id,
             'manager_name' => $request->manager_name,
@@ -31,5 +32,19 @@ class ContractsController extends Controller
             'rc_number' => $request->rc_number,
             'capital' => $request->capital,
         ]);
+
+
+        view()->share('contract', $contract->toArray());
+        $pdf = Pdf::loadView('pdf.contract', $contract->toArray());
+        return $pdf->download('Likdom_contract.pdf');
+    }
+
+    public function get_pdf()
+    {
+        // $data = $contract->toArray();
+        $data = ['name' => 'the name', 'email' => 'the email'];
+        view()->share('data', $data);
+        $pdf = Pdf::loadView('pdf.contract', $data);
+        return $pdf->download('Likdom_contract.pdf');
     }
 }

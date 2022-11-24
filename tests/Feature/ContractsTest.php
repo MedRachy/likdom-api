@@ -42,6 +42,7 @@ class ContractsTest extends TestCase
             'manager_name' => 'a manager name',
         ]);
 
+        $response->dump();
         $response->assertStatus(200);
     }
 }
