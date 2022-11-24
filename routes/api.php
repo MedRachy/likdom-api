@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\api\AuthController;
+use App\Http\Controllers\api\ContractsController;
 use App\Http\Controllers\api\OffersController;
 use App\Http\Controllers\api\SubscriptionsController;
 use App\Http\Controllers\UsersController;
@@ -36,11 +37,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [UsersController::class, 'show']);
     Route::post('/user/update', [UsersController::class, 'update']);
     Route::post('/user/update-password', [UsersController::class, 'update_password']);
+    Route::post('/user/delete', [UsersController::class, 'destroy']);
     // subscriptions 
     Route::get('/get/subscriptions', [SubscriptionsController::class, 'get_all_sub']);
     Route::get('/get/subscriptions/concluded', [SubscriptionsController::class, 'get_all_concluded_sub']);
     Route::post('/create/subscription', [SubscriptionsController::class, 'store_sub']);
-    Route::post('/create/reservation', [SubscriptionsController::class, 'store_reserv']);
     Route::get('/recap/{id}', [SubscriptionsController::class, 'recap']);
+    // reservations
+    Route::post('/create/reservation', [SubscriptionsController::class, 'store_reserv']);
     Route::put('/confirm/{id}', [SubscriptionsController::class, 'to_confirm']);
+    // contracts
+    Route::post('/create/contract', [ContractsController::class, 'store']);
 });

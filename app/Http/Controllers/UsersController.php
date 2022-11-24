@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Actions\Fortify\UpdateUserPassword;
 use App\Actions\Fortify\UpdateUserProfileInformation;
+use Laravel\Jetstream\Contracts\DeletesUsers;
+use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Validation\ValidationException;
 
 class UsersController extends Controller
@@ -43,8 +45,10 @@ class UsersController extends Controller
         }
     }
 
-    public function destroy($id)
+    public function destroy(DeletesUsers $deleter)
     {
-        //
+        // $user = User::find(Auth::id());
+
+        $deleter->delete(Auth::user()->fresh());
     }
 }

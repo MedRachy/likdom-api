@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Models\Employee;
 use App\Models\Subscription;
 use App\Models\User;
 use Laravel\Sanctum\Sanctum;
@@ -10,7 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
-class SubscriptionOnceTest extends TestCase
+class ReservationTest extends TestCase
 {
     use RefreshDatabase;
     /**
@@ -18,7 +17,7 @@ class SubscriptionOnceTest extends TestCase
      *
      * @return void
      */
-    public function test_can_store_subscription()
+    public function test_can_store_reservation()
     {
         $user = User::factory()->create();
         Sanctum::actingAs($user, ['*']);
@@ -44,7 +43,7 @@ class SubscriptionOnceTest extends TestCase
         ]);
     }
 
-    public function test_confirm_subscription()
+    public function test_confirm_reservation()
     {
         $user = User::factory()->create();
         Sanctum::actingAs($user, ['*']);
@@ -59,7 +58,7 @@ class SubscriptionOnceTest extends TestCase
         $this->assertEquals(1, $subscription->fresh()->confirmed);
     }
 
-    public function test_get_subscription_total_price()
+    public function test_get_total_price()
     {
         // --------- valid inputs : 
         $nbr_hours = 2;

@@ -10,7 +10,7 @@
 -   update user info (name & email) : api/user/update
 -   update user password : api/user/update-password
 -   update phone number :
--   delete a user account :
+-   delete a user account : api/user/delete
 
 [x] Offers Pages
 
@@ -40,5 +40,5 @@
 
 [] Contract
 
--   create a contract :
+-   create a contract : api/create/contract
 -   generate a contract :

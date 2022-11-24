@@ -40,8 +40,7 @@ class SubscriptionsController extends Controller
 
     public function store_sub(Request $request)
     {
-        // dump($request->passages);
-        // dd(json_decode($request->passages));
+
         // validation 
         $request->validate([
             'start_date' => 'required|date|after:tomorrow',

@@ -15,6 +15,8 @@ class Contract extends Model
      * @var string[]
      */
     protected $fillable = [
+        'user_id',
+        'subscription_id',
         'manager_name',
         'company_name',
         'adress',
