@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Offer;
 use App\Models\Subscription;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Testing\Fluent\AssertableJson;
@@ -52,9 +53,11 @@ class SubscriptionsTest extends TestCase
 
     public function test_can_store_subscription()
     {
+        $offer = Offer::factory()->create();
         $user = User::factory()->create();
         Sanctum::actingAs($user, ['*']);
 
+        $valideDate = Carbon::now()->addDays(5)->format('Y-m-d');
         $location = [
             'long' => 1234,
             'lat' => 5678
@@ -67,7 +70,8 @@ class SubscriptionsTest extends TestCase
         ];
 
         $response =    $this->postJson('/api/create/subscription', [
-            'start_date' => '2022-11-30',
+            'offer_id' => $offer->id,
+            'start_date' => $valideDate,
             'nbr_hours' => 2,
             'nbr_employees' => 1,
             'nbr_months' => 1,
@@ -78,11 +82,47 @@ class SubscriptionsTest extends TestCase
         ]);
 
         // $response->dump();
-
+        $response->assertJsonMissingValidationErrors('start_date');
         $this->assertDatabaseHas('subscriptions', [
             'user_id' => $user->id,
-            'start_date' => '2022-11-30'
+            'offer_id' => $offer->id,
+            'start_date' => $valideDate
         ]);
+    }
+
+    public function test_start_date_must_be_after_tomorrow()
+    {
+        $offer = Offer::factory()->create();
+        $user = User::factory()->create();
+        Sanctum::actingAs($user, ['*']);
+
+        $valideDate = Carbon::now()->addDays(5)->format('Y-m-d');
+        $unvalidDate =  Carbon::today()->format('Y-m-d');
+
+        $location = [
+            'long' => 1234,
+            'lat' => 5678
+        ];
+
+        $passages = [
+            ["day" => "Lundi", "time" => '09:00'],
+            ["day" => "Mercredi", "time" => '10:00'],
+            ["day" => "Vendredi", "time" => '11:00']
+        ];
+
+        $response =   $this->postJson('/api/create/subscription', [
+            'offer_id' => $offer->id,
+            'start_date' => $unvalidDate,
+            'nbr_hours' => 2,
+            'nbr_employees' => 1,
+            'nbr_months' => 1,
+            'passages' => json_encode($passages),
+            'location' => json_encode($location),
+            'city' => 'Mohammedia',
+            'price' => 300
+        ]);
+
+        $response->assertJsonValidationErrorFor('start_date');
     }
 
     public function test_get_pro_subscription_total_price()

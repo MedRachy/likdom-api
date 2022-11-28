@@ -43,6 +43,7 @@ class SubscriptionsController extends Controller
 
         // validation 
         $request->validate([
+            'offer_id' => 'required',
             'start_date' => 'required|date|after:tomorrow',
             'nbr_hours' => 'required|integer',
             'nbr_employees' => 'required|integer',
@@ -55,6 +56,7 @@ class SubscriptionsController extends Controller
 
         $subscription = Subscription::create([
             'user_id' => Auth::id(),
+            'offer_id' => $request->offer_id,
             'start_date' => $request->start_date,
             'nbr_hours' => $request->nbr_hours,
             'nbr_employees' => $request->nbr_employees,
