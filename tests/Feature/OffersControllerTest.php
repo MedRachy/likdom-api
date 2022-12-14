@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Database\Seeders\OfferSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -15,6 +16,8 @@ class OffersControllerTest extends TestCase
      */
     public function test_get_pro_offers()
     {
+        $this->seed(OfferSeeder::class);
+
         $response = $this->getJson('/api/offers/pro');
 
         $response->assertOk()

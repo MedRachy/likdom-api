@@ -15,10 +15,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('coming_soon');
 });
 
-Route::get('/pdf', [ContractsController::class, 'get_pdf']);
+// Route::get('/pdf', [ContractsController::class, 'get_pdf']);
 
 // Route::middleware([
 //     'auth:sanctum',

@@ -216,6 +216,6 @@ class SubscriptionsTest extends TestCase
             ->assertJsonPath('data.id', $subscription->id)
             ->assertJsonPath('data.offer.nbr_passages', $offer->nbr_passages);
 
-        $response->dump();
+        // $response->dump();
     }
 }

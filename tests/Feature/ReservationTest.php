@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Subscription;
 use App\Models\User;
+use Carbon\Carbon;
 use Laravel\Sanctum\Sanctum;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -22,13 +23,16 @@ class ReservationTest extends TestCase
         $user = User::factory()->create();
         Sanctum::actingAs($user, ['*']);
 
+        $valideDate = Carbon::now()->addDays(2)->format('Y-m-d');
+        $unvalidDate =  Carbon::today()->format('Y-m-d');
+
         $location = [
             'long' => 1234,
             'lat' => 5678
         ];
 
         $this->postJson('/api/create/reservation', [
-            'start_date' => '2022-11-30',
+            'start_date' => $valideDate,
             'start_time' => '09:00',
             'nbr_hours' => 2,
             'nbr_employees' => 1,
@@ -39,10 +43,33 @@ class ReservationTest extends TestCase
 
         $this->assertDatabaseHas('subscriptions', [
             'user_id' => $user->id,
-            'start_date' => '2022-11-30',
+            'start_date' => $valideDate,
         ]);
     }
 
+    public function test_start_date_must_be_tomorrow()
+    {
+        $user = User::factory()->create();
+        Sanctum::actingAs($user, ['*']);
+
+        $unvalidDate =  Carbon::today()->format('Y-m-d');
+
+        $location = [
+            'long' => 1234,
+            'lat' => 5678
+        ];
+        $response = $this->postJson('/api/create/reservation', [
+            'start_date' => $unvalidDate,
+            'start_time' => '09:00',
+            'nbr_hours' => 2,
+            'nbr_employees' => 1,
+            'location' => json_encode($location),
+            'city' => 'Mohammedia',
+            'price' => 230
+        ]);
+
+        $response->assertJsonValidationErrorFor('start_date');
+    }
     public function test_confirm_reservation()
     {
         $user = User::factory()->create();
