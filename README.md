@@ -33,7 +33,7 @@
 -   get subscription : api/recap/{subscription_id}
 -   confirm subscription : api/confirm/{subscription_id}
 
-[x] Mes abonnements
+[x] My Subscriptions
 
 -   get all user pending and valid subscriptions : api/get/subscriptions
 -   get all user concluded subscriptions : api/get/subscriptions/concluded
@@ -41,4 +41,4 @@
 [] Contract
 
 -   create a contract : api/create/contract
--   generate a contract :
+-   generate a contract as pdf doc :
