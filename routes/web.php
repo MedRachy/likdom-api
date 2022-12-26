@@ -1,6 +1,10 @@
 <?php
 
+use App\Http\Controllers\Admin\AbonmtController;
 use App\Http\Controllers\Admin\DashbordController;
+use App\Http\Controllers\Admin\EmplyController;
+use App\Http\Controllers\Admin\ReservController;
+use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\api\ContractsController;
 use Illuminate\Support\Facades\Route;
 
@@ -63,9 +67,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'isAdmin']], functio
         return $query;
     })->name('admin.Emplysearch');
     // search users list
-    Route::get('/Usersearch/{query?}', [UsersController::class, 'search'], function ($query = null) {
-        return $query;
-    })->name('admin.Usersearch');
+    Route::get('/Usersearch', [UsersController::class, 'search'])->name('admin.Usersearch');
     // search entreps list
     Route::get('/Entrepsearch/{query?}', [EntrepsController::class, 'search'], function ($query = null) {
         return $query;

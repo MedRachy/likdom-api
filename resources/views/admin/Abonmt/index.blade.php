@@ -31,40 +31,40 @@
                                 <div>
                                     <h6 class="fw-bold">Statut</h6>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="en_attente" name="statut"
-                                            value="en_attente">
-                                        <label class="form-check-label" for="en_attente">En attente</label>
+                                        <input class="form-check-input" type="checkbox" id="pending" name="status"
+                                            value="pending">
+                                        <label class="form-check-label" for="pending">En attente</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="valider" name="statut"
-                                            value="valider">
-                                        <label class="form-check-label" for="valider">Valider</label>
+                                        <input class="form-check-input" type="checkbox" id="valid" name="status"
+                                            value="valid">
+                                        <label class="form-check-label" for="valid">Valider</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="annuler" name="statut"
-                                            value="annuler">
-                                        <label class="form-check-label" for="annuler">Annuler</label>
+                                        <input class="form-check-input" type="checkbox" id="cancel" name="status"
+                                            value="cancel">
+                                        <label class="form-check-label" for="cancel">Annuler</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="terminer" name="statut"
-                                            value="terminer">
-                                        <label class="form-check-label" for="terminer">Terminer</label>
+                                        <input class="form-check-input" type="checkbox" id="concluded" name="status"
+                                            value="concluded">
+                                        <label class="form-check-label" for="concluded">Terminer</label>
                                     </div>
                                 </div>
                                 <div>
                                     <h6 class="fw-bold">Ville</h6>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="ville1" name="ville"
+                                        <input class="form-check-input" type="checkbox" id="ville1" name="city"
                                             value="Rabat">
                                         <label class="form-check-label" for="ville1">Rabat</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="ville2" name="ville"
+                                        <input class="form-check-input" type="checkbox" id="ville2" name="city"
                                             value="Mohammedia">
                                         <label class="form-check-label" for="ville2">Mohammedia</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="ville3" name="ville"
+                                        <input class="form-check-input" type="checkbox" id="ville3" name="city"
                                             value="Casablanca">
                                         <label class="form-check-label" for="ville3">Casablanca</label>
                                     </div>
@@ -73,74 +73,64 @@
                             </li>
                             <li class="list-group-item d-flex justify-content-between">
                                 <div>
-                                    <h6 class="fw-bold">Pack</h6>
+                                    <h6 class="fw-bold">Offres</h6>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="pack1" name="pack"
-                                            value="Likyoum">
-                                        <label class="form-check-label" for="pack1">Likyoum</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="pack2" name="pack"
-                                            value="Likmeta">
-                                        <label class="form-check-label" for="pack2">Likmeta</label>
+                                        <input class="form-check-input" type="checkbox" id="pack1" name="offer"
+                                            value="offer_1">
+                                        <label class="form-check-label" for="pack1">Offre N°1</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="pack3" name="pack"
-                                            value="Likdima">
-                                        <label class="form-check-label" for="pack3">Likdima</label>
-                                    </div>
-
-                                </div>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between ">
-                                <div>
-                                    <h6 class="fw-bold">Type logement</h6>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="type1"
-                                            name="type_logement" value="appartement">
-                                        <label class="form-check-label" for="type1">Appartement</label>
+                                        <input class="form-check-input" type="checkbox" id="pack2" name="offer"
+                                            value="offer_2">
+                                        <label class="form-check-label" for="pack2">Offre N°2</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="type2"
-                                            name="type_logement" value="maison">
-                                        <label class="form-check-label" for="type2">Maison</label>
+                                        <input class="form-check-input" type="checkbox" id="pack3" name="offer"
+                                            value="offer_3">
+                                        <label class="form-check-label" for="pack3">Offre N°3</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="type3"
-                                            name="type_logement" value="villa">
-                                        <label class="form-check-label" for="type3">Villa</label>
+                                        <input class="form-check-input" type="checkbox" id="pack4" name="offer"
+                                            value="offer_4">
+                                        <label class="form-check-label" for="pack4">Offre N°4</label>
                                     </div>
-                                </div>
-                                <div style="width: 225px;">
-                                    <h6 class="fw-bold">Prix</h6>
-                                    <div class="input-group flex-nowrap m-1">
-                                        <span class="input-group-text" id="min">min</span>
-                                        <input id="prix_min" type="number" class="form-control" placeholder=". . ."
-                                            aria-label=". . ." aria-describedby="min">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="pack5" name="offer"
+                                            value="offer_5">
+                                        <label class="form-check-label" for="pack5">Offre N°5</label>
                                     </div>
-                                    <div class="input-group flex-nowrap m-1">
-                                        <span class="input-group-text" id="max">max</span>
-                                        <input id="prix_max" type="number" class="form-control" placeholder=". . ."
-                                            aria-label=". . ." aria-describedby="max">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="pack6" name="offer"
+                                            value="offer_6">
+                                        <label class="form-check-label" for="pack6">Offre N°6</label>
                                     </div>
-                                    {{-- <label for="customRange2" class="form-label">Prix</label>
-                        <input type="range" class="form-range" min="100" max="500" id="customRange2" 
-                        name="rangeInput" min="0" max="100" onchange="updateTextInput(this.value);">
-                        <input type="text" id="textInput" value=""> --}}
                                 </div>
                             </li>
                             <li class="list-group-item d-flex justify-content-between ">
                                 <div>
                                     <h6 class="fw-bold">Période</h6>
                                     <div class="input-group flex-nowrap m-1">
-                                        <span class="input-group-text" id="labeldate_debut">D</span>
-                                        <input id="date_debut" type="date" class="form-control"
-                                            aria-describedby="labeldate_debut" name="date_debut">
+                                        <span class="input-group-text" id="labelstart_date">D</span>
+                                        <input id="start_date" type="date" class="form-control"
+                                            aria-describedby="labelstart_date" name="start_date">
                                     </div>
                                     <div class="input-group flex-nowrap m-1">
-                                        <span class="input-group-text" id="labeldate_fin">F</span>
-                                        <input id="date_fin" type="date" class="form-control"
-                                            aria-describedby="labeldate_fin" name="date_fin">
+                                        <span class="input-group-text" id="labelend_date">F</span>
+                                        <input id="end_date" type="date" class="form-control"
+                                            aria-describedby="labelend_date" name="end_date">
+                                    </div>
+                                </div>
+                                <div style="width: 225px;">
+                                    <h6 class="fw-bold">Prix</h6>
+                                    <div class="input-group flex-nowrap m-1">
+                                        <span class="input-group-text" id="min">min</span>
+                                        <input id="min_price" type="number" class="form-control" placeholder=". . ."
+                                            aria-label=". . ." aria-describedby="min">
+                                    </div>
+                                    <div class="input-group flex-nowrap m-1">
+                                        <span class="input-group-text" id="max">max</span>
+                                        <input id="max_price" type="number" class="form-control" placeholder=". . ."
+                                            aria-label=". . ." aria-describedby="max">
                                     </div>
                                 </div>
                             </li>
@@ -169,9 +159,8 @@
                             <thead>
                                 <tr>
                                     <th scope="col">Ref</th>
-                                    <th scope="col">Pack</th>
+                                    <th scope="col">Offre</th>
                                     <th scope="col">Ville</th>
-                                    <th scope="col">Type log</th>
                                     <th scope="col">Date debut</th>
                                     <th scope="col">Prix</th>
                                     <th scope="col">Statut</th>
@@ -230,22 +219,19 @@
                             "data": "id"
                         },
                         {
-                            "data": "pack"
+                            "data": "offer"
                         },
                         {
-                            "data": "ville"
+                            "data": "city"
                         },
                         {
-                            "data": "type_logement"
+                            "data": "start_date"
                         },
                         {
-                            "data": "date_debut"
+                            "data": "price"
                         },
                         {
-                            "data": "prix"
-                        },
-                        {
-                            "data": "statut"
+                            "data": "status"
                         },
                         {
                             "data": 'action',
@@ -254,17 +240,17 @@
                         },
                     ],
                     "createdRow": function(row, data, index) {
-                        if (data["statut"] === "valider") {
-                            $('td', row).eq(6).wrapInner('<span class="badge bg-success"></span>');
+                        if (data["status"] === "valid") {
+                            $('td', row).eq(5).wrapInner('<span class="badge bg-success"></span>');
                         }
-                        if (data["statut"] === "terminer") {
-                            $('td', row).eq(6).wrapInner('<span class="badge bg-secondary"></span>');
+                        if (data["status"] === "concluded") {
+                            $('td', row).eq(5).wrapInner('<span class="badge bg-secondary"></span>');
                         }
-                        if (data["statut"] === "annuler") {
-                            $('td', row).eq(6).wrapInner('<span class="badge bg-danger"></span>');
+                        if (data["status"] === "cancel") {
+                            $('td', row).eq(5).wrapInner('<span class="badge bg-danger"></span>');
                         }
-                        if (data["statut"] === "en_attente") {
-                            $('td', row).eq(6).wrapInner('<span class="badge bg-warning"></span>');
+                        if (data["status"] === "pending") {
+                            $('td', row).eq(5).wrapInner('<span class="badge bg-warning"></span>');
                         }
                     }
                 });
@@ -287,61 +273,50 @@
                 function getinputdata() {
                     var paramsinput = {};
                     var paramschecked = '';
-                    var statut = {};
-                    var ville = {};
-                    var pack = {};
-                    var type_logement = {};
+                    var status = {};
+                    var city = {};
+                    var offer = {};
+
                     // get input values 
-                    $("input:checkbox[name=statut]:checked").each(function(i, e) {
-                        statut[$(this).val()] = e.checked;
+                    $("input:checkbox[name=status]:checked").each(function(i, e) {
+                        status[$(this).val()] = e.checked;
                     });
-                    $("input:checkbox[name=ville]:checked").each(function(i, e) {
-                        ville[$(this).val()] = e.checked;
+                    $("input:checkbox[name=city]:checked").each(function(i, e) {
+                        city[$(this).val()] = e.checked;
                     });
-                    $("input:checkbox[name=pack]:checked").each(function(i, e) {
-                        pack[$(this).val()] = e.checked;
-                    });
-                    $("input:checkbox[name=type_logement]:checked").each(function(i, e) {
-                        type_logement[$(this).val()] = e.checked;
+                    $("input:checkbox[name=offer]:checked").each(function(i, e) {
+                        offer[$(this).val()] = e.checked;
                     });
 
-                    if ($("#prix_min").val()) {
-                        paramsinput['prix_min'] = $("#prix_min").val();
+                    if ($("#min_price").val()) {
+                        paramsinput['min_price'] = $("#min_price").val();
                     }
-                    if ($("#prix_max").val()) {
-                        paramsinput['prix_max'] = $("#prix_max").val();
+                    if ($("#max_price").val()) {
+                        paramsinput['max_price'] = $("#max_price").val();
                     }
-                    if ($("#date_debut").val()) {
-                        paramsinput['date_debut'] = $("#date_debut").val();
+                    if ($("#start_date").val()) {
+                        paramsinput['start_date'] = $("#start_date").val();
                     }
-                    if ($("#date_fin").val()) {
-                        paramsinput['date_fin'] = $("#date_fin").val();
+                    if ($("#end_date").val()) {
+                        paramsinput['end_date'] = $("#end_date").val();
                     }
                     // convert object to string param and concatinate 
-                    if (!$.isEmptyObject(statut)) {
-                        var statut_param = $.param(statut);
-                        paramschecked = statut_param + '&';
+                    if (!$.isEmptyObject(status)) {
+                        var status_param = $.param(status);
+                        paramschecked = status_param + '&';
                     }
-                    if (!$.isEmptyObject(ville)) {
-                        var ville_param = $.param(ville);
-                        paramschecked = paramschecked + ville_param + '&';
+                    if (!$.isEmptyObject(city)) {
+                        var city_param = $.param(city);
+                        paramschecked = paramschecked + city_param + '&';
 
                     }
-                    if (!$.isEmptyObject(pack)) {
-                        var pack_param = $.param(pack);
-                        paramschecked = paramschecked + pack_param + '&';
-                    }
-                    if (!$.isEmptyObject(type_logement)) {
-                        var type_logement_param = $.param(type_logement);
-                        paramschecked = paramschecked + type_logement_param + '&';
+                    if (!$.isEmptyObject(offer)) {
+                        var offer_param = $.param(offer);
+                        paramschecked = paramschecked + offer_param + '&';
                     }
 
                     var paramsinput_string = $.param(paramsinput);
                     var params = 'params=true&' + paramschecked + paramsinput_string;
-                    // console.log(paramsinput_string);
-                    // console.log(paramschecked);
-                    // console.log(params);
-
                     return params;
                 }
 

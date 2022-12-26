@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Reservation;
 use App\Models\Employee;
+use App\Models\Subscription;
 use Carbon\Carbon;
 use DataTables;
 
@@ -21,143 +22,100 @@ class ReservController extends Controller
     public function search(Request $request)
     {
 
-        $reservations = Reservation::where('type_passage', 'unique')->get();
-        // get only the columns needed : NOTE maybe its need all colums so the filter works !
-        // $reserv = $reservations->only(['id','statut','service','ville','type_maison'
-        //                                     ,'prix','date_passage','heure_passage' ]);
+        $reservations = Subscription::where('just_once', true)->get();
+
         // filter by params
         if ($request->has('params')) {
 
-            $statut = collect();
-            $ville = collect();
-            $service = collect();
-            $type_logement = collect();
-
+            $status = collect();
+            $city = collect();
             $query = $request->collect();
             // remove items coming with request datatable
             $query = $query->except(['params', 'draw', 'columns', 'order', 'length', 'search', 'start', '_']);
-            // statut
-            if ($query->has('en_attente')) {
-                $statut->push('en_attente');
+            // status
+            if ($query->has('pending')) {
+                $status->push('pending');
             }
-            if ($query->has('valider')) {
-                $statut->push('valider');
+            if ($query->has('valid')) {
+                $status->push('valid');
             }
-            if ($query->has('annuler')) {
-                $statut->push('annuler');
+            if ($query->has('cancel')) {
+                $status->push('cancel');
             }
-            if ($query->has('terminer')) {
-                $statut->push('terminer');
+            if ($query->has('concluded')) {
+                $status->push('concluded');
             }
-            // ville
+            // city
             if ($query->has('Rabat')) {
-                $ville->push('Rabat');
-            }
-            if ($query->has('Casablanca')) {
-                $ville->push('Casablanca');
+                $city->push('Rabat');
             }
             if ($query->has('Mohammedia')) {
-                $ville->push('Mohammedia');
+                $city->push('Mohammedia');
             }
-            // service 
-            if ($query->has('menage_simple')) {
-                $service->push('menage_simple');
+            if ($query->has('Casablanca')) {
+                $city->push('Casablanca');
             }
-            if ($query->has('grand_menage')) {
-                $service->push('grand_menage');
-            }
-            if ($query->has('menage_perso')) {
-                $service->push('menage_perso');
-            }
-            if ($query->has('cristalisation')) {
-                $service->push('cristalisation');
-            }
-            if ($query->has('desinfection')) {
-                $service->push('desinfection');
-            }
-            if ($query->has('nettoyage_sec')) {
-                $service->push('nettoyage_sec');
-            }
-            // type_maison
-            if ($query->has('appartement')) {
-                $type_logement->push('appartement');
-            }
-            if ($query->has('maison')) {
-                $type_logement->push('maison');
-            }
-            if ($query->has('villa')) {
-                $type_logement->push('villa');
-            }
-            //  filter by statut 
-            if ($statut->isNotEmpty()) {
-                $reservations = $reservations->filter(function ($value) use ($statut) {
-                    return $statut->contains($value->statut);
+
+            //  filter by status 
+            if ($status->isNotEmpty()) {
+                $reservations = $reservations->filter(function ($value) use ($status) {
+                    return $status->contains($value->status);
                 });
             }
-            // filter by ville
-            if ($ville->isNotEmpty()) {
-                $reservations = $reservations->filter(function ($value) use ($ville) {
-                    return $ville->contains($value->ville);
+            // filter by city
+            if ($city->isNotEmpty()) {
+                $reservations = $reservations->filter(function ($value) use ($city) {
+                    return $city->contains($value->city);
                 });
             }
-            // filter by service
-            if ($service->isNotEmpty()) {
-                $reservations = $reservations->filter(function ($value) use ($service) {
-                    return $service->contains($value->service);
+            // filter by min_price
+            if ($query->has('min_price')) {
+                $min_price = $query['min_price'];
+                $reservations = $reservations->filter(function ($value) use ($min_price) {
+                    return $value->price >= $min_price;
                 });
             }
-            // filter by type_logement
-            if ($type_logement->isNotEmpty()) {
-                $reservations = $reservations->filter(function ($value) use ($type_logement) {
-                    return $type_logement->contains($value->type_logement);
+            // filter by max_price
+            if ($query->has('max_price')) {
+                $max_price = $query['max_price'];
+                $reservations = $reservations->filter(function ($value) use ($max_price) {
+                    return $value->price <= $max_price;
                 });
             }
-            // filter by prix_min
-            if ($query->has('prix_min')) {
-                $prix_min = $query['prix_min'];
-                $reservations = $reservations->filter(function ($value) use ($prix_min) {
-                    return $value->prix >= $prix_min;
-                });
-            }
-            // filter by prix_max
-            if ($query->has('prix_max')) {
-                $prix_max = $query['prix_max'];
-                $reservations = $reservations->filter(function ($value) use ($prix_max) {
-                    return $value->prix <= $prix_max;
-                });
-            }
+
             // filter by date_passage
             if ($query->has('date_passage')) {
                 $date_passage = $query['date_passage'];
                 $reservations = $reservations->filter(function ($value) use ($date_passage) {
-                    return $value->date_passage == $date_passage;
+                    return $value->start_date == $date_passage;
                 });
             }
-            // filter by heure_passage
-            if ($query->has('heure_passage')) {
-                $heure_passage = $query['heure_passage'];
-                $reservations = $reservations->filter(function ($value) use ($heure_passage) {
-                    return $value->heure_passage == $heure_passage;
+            // filter by start_time
+            if ($query->has('start_time')) {
+                $start_time = $query['start_time'];
+                $reservations = $reservations->filter(function ($value) use ($start_time) {
+                    return $value->start_time == $start_time;
                 });
             }
-            // filter by date_debut
-            if ($query->has('date_debut')) {
-                $date_debut = $query['date_debut'];
-                $reservations = $reservations->filter(function ($value) use ($date_debut) {
-                    return $value->date_passage >=  $date_debut;
+
+            // filter by start_date
+            if ($query->has('start_date')) {
+                $start_date = $query['start_date'];
+                $reservations = $reservations->filter(function ($value) use ($start_date) {
+                    return $value->start_date >=  $start_date;
                 });
             }
-            // filter by date_fin
-            if ($query->has('date_fin')) {
-                $date_fin = $query['date_fin'];
-                $reservations = $reservations->filter(function ($value) use ($date_fin) {
-                    return $value->date_passage <=  $date_fin;
+            // filter by end_date
+            if ($query->has('end_date')) {
+                $end_date = $query['end_date'];
+                $reservations = $reservations->filter(function ($value) use ($end_date) {
+                    return $value->start_date <=  $end_date;
                 });
             }
         }
 
         return datatables()->of($reservations)
-            ->addColumn('action', function (Reservation $reservation) {
+            ->addColumn('action', function (Subscription $reservation) {
                 $actionBtn = '<a href="' . route("admin.reserv.show", $reservation->id) . '" target="_blank" class="edit btn btn-primary btn-sm"><i class="fas fa-eye"></i></a>
                                 <a href="' . route("admin.reserv.edit", $reservation->id) . '" class="delete btn btn-secondary btn-sm"><i class="fas fa-edit"></i></a>';
                 return $actionBtn;
@@ -193,7 +151,7 @@ class ReservController extends Controller
             'service' => $request->input('service'),
             'type_logement' => $request->input('type_logement'),
             'date_passage' => $request->input('date_passage'),
-            'heure_passage' => $request->input('heure_passage'),
+            'start_time' => $request->input('start_time'),
             'pieces' => $pieces,
             'type_surface' => $request->input('type_surface'),
             'equipements' => $request->input('equipements'),
@@ -250,15 +208,15 @@ class ReservController extends Controller
 
         //     foreach ($reserv->passages as $passage) {
 
-        //         $heure_passage = $passage['jour'];
+        //         $start_time = $passage['jour'];
         //         $reserv_dayName = $passage['heure'];
-        //         $empolyees_dispo = $empolyees_dispo->reject(function ($value, $key) use ($date_debut, $reserv_dayName, $heure_passage) {
+        //         $empolyees_dispo = $empolyees_dispo->reject(function ($value, $key) use ($date_debut, $reserv_dayName, $start_time) {
 
         //             foreach ($value->reservations as $reserv) {
         //                 // vérifie si dispo  par rapport avec les reservations unique  attribué  
         //                 $dayName = Carbon::parse($reserv->date_passage)->locale('fr')->dayName;
         //                 if ($date_debut <= $reserv->date_passage ) {
-        //                     if ($dayName == $reserv_dayName && $reserv->heure_passage == $heure_passage) {
+        //                     if ($dayName == $reserv_dayName && $reserv->start_time == $start_time) {
         //                         return true;
         //                     }
         //                 }
@@ -267,7 +225,7 @@ class ReservController extends Controller
         //                     if ($reserv->date_debut >= $date_debut) {
 
         //                         foreach ($reserv->abonnement->passages as $passage) {
-        //                             if ($passage["day"] == $reserv_dayName && $passage["time"] == $heure_passage) {
+        //                             if ($passage["day"] == $reserv_dayName && $passage["time"] == $start_time) {
         //                                 return true;
         //                             }
         //                         }
@@ -279,16 +237,16 @@ class ReservController extends Controller
         // } else {
 
         //     $date_passage = $reserv->date_passage;
-        //     $heure_passage = $reserv->heure_passage;
+        //     $start_time = $reserv->start_time;
         //     $dayName = Carbon::parse($date_passage)->locale('fr')->dayName;
 
         //     // list des Empolyee disponible pour cette réservation     
-        //     $empolyees_dispo = $empolyees_dispo->reject(function ($value, $key) use ($date_passage, $heure_passage, $dayName) {
+        //     $empolyees_dispo = $empolyees_dispo->reject(function ($value, $key) use ($date_passage, $start_time, $dayName) {
 
         //         // if($value->reservations()->exists()) { }
         //         foreach ($value->reservations as $reserv) {
         //             // vérifie si dispo par rapport avec les reservations unique  attribué   
-        //             if ($reserv->date_passage == $date_passage && $reserv->heure_passage == $heure_passage) {
+        //             if ($reserv->date_passage == $date_passage && $reserv->start_time == $start_time) {
         //                 return true;
         //             }
         //             // vérifie si dispo  par rapport avec les abonnements attribué
@@ -296,7 +254,7 @@ class ReservController extends Controller
         //                 if ($reserv->abonnement->date_debut <= $date_passage && $reserv->abonnement->date_fin >= $date_passage) {
 
         //                     foreach ($reserv->abonnement->passages as $passage) {
-        //                         if ($passage["day"] == $dayName && $passage["time"] == $heure_passage) {
+        //                         if ($passage["day"] == $dayName && $passage["time"] == $start_time) {
         //                             return true;
         //                         }
         //                     }
@@ -323,11 +281,11 @@ class ReservController extends Controller
             $request->validate([
                 'date_passage' => 'required_without:date_debut|date',
                 'date_debut' => 'required_without:date_passage|date',
-                'heure_passage' => 'required_without:date_debut',
+                'start_time' => 'required_without:date_debut',
             ]);
             $reserv->update([
                 'date_passage' => $request->input('date_passage'),
-                'heure_passage' => $request->input('heure_passage'),
+                'start_time' => $request->input('start_time'),
                 'date_debut'  => $request->input('date_debut'),
             ]);
         }

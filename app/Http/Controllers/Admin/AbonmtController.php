@@ -4,9 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Reservation;
-use Carbon\Carbon;
-use DataTables;
+use App\Models\Subscription;
 
 class AbonmtController extends Controller
 {
@@ -19,125 +17,116 @@ class AbonmtController extends Controller
     public function search(Request $request)
     {
 
-        $reservations = Reservation::where('type_passage', 'abonnement')->get();
+        $subscriptions = Subscription::where('just_once', false)->get();
 
         // filter by params
         if ($request->has('params')) {
 
-            $statut = collect();
-            $ville = collect();
-            $pack = collect();
-            $type_logement = collect();
-
+            $status = collect();
+            $city = collect();
+            $offer = collect();
             $query = $request->collect();
             // remove items coming with request datatable
             $query = $query->except(['params', 'draw', 'columns', 'order', 'length', 'search', 'start', '_']);
-            // statut
-            if ($query->has('en_attente')) {
-                $statut->push('en_attente');
+            // status
+            if ($query->has('pending')) {
+                $status->push('pending');
             }
-            if ($query->has('valider')) {
-                $statut->push('valider');
+            if ($query->has('valid')) {
+                $status->push('valid');
             }
-            if ($query->has('annuler')) {
-                $statut->push('annuler');
+            if ($query->has('cancel')) {
+                $status->push('cancel');
             }
-            if ($query->has('terminer')) {
-                $statut->push('terminer');
+            if ($query->has('concluded')) {
+                $status->push('concluded');
             }
-            // ville
+            // city
             if ($query->has('Rabat')) {
-                $ville->push('Rabat');
+                $city->push('Rabat');
             }
             if ($query->has('Mohammedia')) {
-                $ville->push('Mohammedia');
+                $city->push('Mohammedia');
             }
             if ($query->has('Casablanca')) {
-                $ville->push('Casablanca');
+                $city->push('Casablanca');
             }
-            // pack 
-            if ($query->has('Likyoum')) {
-                $pack->push('Likyoum');
+            // offer 
+            if ($query->has('offer_1')) {
+                $offer->push(1);
             }
-            if ($query->has('Likmeta')) {
-                $pack->push('Likmeta');
+            if ($query->has('offer_2')) {
+                $offer->push(2);
             }
-            if ($query->has('Likdima')) {
-                $pack->push('Likdima');
+            if ($query->has('offer_3')) {
+                $offer->push(3);
             }
-            // type_maison
-            if ($query->has('appartement')) {
-                $type_logement->push('appartement');
+            if ($query->has('offer_4')) {
+                $offer->push(4);
             }
-            if ($query->has('maison')) {
-                $type_logement->push('maison');
+            if ($query->has('offer_5')) {
+                $offer->push(5);
             }
-            if ($query->has('villa')) {
-                $type_logement->push('villa');
+            if ($query->has('offer_6')) {
+                $offer->push(6);
             }
-            //  filter by statut 
-            if ($statut->isNotEmpty()) {
-                $reservations = $reservations->filter(function ($value) use ($statut) {
-                    return $statut->contains($value->statut);
+            //  filter by status 
+            if ($status->isNotEmpty()) {
+                $subscriptions = $subscriptions->filter(function ($value) use ($status) {
+                    return $status->contains($value->status);
                 });
             }
-            // filter by ville
-            if ($ville->isNotEmpty()) {
-                $reservations = $reservations->filter(function ($value) use ($ville) {
-                    return $ville->contains($value->ville);
+            // filter by city
+            if ($city->isNotEmpty()) {
+                $subscriptions = $subscriptions->filter(function ($value) use ($city) {
+                    return $city->contains($value->city);
                 });
             }
-            // filter by service
-            if ($pack->isNotEmpty()) {
-                $reservations = $reservations->filter(function ($value) use ($pack) {
-                    return $pack->contains($value->pack->name);
+            // filter by offer
+            if ($offer->isNotEmpty()) {
+                $subscriptions = $subscriptions->filter(function ($value) use ($offer) {
+                    return $offer->contains($value->offer_id);
                 });
             }
-            // filter by type_logement
-            if ($type_logement->isNotEmpty()) {
-                $reservations = $reservations->filter(function ($value) use ($type_logement) {
-                    return $type_logement->contains($value->type_logement);
+            // filter by min_price
+            if ($query->has('min_price')) {
+                $min_price = $query['min_price'];
+                $subscriptions = $subscriptions->filter(function ($value) use ($min_price) {
+                    return $value->price >= $min_price;
                 });
             }
-            // filter by prix_min
-            if ($query->has('prix_min')) {
-                $prix_min = $query['prix_min'];
-                $reservations = $reservations->filter(function ($value) use ($prix_min) {
-                    return $value->prix >= $prix_min;
-                });
-            }
-            // filter by prix_max
-            if ($query->has('prix_max')) {
-                $prix_max = $query['prix_max'];
-                $reservations = $reservations->filter(function ($value) use ($prix_max) {
-                    return $value->prix <= $prix_max;
+            // filter by max_price
+            if ($query->has('max_price')) {
+                $max_price = $query['max_price'];
+                $subscriptions = $subscriptions->filter(function ($value) use ($max_price) {
+                    return $value->price <= $max_price;
                 });
             }
 
-            // filter by date_debut
-            if ($query->has('date_debut')) {
-                $date_debut = $query['date_debut'];
-                $reservations = $reservations->filter(function ($value) use ($date_debut) {
-                    return $value->date_debut >=  $date_debut;
+            // filter by start_date
+            if ($query->has('start_date')) {
+                $start_date = $query['start_date'];
+                $subscriptions = $subscriptions->filter(function ($value) use ($start_date) {
+                    return $value->start_date >=  $start_date;
                 });
             }
-            // filter by date_fin
-            if ($query->has('date_fin')) {
-                $date_fin = $query['date_fin'];
-                $reservations = $reservations->filter(function ($value) use ($date_fin) {
-                    return $value->date_debut <=  $date_fin;
+            // filter by end_date
+            if ($query->has('end_date')) {
+                $end_date = $query['end_date'];
+                $subscriptions = $subscriptions->filter(function ($value) use ($end_date) {
+                    return $value->end_date <=  $end_date;
                 });
             }
         }
 
-        return datatables()->of($reservations)
-            ->addColumn('action', function (Reservation $reservation) {
-                $actionBtn = '<a href="' . route("admin.reserv.show", $reservation->id) . '" target="_blank" class="edit btn btn-primary btn-sm"><i class="fas fa-eye"></i></a>
-                                <a href="' . route("admin.reserv.edit", $reservation->id) . '" class="delete btn btn-secondary btn-sm"><i class="fas fa-edit"></i></a>';
+        return datatables()->of($subscriptions)
+            ->addColumn('action', function (Subscription $subscription) {
+                $actionBtn = '<a href="' . route("admin.reserv.show", $subscription->id) . '" target="_blank" class="edit btn btn-primary btn-sm"><i class="fas fa-eye"></i></a>
+                                <a href="' . route("admin.reserv.edit", $subscription->id) . '" class="delete btn btn-secondary btn-sm"><i class="fas fa-edit"></i></a>';
                 return $actionBtn;
             })
-            ->addColumn('pack', function (Reservation $reservation) {
-                return $reservation->pack->name;
+            ->addColumn('offer', function (Subscription $subscription) {
+                return $subscription->offer->name;
             })
             ->toJson();
     }
@@ -178,13 +167,13 @@ class AbonmtController extends Controller
 
         $reservation = Reservation::create([
             'user_id' => $request->input('user_id'),
-            'pack_id' => $request->input('pack_id'),
+            'offer_id' => $request->input('offer_id'),
             'type_passage' => 'abonnement',
-            'date_debut' => $request->input('date_debut'),
+            'start_date' => $request->input('start_date'),
             'passages' => $passages,
             'type_logement' => $request->input('type_logement'),
             'pieces' => $pieces,
-            'ville' => $request->input('ville'),
+            'city' => $request->input('city'),
             'adresse' => $request->input('adresse'),
             'Emp_selected' => $request->input('Emp_selected'),
             'confirmed' => $request->input('confirmed')

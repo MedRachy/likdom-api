@@ -71,38 +71,6 @@
                         </div>
 
                         <div class="row mb-3">
-                            <label for="adresse" class="col-md-4 col-form-label text-md-right">{{ __('Adresse') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="adresse" type="adresse"
-                                    class="form-control @error('adresse') is-invalid @enderror" name="adresse"
-                                    value="{{ old('adresse') }}">
-
-                                @error('adresse')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <label for="ville" class="col-md-4 col-form-label text-md-right">{{ __('Ville') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="ville" type="ville"
-                                    class="form-control @error('ville') is-invalid @enderror" name="ville"
-                                    value="{{ old('ville') }}">
-
-                                @error('ville')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
                             <label for="selectrole" class="col-md-4 col-form-label text-md-right">Role</label>
                             <div class="col-md-6">
                                 <select class="form-select  @error('role') is-invalid @enderror" id="selectrole"

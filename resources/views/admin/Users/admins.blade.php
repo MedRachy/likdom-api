@@ -50,8 +50,6 @@
                                     <th scope="col">Ref</th>
                                     <th scope="col">Nom</th>
                                     <th scope="col">Email</th>
-                                    <th scope="col">Adresse</th>
-                                    <th scope="col">Ville</th>
                                     <th scope="col">Tel</th>
                                     <th scope="col">Role</th>
                                 </tr>
@@ -62,8 +60,6 @@
                                         <td>{{ $admin->id }}</td>
                                         <td>{{ $admin->name }}</td>
                                         <td>{{ $admin->email }}</td>
-                                        <td>{{ $admin->adresse }}</td>
-                                        <td>{{ $admin->ville }}</td>
                                         <td>{{ $admin->phone }}</td>
                                         <td>{{ $admin->role }}</td>
                                         <td>

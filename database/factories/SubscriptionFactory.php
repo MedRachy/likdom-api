@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class SubscriptionFactory extends Factory
@@ -15,9 +16,10 @@ class SubscriptionFactory extends Factory
     {
         return [
             'service' => 'menage',
+            'start_date' => Carbon::now()->addDays(5)->format('Y-m-d'),
             'nbr_hours' => 1,
             'nbr_employees' => 1,
-            'city' => 'Mohammedia',
+            'city' => $this->faker->randomElement(['Mohammedia', 'Casablanca']),
             'nbr_months' => 1
         ];
     }
@@ -32,9 +34,9 @@ class SubscriptionFactory extends Factory
         return $this->state(function (array $attributes) {
             return [
                 'just_once' => true,
-                'start_date' => '2022-12-10',
-                'start_time' => '09:00',
+                'start_time' =>  $this->faker->randomElement(['07:00', '08:00', '09:00', '10:00']),
                 'nbr_hours' => 2,
+                'nbr_months' => null,
             ];
         });
     }
@@ -80,6 +82,57 @@ class SubscriptionFactory extends Factory
             return [
                 'status' => 'concluded',
                 'confirmed' => true
+            ];
+        });
+    }
+
+    /**
+     * Indicate that the model's relations for an offer.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    public function forOffer($offer_id)
+    {
+        // Likyoum
+        if ($offer_id == 1) {
+            $passages = collect([["day" => "Lundi", "time" => '09:00']]);
+        }
+        // Likmeta
+        elseif ($offer_id == 2) {
+            $passages =  collect(
+                [
+                    ["day" => "Lundi", "time" => '09:00'],
+                    ["day" => "Mercredi", "time" => '10:00'],
+                ]
+            );
+        }
+        // offer_3
+        elseif ($offer_id == 3) {
+            $passages =  collect(
+                [
+                    ["day" => "Lundi", "time" => '09:00'],
+                    ["day" => "Mardi", "time" => '10:00'],
+                    ["day" => "Mercredi", "time" => '09:00'],
+                ]
+            );
+        }
+        // offer_4
+        elseif ($offer_id == 4) {
+            $passages =  collect(
+                [
+                    ["day" => "Lundi", "time" => '09:00'],
+                    ["day" => "Mardi", "time" => '10:00'],
+                    ["day" => "Mercredi", "time" => '09:00'],
+                    ["day" => "Jeudi", "time" => '10:00'],
+                    ["day" => "Vendredi", "time" => '09:00'],
+                    ["day" => "Samedi", "time" => '10:00'],
+                ]
+            );
+        }
+        return $this->state(function (array $attributes) use ($offer_id, $passages) {
+            return [
+                'offer_id' => $offer_id,
+                'passages' => $passages,
             ];
         });
     }

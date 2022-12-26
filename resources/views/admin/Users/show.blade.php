@@ -57,17 +57,6 @@
 
                         </li>
 
-                        <li class="list-group-item d-flex justify-content-between">
-                            <div>
-                                <h5 class="text-bold">Adresse</h5>
-                                <p class="mb-1">{{ $user->adresse }}</p>
-
-                            </div>
-                            <div>
-                                <h5 class="text-bold">Ville</h5>
-                                <p class="mb-1">{{ $user->ville }}</p>
-                            </div>
-                        </li>
                         @isset($user->reservations)
                             @foreach ($user->reservations as $reserv)
                                 @isset($reserv->pack)

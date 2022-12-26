@@ -31,118 +31,47 @@
                                 <div>
                                     <h6 class="fw-bold">Statut</h6>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="en_attente" name="statut"
-                                            value="en_attente">
-                                        <label class="form-check-label" for="en_attente">En attente</label>
+                                        <input class="form-check-input" type="checkbox" id="pending" name="status"
+                                            value="pending">
+                                        <label class="form-check-label" for="pending">En attente</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="valider" name="statut"
-                                            value="valider">
-                                        <label class="form-check-label" for="valider">Valider</label>
+                                        <input class="form-check-input" type="checkbox" id="valid" name="status"
+                                            value="valid">
+                                        <label class="form-check-label" for="valid">Valider</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="annuler" name="statut"
-                                            value="annuler">
-                                        <label class="form-check-label" for="annuler">Annuler</label>
+                                        <input class="form-check-input" type="checkbox" id="cancel" name="status"
+                                            value="cancel">
+                                        <label class="form-check-label" for="cancel">Annuler</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="terminer" name="statut"
-                                            value="terminer">
-                                        <label class="form-check-label" for="terminer">Terminer</label>
+                                        <input class="form-check-input" type="checkbox" id="concluded" name="status"
+                                            value="concluded">
+                                        <label class="form-check-label" for="concluded">Terminer</label>
                                     </div>
                                 </div>
                                 <div>
                                     <h6 class="fw-bold">Ville</h6>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="ville1" name="ville"
+                                        <input class="form-check-input" type="checkbox" id="ville1" name="city"
                                             value="Rabat">
                                         <label class="form-check-label" for="ville1">Rabat</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="ville2" name="ville"
-                                            value="Casablanca">
-                                        <label class="form-check-label" for="ville2">Casablanca</label>
+                                        <input class="form-check-input" type="checkbox" id="ville2" name="city"
+                                            value="Mohammedia">
+                                        <label class="form-check-label" for="ville2">Mohammedia</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="ville3" name="ville"
-                                            value="Mohammedia">
-                                        <label class="form-check-label" for="ville3">Mohammedia</label>
+                                        <input class="form-check-input" type="checkbox" id="ville3" name="city"
+                                            value="Casablanca">
+                                        <label class="form-check-label" for="ville3">Casablanca</label>
                                     </div>
                                 </div>
 
                             </li>
-                            <li class="list-group-item d-flex justify-content-between">
-                                <div>
-                                    <h6 class="fw-bold">Service</h6>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="service1" name="service"
-                                            value="menage_simple">
-                                        <label class="form-check-label" for="service1">Ménage simple</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="service2" name="service"
-                                            value="grand_menage">
-                                        <label class="form-check-label" for="service2">Grand ménage</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="service3" name="service"
-                                            value="menage_perso">
-                                        <label class="form-check-label" for="service3">Ménage personnalisable</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="service4" name="service"
-                                            value="cristalisation">
-                                        <label class="form-check-label" for="service4">Cristalisation</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="service5" name="service"
-                                            value="desinfection">
-                                        <label class="form-check-label" for="service5">Désinfection</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="service6" name="service"
-                                            value="nettoyage_sec">
-                                        <label class="form-check-label" for="service6">Nettoyage à sec</label>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between ">
-                                <div>
-                                    <h6 class="fw-bold">Type logement</h6>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="type1"
-                                            name="type_logement" value="appartement">
-                                        <label class="form-check-label" for="type1">Appartement</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="type2"
-                                            name="type_logement" value="maison">
-                                        <label class="form-check-label" for="type2">Maison</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="type3"
-                                            name="type_logement" value="villa">
-                                        <label class="form-check-label" for="type3">Villa</label>
-                                    </div>
-                                </div>
-                                <div style="width: 225px;">
-                                    <h6 class="fw-bold">Prix</h6>
-                                    <div class="input-group flex-nowrap m-1">
-                                        <span class="input-group-text" id="min">min</span>
-                                        <input id="prix_min" type="number" class="form-control" placeholder=". . ."
-                                            aria-label=". . ." aria-describedby="min">
-                                    </div>
-                                    <div class="input-group flex-nowrap m-1">
-                                        <span class="input-group-text" id="max">max</span>
-                                        <input id="prix_max" type="number" class="form-control" placeholder=". . ."
-                                            aria-label=". . ." aria-describedby="max">
-                                    </div>
-                                    {{-- <label for="customRange2" class="form-label">Prix</label>
-                        <input type="range" class="form-range" min="100" max="500" id="customRange2" 
-                        name="rangeInput" min="0" max="100" onchange="updateTextInput(this.value);">
-                        <input type="text" id="textInput" value=""> --}}
-                                </div>
-                            </li>
+
                             <li class="list-group-item d-flex justify-content-between ">
                                 <div>
                                     <h6 class="fw-bold">Date & Heure</h6>
@@ -152,23 +81,37 @@
                                             aria-describedby="labeldate_passage" name="date_passage">
                                     </div>
                                     <div class="input-group flex-nowrap m-1">
-                                        <span class="input-group-text" id="labelheure_passage">à</span>
-                                        <input id="heure_passage" type="time" class="form-control"
-                                            aria-describedby="labelheure_passage" name="heure_passage">
+                                        <span class="input-group-text" id="labelstart_time">à</span>
+                                        <input id="start_time" type="time" class="form-control"
+                                            aria-describedby="labelstart_time" name="start_time">
                                     </div>
                                 </div>
                                 <div>
                                     <h6 class="fw-bold">Période</h6>
                                     <div class="input-group flex-nowrap m-1">
-                                        <span class="input-group-text" id="labeldate_debut">D</span>
-                                        <input id="date_debut" type="date" class="form-control"
-                                            aria-describedby="labeldate_debut" name="date_debut">
+                                        <span class="input-group-text" id="labelstart_date">D</span>
+                                        <input id="start_date" type="date" class="form-control"
+                                            aria-describedby="labelstart_date" name="start_date">
                                     </div>
                                     <div class="input-group flex-nowrap m-1">
-                                        <span class="input-group-text" id="labeldate_fin">F</span>
-                                        <input id="date_fin" type="date" class="form-control"
-                                            aria-describedby="labeldate_fin" name="date_fin">
+                                        <span class="input-group-text" id="labelend_date">F</span>
+                                        <input id="end_date" type="date" class="form-control"
+                                            aria-describedby="labelend_date" name="end_date">
                                     </div>
+                                </div>
+                                <div style="width: 225px;">
+                                    <h6 class="fw-bold">Prix</h6>
+                                    <div class="input-group flex-nowrap m-1">
+                                        <span class="input-group-text" id="min">min</span>
+                                        <input id="min_price" type="number" class="form-control" placeholder=". . ."
+                                            aria-label=". . ." aria-describedby="min">
+                                    </div>
+                                    <div class="input-group flex-nowrap m-1">
+                                        <span class="input-group-text" id="max">max</span>
+                                        <input id="max_price" type="number" class="form-control" placeholder=". . ."
+                                            aria-label=". . ." aria-describedby="max">
+                                    </div>
+
                                 </div>
                             </li>
                             <li class="list-group-item ">
@@ -196,9 +139,7 @@
                             <thead>
                                 <tr>
                                     <th scope="col">Ref</th>
-                                    <th scope="col">Service</th>
                                     <th scope="col">Ville</th>
-                                    <th scope="col">Type log</th>
                                     <th scope="col">Date</th>
                                     <th scope="col">Heure</th>
                                     <th scope="col">Prix</th>
@@ -259,25 +200,19 @@
                             "data": "id"
                         },
                         {
-                            "data": "service"
+                            "data": "city"
                         },
                         {
-                            "data": "ville"
+                            "data": "start_date"
                         },
                         {
-                            "data": "type_logement"
+                            "data": "start_time"
                         },
                         {
-                            "data": "date_passage"
+                            "data": "price"
                         },
                         {
-                            "data": "heure_passage"
-                        },
-                        {
-                            "data": "prix"
-                        },
-                        {
-                            "data": "statut"
+                            "data": "status"
                         },
                         {
                             "data": 'action',
@@ -286,23 +221,20 @@
                         },
                     ],
                     "createdRow": function(row, data, index) {
-                        if (data["statut"] === "valider") {
-                            $('td', row).eq(7).wrapInner('<span class="badge bg-success"></span>');
+                        if (data["status"] === "valid") {
+                            $('td', row).eq(5).wrapInner('<span class="badge bg-success"></span>');
                         }
-                        if (data["statut"] === "terminer") {
-                            $('td', row).eq(7).wrapInner('<span class="badge bg-secondary"></span>');
+                        if (data["status"] === "concluded") {
+                            $('td', row).eq(5).wrapInner('<span class="badge bg-secondary"></span>');
                         }
-                        if (data["statut"] === "annuler") {
-                            $('td', row).eq(7).wrapInner('<span class="badge bg-danger"></span>');
+                        if (data["status"] === "cancel") {
+                            $('td', row).eq(5).wrapInner('<span class="badge bg-danger"></span>');
                         }
-                        if (data["statut"] === "en_attente") {
-                            $('td', row).eq(7).wrapInner('<span class="badge bg-warning"></span>');
+                        if (data["status"] === "pending") {
+                            $('td', row).eq(5).wrapInner('<span class="badge bg-warning"></span>');
                         }
                     }
                 });
-                //  count : NOTE cant override ajax success of the table
-                // console.log(datatable.page.info().recordsTotal);
-
 
                 $("#searchButton").click(function() {
                     query = getinputdata();
@@ -319,67 +251,47 @@
                 function getinputdata() {
                     var paramsinput = {};
                     var paramschecked = '';
-                    var statut = {};
-                    var ville = {};
-                    var service = {};
-                    var type_logement = {};
+                    var status = {};
+                    var city = {};
                     // get input values 
-                    $("input:checkbox[name=statut]:checked").each(function(i, e) {
-                        statut[$(this).val()] = e.checked;
+                    $("input:checkbox[name=status]:checked").each(function(i, e) {
+                        status[$(this).val()] = e.checked;
                     });
-                    $("input:checkbox[name=ville]:checked").each(function(i, e) {
-                        ville[$(this).val()] = e.checked;
-                    });
-                    $("input:checkbox[name=service]:checked").each(function(i, e) {
-                        service[$(this).val()] = e.checked;
-                    });
-                    $("input:checkbox[name=type_logement]:checked").each(function(i, e) {
-                        type_logement[$(this).val()] = e.checked;
+                    $("input:checkbox[name=city]:checked").each(function(i, e) {
+                        city[$(this).val()] = e.checked;
                     });
 
-                    if ($("#prix_min").val()) {
-                        paramsinput['prix_min'] = $("#prix_min").val();
+                    if ($("#min_price").val()) {
+                        paramsinput['min_price'] = $("#min_price").val();
                     }
-                    if ($("#prix_max").val()) {
-                        paramsinput['prix_max'] = $("#prix_max").val();
+                    if ($("#max_price").val()) {
+                        paramsinput['max_price'] = $("#max_price").val();
+                    }
+                    if ($("#start_date").val()) {
+                        paramsinput['start_date'] = $("#start_date").val();
+                    }
+                    if ($("#end_date").val()) {
+                        paramsinput['end_date'] = $("#end_date").val();
                     }
                     if ($("#date_passage").val()) {
                         paramsinput['date_passage'] = $("#date_passage").val();
                     }
-                    if ($("#heure_passage").val()) {
-                        paramsinput['heure_passage'] = $("#heure_passage").val();
-                    }
-                    if ($("#date_debut").val()) {
-                        paramsinput['date_debut'] = $("#date_debut").val();
-                    }
-                    if ($("#date_fin").val()) {
-                        paramsinput['date_fin'] = $("#date_fin").val();
+                    if ($("#start_time").val()) {
+                        paramsinput['start_time'] = $("#start_time").val();
                     }
                     // convert object to string param and concatinate 
-                    if (!$.isEmptyObject(statut)) {
-                        var statut_param = $.param(statut);
-                        paramschecked = statut_param + '&';
+                    if (!$.isEmptyObject(status)) {
+                        var status_param = $.param(status);
+                        paramschecked = status_param + '&';
                     }
-                    if (!$.isEmptyObject(ville)) {
-                        var ville_param = $.param(ville);
-                        paramschecked = paramschecked + ville_param + '&';
+                    if (!$.isEmptyObject(city)) {
+                        var city_param = $.param(city);
+                        paramschecked = paramschecked + city_param + '&';
 
-                    }
-                    if (!$.isEmptyObject(service)) {
-                        var service_param = $.param(service);
-                        paramschecked = paramschecked + service_param + '&';
-                    }
-                    if (!$.isEmptyObject(type_logement)) {
-                        var type_logement_param = $.param(type_logement);
-                        paramschecked = paramschecked + type_logement_param + '&';
                     }
 
                     var paramsinput_string = $.param(paramsinput);
                     var params = 'params=true&' + paramschecked + paramsinput_string;
-                    // console.log(paramsinput_string);
-                    // console.log(paramschecked);
-                    // console.log(params);
-
                     return params;
                 }
 
