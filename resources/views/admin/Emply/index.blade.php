@@ -31,37 +31,32 @@
                                 <div>
                                     <h6 class="fw-bold">Ville</h6>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="ville1" name="ville"
+                                        <input class="form-check-input" type="checkbox" id="city1" name="city"
                                             value="Rabat">
-                                        <label class="form-check-label" for="ville1">Rabat</label>
+                                        <label class="form-check-label" for="city1">Rabat</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="ville2" name="ville"
+                                        <input class="form-check-input" type="checkbox" id="city2" name="city"
                                             value="Casablanca">
-                                        <label class="form-check-label" for="ville2">Casablanca</label>
+                                        <label class="form-check-label" for="city2">Casablanca</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="ville3" name="ville"
+                                        <input class="form-check-input" type="checkbox" id="city3" name="city"
                                             value="Mohammedia">
-                                        <label class="form-check-label" for="ville3">Mohammedia</label>
+                                        <label class="form-check-label" for="city3">Mohammedia</label>
                                     </div>
                                 </div>
                                 <div>
                                     <h6 class="fw-bold">Disponibilité</h6>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="type1" name="disponible"
-                                            value="disponible">
+                                        <input class="form-check-input" type="checkbox" id="type1" name="availability"
+                                            value="available">
                                         <label class="form-check-label" for="type1">Disponible</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="type2" name="disponible"
-                                            value="conge">
-                                        <label class="form-check-label" for="type2">Congé</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="type3" name="disponible"
-                                            value="autre">
-                                        <label class="form-check-label" for="type3">Autre raison</label>
+                                        <input class="form-check-input" type="checkbox" id="type2" name="availability"
+                                            value="unavailable">
+                                        <label class="form-check-label" for="type2">Indisponible</label>
                                     </div>
                                 </div>
 
@@ -125,7 +120,6 @@
                                     <th scope="col">Tel</th>
                                     <th scope="col">Adresse</th>
                                     <th scope="col">Ville</th>
-                                    <th scope="col">Age</th>
                                     <th scope="col">Disponibilité</th>
                                     <th scope="col">Action</th>
                                 </tr>
@@ -179,25 +173,22 @@
                             "data": "id"
                         },
                         {
-                            "data": "nom"
+                            "data": "last_name"
                         },
                         {
-                            "data": "prenom"
+                            "data": "first_name"
                         },
                         {
                             "data": "phone"
                         },
                         {
-                            "data": "adresse"
+                            "data": "adress"
                         },
                         {
-                            "data": "ville"
+                            "data": "city"
                         },
                         {
-                            "data": "age"
-                        },
-                        {
-                            "data": "disponibilite"
+                            "data": "availability"
                         },
                         {
                             "data": 'action',
@@ -222,13 +213,13 @@
                 function getinputdata() {
                     var paramsinput = {};
                     var paramschecked = '';
-                    var ville = {};
+                    var city = {};
                     var disponible = {};
                     // get input values 
-                    $("input:checkbox[name=ville]:checked").each(function(i, e) {
-                        ville[$(this).val()] = e.checked;
+                    $("input:checkbox[name=city]:checked").each(function(i, e) {
+                        city[$(this).val()] = e.checked;
                     });
-                    $("input:checkbox[name=disponible]:checked").each(function(i, e) {
+                    $("input:checkbox[name=availability]:checked").each(function(i, e) {
                         disponible[$(this).val()] = e.checked;
                     });
 
@@ -242,9 +233,9 @@
                         paramsinput['reserv'] = $("input:radio[name=reserv]:checked").val();
                     }
                     // convert object to string param and concatinate 
-                    if (!$.isEmptyObject(ville)) {
-                        var ville_param = $.param(ville);
-                        paramschecked = paramschecked + ville_param + '&';
+                    if (!$.isEmptyObject(city)) {
+                        var city_param = $.param(city);
+                        paramschecked = paramschecked + city_param + '&';
 
                     }
                     if (!$.isEmptyObject(disponible)) {
@@ -254,9 +245,6 @@
 
                     var paramsinput_string = $.param(paramsinput);
                     var params = 'params=true&' + paramschecked + paramsinput_string;
-                    // console.log(paramsinput_string);
-                    // console.log(paramschecked);
-                    // console.log(params);
 
                     return params;
                 }

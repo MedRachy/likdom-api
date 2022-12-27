@@ -27,68 +27,65 @@ class EmplyController extends Controller
         // filter by params
         if ($request->has('params')) {
 
-            $ville = collect();
-            $disponible = collect();
+            $city = collect();
+            $availability = collect();
 
             $query = $request->collect();
             // remove items coming with request datatable
             $query = $query->except(['params', 'draw', 'columns', 'order', 'length', 'search', 'start', '_']);
 
-            // ville
+            // city
             if ($query->has('Rabat')) {
-                $ville->push('Rabat');
+                $city->push('Rabat');
             }
             if ($query->has('Casablanca')) {
-                $ville->push('Casablanca');
+                $city->push('Casablanca');
             }
             if ($query->has('Mohammedia')) {
-                $ville->push('Mohammedia');
+                $city->push('Mohammedia');
             }
-            // disponible
-            if ($query->has('disponible')) {
-                $disponible->push('disponible');
+            // availability
+            if ($query->has('available')) {
+                $availability->push('available');
             }
-            if ($query->has('conge')) {
-                $disponible->push('conge');
-            }
-            if ($query->has('autre')) {
-                $disponible->push('autre');
+            if ($query->has('unavailable')) {
+                $availability->push('unavailable');
             }
 
-            // filter by ville
-            if ($ville->isNotEmpty()) {
-                $employees = $employees->filter(function ($value) use ($ville) {
-                    return $ville->contains($value->ville);
+            // filter by city
+            if ($city->isNotEmpty()) {
+                $employees = $employees->filter(function ($value) use ($city) {
+                    return $city->contains($value->city);
                 });
             }
 
-            // filter by disponible
-            if ($disponible->isNotEmpty()) {
-                $employees = $employees->filter(function ($value) use ($disponible) {
-                    return $disponible->contains($value->disponibilite);
+            // filter by availability
+            if ($availability->isNotEmpty()) {
+                $employees = $employees->filter(function ($value) use ($availability) {
+                    return $availability->contains($value->availability);
                 });
             }
-
-            // filter by date_passage
+            // only for subscriptions 
+            // filter by start_date
             if ($query->has('date_passage')) {
                 $date_passage = $query['date_passage'];
                 $employees = $employees->filter(function ($value) use ($date_passage) {
-                    if ($value->reservations()->exists()) {
-                        foreach ($value->reservations as $reserv) {
-                            if ($reserv->date_passage == $date_passage) {
+                    if ($value->subscriptions()->exists()) {
+                        foreach ($value->subscriptions as $reserv) {
+                            if ($reserv->start_date == $date_passage) {
                                 return true;
                             }
                         }
                     }
                 });
             }
-            // // filter by heure_passage
+            // // filter by start_time
             if ($query->has('heure_passage')) {
                 $heure_passage = $query['heure_passage'];
                 $employees = $employees->filter(function ($value) use ($heure_passage) {
-                    if ($value->reservations()->exists()) {
-                        foreach ($value->reservations as $reserv) {
-                            if ($reserv->heure_passage == $heure_passage) {
+                    if ($value->subscriptions()->exists()) {
+                        foreach ($value->subscriptions as $reserv) {
+                            if ($reserv->start_time == $heure_passage) {
                                 return true;
                             }
                         }
@@ -100,11 +97,11 @@ class EmplyController extends Controller
                 $reserv = $query['reserv'];
                 if ($reserv == '1') {
                     $employees = $employees->filter(function ($value) {
-                        return $value->reservations()->exists();
+                        return $value->subscriptions()->exists();
                     });
                 } else if ($reserv == '0') {
                     $employees = $employees->reject(function ($value) {
-                        return $value->reservations()->exists();
+                        return $value->subscriptions()->exists();
                     });
                 }
             }
@@ -126,34 +123,32 @@ class EmplyController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request->all());
         $request->validate([
-            'nom' => 'required|string',
-            'prenom' => 'required|string',
-            'adresse' => 'required|string',
-            'ville' => 'required|string',
-            'age' => 'required|integer',
-            'sex' => 'required|string',
-            'specialite' => 'required|string',
+            'last_name' => 'required|string',
+            'first_name' => 'required|string',
             'phone' => 'required',
+            'adress' => 'required|string',
+            'city' => 'required|string',
+            'date_birth' => 'required|date',
+            'sex' => 'required|string',
+            'speciality' => 'required|string',
             'image_path' => 'required|mimes:png,jpg,jpeg',
-
         ]);
+
         // image name
-        $imageName = $request->nom . '-' . time() . '.' . $request->image_path->extension();
+        $imageName = $request->last_name . '-' . time() . '.' . $request->image_path->extension();
         // store in storage/app/public/Emplys ----> access from public after creating a storage:link
         $request->image_path->storeAs('Emplys', $imageName, 'public');
 
         $employee = Employee::create([
-
-            'nom' => $request->input('nom'),
-            'prenom' => $request->input('prenom'),
-            'adresse' => $request->input('adresse'),
-            'ville' => $request->input('ville'),
-            'age' => $request->input('age'),
-            'sex' => $request->input('sex'),
-            'specialite' => $request->input('specialite'),
-            'phone' => $request->input('phone'),
+            'last_name' => $request->last_name,
+            'first_name' => $request->first_name,
+            'phone' => $request->phone,
+            'adress' => $request->adress,
+            'city' => $request->city,
+            'date_birth' => $request->date_birth,
+            'sex' => $request->sex,
+            'speciality' => $request->speciality,
             'image_path' => $imageName
         ]);
 
@@ -170,20 +165,20 @@ class EmplyController extends Controller
 
         if ($employee) {
 
-            if ($employee->reservations()->exists()) {
-                foreach ($employee->reservations as $reserv) {
-                    if ($reserv->type_passage == "unique") {
+            if ($employee->subscriptions()->exists()) {
+                foreach ($employee->subscriptions as $reserv) {
+                    if ($reserv->just_once) {
                         $event = [
                             'title' => 'Reserv-' . $reserv->id,
                             'description' => 'valider',
                             'url' => route('admin.reserv.show', $reserv->id),
-                            'start' => $reserv->date_passage,
+                            'start' => $reserv->start_date,
                         ];
                         $events->push($event);
-                    } elseif ($reserv->type_passage == "abonnement") {
+                    } elseif (!$reserv->just_once) {
                         // Periode from : date_debut until date_debut + month  
-                        $date_debut = Carbon::create($reserv->date_debut);
-                        $period = Carbon::parse($date_debut)->daysUntil($date_debut->addMonth());
+                        $start_date = Carbon::create($reserv->start_date);
+                        $period = Carbon::parse($start_date)->daysUntil($start_date->addMonth());
                         $dates = $period->toArray();
                         foreach ($reserv->passages as $passage) {
 
@@ -191,12 +186,12 @@ class EmplyController extends Controller
                                 // get the dayname of every date in the periode 
                                 $dayName = Carbon::parse($dates[$i])->locale('fr')->dayName;
                                 $dayName = Str::ucfirst($dayName);
-                                if ($passage['jour'] == $dayName) {
+                                if ($passage['day'] == $dayName) {
                                     $event = [
                                         'title' => 'Reserv-abonmt-' . $reserv->id,
                                         'description' => 'valider',
                                         'color' => '#0d6efd',
-                                        'url' => route('admin.reserv.show', $reserv->id),
+                                        'url' => route('admin.abonmt.show', $reserv->id),
                                         'start' => $dates[$i]->format('Y-m-d'),
                                     ];
                                     $events->push($event);
@@ -207,15 +202,15 @@ class EmplyController extends Controller
                 }
             }
             // old reserv 
-            if ($employee->reservHistory()->exists()) {
-                foreach ($employee->reservHistory as $reserv) {
-                    if ($reserv->type_passage == "unique") {
+            if ($employee->subscriptionHistory()->exists()) {
+                foreach ($employee->subscriptionHistory as $reserv) {
+                    if ($reserv->just_once) {
                         $event = [
                             'title' => 'Reserv-' . $reserv->id,
                             'description' => 'terminer',
                             'color' => 'grey',
                             'url' => route('admin.reserv.show', $reserv->id),
-                            'start' => $reserv->date_passage,
+                            'start' => $reserv->start_date,
                         ];
                         $events->push($event);
                     }
@@ -251,7 +246,7 @@ class EmplyController extends Controller
             'nom' => 'required|string',
             'prenom' => 'required|string',
             'adresse' => 'required|string',
-            'ville' => 'required|string',
+            'city' => 'required|string',
             'age' => 'required|integer',
             'sex' => 'required|string',
             'specialite' => 'required|string',
@@ -264,7 +259,7 @@ class EmplyController extends Controller
             'nom' => $request->input('nom'),
             'prenom' => $request->input('prenom'),
             'adresse' => $request->input('adresse'),
-            'ville' => $request->input('ville'),
+            'city' => $request->input('city'),
             'age' => $request->input('age'),
             'sex' => $request->input('sex'),
             'specialite' => $request->input('specialite'),
@@ -294,12 +289,12 @@ class EmplyController extends Controller
     public function reservsearch(Request $request, $id)
     {
         $employee = Employee::find($id);
-        $reservations = $employee->reservHistory;
+        $subscriptions = $employee->reservHistory;
         // filter by params
         if ($request->has('params')) {
 
             $statut = collect();
-            $ville = collect();
+            $city = collect();
             $service = collect();
             $type_logement = collect();
 
@@ -319,15 +314,15 @@ class EmplyController extends Controller
             if ($query->has('terminer')) {
                 $statut->push('terminer');
             }
-            // ville
+            // city
             if ($query->has('Rabat')) {
-                $ville->push('Rabat');
+                $city->push('Rabat');
             }
             if ($query->has('Casablanca')) {
-                $ville->push('Casablanca');
+                $city->push('Casablanca');
             }
             if ($query->has('Mohammedia')) {
-                $ville->push('Mohammedia');
+                $city->push('Mohammedia');
             }
             // service 
             if ($query->has('menage_simple')) {
@@ -357,73 +352,73 @@ class EmplyController extends Controller
             }
             //  filter by statut 
             if ($statut->isNotEmpty()) {
-                $reservations = $reservations->filter(function ($value) use ($statut) {
+                $subscriptions = $subscriptions->filter(function ($value) use ($statut) {
                     return $statut->contains($value->statut);
                 });
             }
-            // filter by ville
-            if ($ville->isNotEmpty()) {
-                $reservations = $reservations->filter(function ($value) use ($ville) {
-                    return $ville->contains($value->ville);
+            // filter by city
+            if ($city->isNotEmpty()) {
+                $subscriptions = $subscriptions->filter(function ($value) use ($city) {
+                    return $city->contains($value->city);
                 });
             }
             // filter by service
             if ($service->isNotEmpty()) {
-                $reservations = $reservations->filter(function ($value) use ($service) {
+                $subscriptions = $subscriptions->filter(function ($value) use ($service) {
                     return $service->contains($value->service);
                 });
             }
             // filter by type_logement
             if ($type_logement->isNotEmpty()) {
-                $reservations = $reservations->filter(function ($value) use ($type_logement) {
+                $subscriptions = $subscriptions->filter(function ($value) use ($type_logement) {
                     return $type_logement->contains($value->type_logement);
                 });
             }
             // filter by prix_min
             if ($query->has('prix_min')) {
                 $prix_min = $query['prix_min'];
-                $reservations = $reservations->filter(function ($value) use ($prix_min) {
+                $subscriptions = $subscriptions->filter(function ($value) use ($prix_min) {
                     return $value->prix >= $prix_min;
                 });
             }
             // filter by prix_max
             if ($query->has('prix_max')) {
                 $prix_max = $query['prix_max'];
-                $reservations = $reservations->filter(function ($value) use ($prix_max) {
+                $subscriptions = $subscriptions->filter(function ($value) use ($prix_max) {
                     return $value->prix <= $prix_max;
                 });
             }
             // filter by date_passage
             if ($query->has('date_passage')) {
                 $date_passage = $query['date_passage'];
-                $reservations = $reservations->filter(function ($value) use ($date_passage) {
+                $subscriptions = $subscriptions->filter(function ($value) use ($date_passage) {
                     return $value->date_passage == $date_passage;
                 });
             }
             // filter by heure_passage
             if ($query->has('heure_passage')) {
                 $heure_passage = $query['heure_passage'];
-                $reservations = $reservations->filter(function ($value) use ($heure_passage) {
+                $subscriptions = $subscriptions->filter(function ($value) use ($heure_passage) {
                     return $value->heure_passage == $heure_passage;
                 });
             }
             // filter by date_debut
             if ($query->has('date_debut')) {
                 $date_debut = $query['date_debut'];
-                $reservations = $reservations->filter(function ($value) use ($date_debut) {
+                $subscriptions = $subscriptions->filter(function ($value) use ($date_debut) {
                     return $value->date_passage >=  $date_debut;
                 });
             }
             // filter by date_fin
             if ($query->has('date_fin')) {
                 $date_fin = $query['date_fin'];
-                $reservations = $reservations->filter(function ($value) use ($date_fin) {
+                $subscriptions = $subscriptions->filter(function ($value) use ($date_fin) {
                     return $value->date_passage <=  $date_fin;
                 });
             }
         }
 
-        return datatables()->of($reservations)
+        return datatables()->of($subscriptions)
             ->addColumn('action', function (Reservation $reservation) {
                 $actionBtn = '<a href="' . route("admin.reserv.show", $reservation->id) . '" target="_blank" class="edit btn btn-primary btn-sm"><i class="fas fa-eye"></i></a>
                                 <a href="' . route("admin.reserv.edit", $reservation->id) . '" class="delete btn btn-secondary btn-sm"><i class="fas fa-edit"></i></a>';
@@ -442,7 +437,7 @@ class EmplyController extends Controller
     {
         $employee = Employee::find($id);
         if ($employee) {
-            $employee->reservations()->detach();
+            $employee->subscriptions()->detach();
             $employee->reservHistory()->detach();
             $employee->delete();
         }

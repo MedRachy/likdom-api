@@ -233,10 +233,8 @@
                                 Confirmer par le client
                             </label>
                         </div>
-                        <small>* Réservation sera enregister avec statut "en attente"</small>
+                        <small>* Abonnement sera enregister avec statut "en attente"</small>
                         <button class="w-100 btn btn-primary btn-lg" type="submit">Ajouter</button>
-
-
                     </form>
                 </div>
             </div>

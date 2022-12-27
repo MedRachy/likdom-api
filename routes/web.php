@@ -34,26 +34,29 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'isAdmin']], functio
     Route::resource('/emply', EmplyController::class, ['names' => 'admin.emply']);
     Route::resource('/users', UsersController::class, ['names' => 'admin.users']);
     Route::resource('/entreps', EntrepsController::class, ['names' => 'admin.entreps']);
-    // charts
+
+    /* -------- Admins list ------- */
+    Route::get('/administrateurs', [UsersController::class, 'admins'])->name('admin.users.admins');
+
+    /* -------- charts ------- */
     Route::get('/charts', [DashbordController::class, 'charts'])->name('admin.charts');
-    // data search for charts
     Route::get('/dataSearch/{query?}', [DashbordController::class, 'dataSearch'], function ($query = null) {
         return $query;
     })->name('admin.dataSearch');
-    // Devis
+
+    /* -------- Devis ------- */
     Route::get('/devis', [DashbordController::class, 'devis'])->name('admin.devis');
-    // search devis list
     Route::get('/Devisearch/{query?}', [DashbordController::class, 'devisearch'], function ($query = null) {
         return $query;
     })->name('admin.devisearch');
-    // Candidatures
+
+    /* -------- Candidatures ------- */
     Route::get('/candidatures', [DashbordController::class, 'candidatures'])->name('admin.candidatures');
-    // search candidatures list
     Route::get('/Candidatsearch/{query?}', [DashbordController::class, 'candidatsearch'], function ($query = null) {
         return $query;
     })->name('admin.candidatsearch');
-    // admins list
-    Route::get('/administrateurs', [UsersController::class, 'admins'])->name('admin.users.admins');
+
+    /* -------- Searching / listing ------- */
     // search reserv list
     Route::get('/search/{query?}', [ReservController::class, 'search'], function ($query = null) {
         return $query;
@@ -72,13 +75,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'isAdmin']], functio
     Route::get('/Entrepsearch/{query?}', [EntrepsController::class, 'search'], function ($query = null) {
         return $query;
     })->name('admin.Entrepsearch');
-
     // search reserv list for an emply
     Route::get('/Reservsearch/{id}/{query?}', [EmplyController::class, 'reservsearch'], function ($query = null) {
         return $query;
     })->name('admin.Reservsearch');
-    // search by code
-    Route::get('/code', [ReservController::class, 'code'])->name('admin.code');
     // search history list for an emply
     Route::get('/emply/{id}/history', [EmplyController::class, 'history'])->name('admin.emply.history');
 });

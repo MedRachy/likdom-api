@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Employee;
 use Illuminate\Http\Request;
 use App\Models\Subscription;
 
 class AbonmtController extends Controller
 {
-
     public function index()
     {
         return view('Admin.Abonmt.index');
@@ -121,8 +121,8 @@ class AbonmtController extends Controller
 
         return datatables()->of($subscriptions)
             ->addColumn('action', function (Subscription $subscription) {
-                $actionBtn = '<a href="' . route("admin.reserv.show", $subscription->id) . '" target="_blank" class="edit btn btn-primary btn-sm"><i class="fas fa-eye"></i></a>
-                                <a href="' . route("admin.reserv.edit", $subscription->id) . '" class="delete btn btn-secondary btn-sm"><i class="fas fa-edit"></i></a>';
+                $actionBtn = '<a href="' . route("admin.abonmt.show", $subscription->id) . '" target="_blank" class="edit btn btn-primary btn-sm"><i class="fas fa-eye"></i></a>
+                                <a href="' . route("admin.abonmt.edit", $subscription->id) . '" class="delete btn btn-secondary btn-sm"><i class="fas fa-edit"></i></a>';
                 return $actionBtn;
             })
             ->addColumn('offer', function (Subscription $subscription) {
@@ -138,55 +138,137 @@ class AbonmtController extends Controller
 
     public function store(Request $request)
     {
-
+        // validation 
         $request->validate([
-            'jour' => 'required|array',
+            'offer_id' => 'required',
+            'start_date' => 'required|date',
+            'nbr_hours' => 'required|integer',
+            'nbr_employees' => 'required|integer',
+            'nbr_months' => 'required|integer',
+            'day' => 'required|array',
+            'city' => 'required',
+            // 'adress' => 'adress'
         ]);
 
         $passages = collect();
-        $journees =  $request->input('jour');
+        $days =  $request->input('day');
 
-        foreach ($journees as $jour) {
-            $passages->push(["jour" => $jour, "heure" =>  $request->input($jour)]);
+        foreach ($days as $day) {
+            $passages->push(["day" => $day, "time" =>  $request->input($day)]);
         }
 
-
-        $pieces = [
-            'niveau' => $request->niveau,
-            'chambre' => $request->chambre,
-            'cuisine' => $request->cuisine,
-            'toilette' => $request->toilette,
-            'salon_traditionnel' => $request->salon_traditionnel,
-            'salon_moderne' => $request->salon_moderne,
-            'sejour' => $request->sejour,
-            'coure' => $request->coure,
-            'terasse' => $request->terasse,
-            'buanderie' => $request->buanderie,
-            'garage' => $request->garage,
-        ];
-
-        $reservation = Reservation::create([
-            'user_id' => $request->input('user_id'),
-            'offer_id' => $request->input('offer_id'),
-            'type_passage' => 'abonnement',
-            'start_date' => $request->input('start_date'),
+        $subscription = Subscription::create([
+            'user_id' =>  $request->user_id,
+            'offer_id' => $request->offer_id,
+            'start_date' => $request->start_date,
+            'nbr_hours' => $request->nbr_hours,
+            'nbr_employees' => $request->nbr_employees,
             'passages' => $passages,
-            'type_logement' => $request->input('type_logement'),
-            'pieces' => $pieces,
-            'city' => $request->input('city'),
-            'adresse' => $request->input('adresse'),
-            'Emp_selected' => $request->input('Emp_selected'),
-            'confirmed' => $request->input('confirmed')
+            'nbr_months' => $request->nbr_months,
+            'city' => $request->city,
+            'confirmed' => $request->confirmed,
+            // 'adress' => $request->adress,
         ]);
 
-        // TODO : update prix
-        // $reservation->update([
-        //     'prix' => $reservation->getPrix()
+        // TODO : calculate and update price
+        // $subscription->update([
+        //     'prix' => $subscription->getPrix()
         // ]);
 
         return redirect()->action(
-            [ReservController::class, 'show'],
-            $reservation->id
+            [AbonmtController::class, 'show'],
+            $subscription->id
         );
+    }
+
+    public function show($id)
+    {
+        $subscription = Subscription::find($id);
+        if ($subscription) {
+            return view('Admin.Abonmt.show')->with('sub', $subscription);
+        } else {
+            return view('Admin.Abonmt.404');
+        }
+    }
+
+    public function edit($id)
+    {
+        $subscription = Subscription::find($id);
+
+        $empolyees_dispo = Employee::where('city', $subscription->city)
+            ->where('availability', 'available')->get();
+
+        return view('Admin.Abonmt.edit', [
+            'sub' => $subscription,
+            'employees' => $empolyees_dispo
+        ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $subscription = Subscription::find($id);
+        // edit start date
+        if ($request->has('edit_start_date')) {
+            $request->validate([
+                'start_date' => 'required|date',
+            ]);
+            $subscription->update(['start_date' => $request->start_date]);
+        }
+        // update passages 
+        if ($request->has('edit_passages')) {
+
+            $request->validate([
+                'day' => 'required|array',
+            ]);
+
+            $passages = collect();
+            $days =  $request->day;
+
+            foreach ($days as $day) {
+                $passages->push(["day" => $day, "time" =>  $request->input($day)]);
+            }
+            $subscription->update(['passages' => $passages]);
+        }
+        // update statut
+        if ($request->has('edit_status') && $request->filled('status')) {
+
+            if ($request->status == 'concluded') {
+                // add to table enregistrements 
+                foreach ($subscription->employees as $emply) {
+                    $subscription->emplyHistory()->attach($emply->id);
+                }
+                // remove employee from subscription_employee
+                $subscription->employees()->detach();
+            } elseif ($request->status == 'cancel') {
+                // remove employee from subscription_employee
+                $subscription->employees()->detach();
+            }
+
+            $subscription->update(['status' => $request->status]);
+        }
+        // add or remove emloyees for a subscription
+        if ($request->has('edit_Emp_selected')) {
+
+            if (!empty($request->Emp_selected)) {
+                // attach to employees_reservations
+                $subscription->employees()->sync($request->Emp_selected);
+                $subscription->update(['status' => 'valid']);
+            } else {
+                $subscription->employees()->detach();
+            }
+        }
+        return redirect()->action(
+            [AbonmtController::class, 'show'],
+            $id
+        );
+    }
+
+    public function destroy($id)
+    {
+        $subscription = Subscription::find($id);
+        // remove employee from subscription_employee
+        $subscription->employees()->detach();
+        $subscription->delete();
+        return redirect()->action([AbonmtController::class, 'index']);
     }
 }

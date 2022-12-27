@@ -1,35 +1,25 @@
 @extends('layouts.admin')
 @section('content')
-    <!-- Modal passage -->
-    <div class="modal fade" id="ModalPassage" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+    <!-- Modal start date -->
+    <div class="modal fade" id="ModalStartDate" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="ModalLabel">Modifier le passage</h5>
+                    <h5 class="modal-title" id="ModalLabel">Modifier la date du début</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('admin.reserv.update', $reserv->id) }}" method="POST">
+                    <form action="{{ route('admin.abonmt.update', $sub->id) }}" method="POST">
                         @csrf
                         @method('PUT')
-                        <input type="hidden" name="edit_passage">
-
+                        <input type="hidden" name="edit_start_date">
                         <div class="mb-3 row m-auto">
-                            <label for="start_date" class="col-sm-4 col-form-label text-end">Date</label>
+                            <label for="date_debut" class="col-sm-4 col-form-label text-end">Date début</label>
                             <div class="col-sm-6">
-                                <input type="date" class="form-control" id="start_date" name="start_date"
-                                    value="{{ $reserv->start_date }}">
+                                <input type="date" class="form-control" id="date_debut" name="start_date"
+                                    value="{{ $sub->start_date }}">
                             </div>
                         </div>
-                        <div class="mb-3 row m-auto">
-                            <label for="start_time" class="col-sm-4 col-form-label text-end">Heure</label>
-                            <div class="col-sm-6">
-                                <input type="time" class="form-control" id="start_time" name="start_time"
-                                    value="{{ $reserv->start_time }}">
-                            </div>
-                        </div>
-
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
@@ -48,7 +38,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('admin.reserv.update', $reserv->id) }}" method="POST">
+                    <form action="{{ route('admin.abonmt.update', $sub->id) }}" method="POST">
                         @csrf
                         @method('PUT')
                         <input type="hidden" name="edit_status">
@@ -98,11 +88,11 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p class="lead text-danger">ête vous sur de vouloir supprimer cette réservation</p>
+                    <p class="lead text-danger">ête vous sur de vouloir supprimer cette abonnement</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Annuler</button>
-                    <form method="POST" action="{{ route('admin.reserv.destroy', $reserv->id) }}">
+                    <form method="POST" action="{{ route('admin.abonmt.destroy', $sub->id) }}">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger">Supprimer</button>
@@ -112,13 +102,115 @@
             </div>
         </div>
     </div>
+    <!-- Modal passages -->
+    <div class="modal fade" id="ModalPackPassages" tabindex="-1" aria-labelledby="ModalLabel4" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ModalLabel4">Modifier les passages</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('admin.abonmt.update', $sub->id) }}" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" name="edit_passages">
+
+                        <div class="mb-3 row m-auto">
+
+                            <div class="col-sm-6 mx-auto">
+                                <div class="input-group mt-2">
+                                    <div class="input-group-text">
+                                        <input class="form-check-input mt-0 " type="checkbox" value="Lundi"
+                                            name="day[]" aria-label="Checkbox for following text input">
+                                        <span class="mx-1">Lundi</span>
+                                    </div>
+                                    <input type="time" class="form-control" name="Lundi"
+                                        aria-label="Text input with checkbox">
+                                </div>
+
+
+                                <div class="input-group mt-2">
+                                    <div class="input-group-text">
+                                        <input class="form-check-input mt-0 " type="checkbox" value="Mardi"
+                                            name="day[]" aria-label="Checkbox for following text input">
+                                        <span class="mx-1">Mardi</span>
+                                    </div>
+                                    <input type="time" class="form-control" name="Mardi"
+                                        aria-label="Text input with checkbox">
+                                </div>
+
+
+                                <div class="input-group mt-2">
+                                    <div class="input-group-text">
+                                        <input class="form-check-input mt-0 " type="checkbox" value="Mercredi"
+                                            name="day[]" aria-label="Checkbox for following text input">
+                                        <span class="mx-1">Mercredi</span>
+                                    </div>
+                                    <input type="time" class="form-control" name="Mercredi"
+                                        aria-label="Text input with checkbox">
+                                </div>
+
+
+                                <div class="input-group mt-2">
+                                    <div class="input-group-text">
+                                        <input class="form-check-input mt-0 " type="checkbox" value="Jeudi"
+                                            name="day[]" aria-label="Checkbox for following text input">
+                                        <span class="mx-1">Jeudi</span>
+                                    </div>
+                                    <input type="time" class="form-control" name="Jeudi"
+                                        aria-label="Text input with checkbox">
+                                </div>
+
+                                <div class="input-group mt-2">
+                                    <div class="input-group-text">
+                                        <input class="form-check-input mt-0 " type="checkbox" value="Vendredi"
+                                            name="day[]" aria-label="Checkbox for following text input">
+                                        <span class="mx-1">Vendredi</span>
+                                    </div>
+                                    <input type="time" class="form-control" name="Vendredi"
+                                        aria-label="Text input with checkbox">
+                                </div>
+
+                                <div class="input-group mt-2">
+                                    <div class="input-group-text">
+                                        <input class="form-check-input mt-0 " type="checkbox" value="Samedi"
+                                            name="day[]" aria-label="Checkbox for following text input">
+                                        <span class="mx-1">Samedi</span>
+                                    </div>
+                                    <input type="time" class="form-control" name="Samedi"
+                                        aria-label="Text input with checkbox">
+                                </div>
+
+                                <div class="input-group mt-2">
+                                    <div class="input-group-text">
+                                        <input class="form-check-input mt-0 " type="checkbox" value="Dimanche"
+                                            name="day[]" aria-label="Checkbox for following text input">
+                                        <span class="mx-1">Dimanche</span>
+                                    </div>
+                                    <input type="time" class="form-control" name="Dimanche"
+                                        aria-label="Text input with checkbox">
+                                </div>
+                            </div>
+
+                        </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="row align-items-center">
         <div class="col-md-12">
-            <h1 class="mt-4">Réservations</h1>
+            <h1 class="mt-4">Abonnements</h1>
             <ol class="breadcrumb mb-4">
                 <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Tableau de bord</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('admin.reserv.index') }}">liste</a> </li>
-                <li class="breadcrumb-item active">reservation</li>
+                <li class="breadcrumb-item"><a href="{{ route('admin.abonmt.index') }}">liste</a> </li>
+                <li class="breadcrumb-item active">abonnement</li>
             </ol>
             @if ($errors->any())
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -136,8 +228,8 @@
     <div class="row">
         <div class="col-md-8">
             <div class="card  border-info shadow-sm p-3  bg-white rounded">
-                <h5 class="card-header">Réservation
-                    @switch($reserv->status)
+                <h5 class="card-header">Abonnement
+                    @switch($sub->status)
                         @case('valid')
                             <span class="badge bg-success">Valider</span>
                         @break
@@ -168,54 +260,74 @@
                 </h5>
                 <div class="card-body">
 
-                    @if ($reserv->confirmed)
-                        <h6 class="card-title "> Reservation confirmer </h6>
+                    @if ($sub->confirmed)
+                        <h6 class="card-title "> Abonnement confirmer </h6>
                     @else
-                        <h6 class="card-title bg-danger p-2" style="color: white"> Reservation pas encore confirmer par le
+                        <h6 class="card-title bg-danger p-2" style="color: white"> Abonnement pas encore confirmer par le
                             client</h6>
                     @endif
-
+                    <h6 class="card-title "> Durée d'engagement : {{ $sub->nbr_months }} mois </h6>
                     <ul class="list-group list-group-flush">
+
                         <li class="list-group-item d-flex justify-content-between active ">
                             <div>
-                                <h5 class="text-bold">Service</h5>
-                                <p class="mb-1">{{ $reserv->service }}</p>
+                                <h5 class="text-bold">Offre</h5>
+                                <p class="mb-1">{{ $sub->offer->name }}</p>
                             </div>
                             <div>
-                                <h5 class="text-bold d-inline "> Passage</h5>
+                                <h5 class="text-bold d-inline ">Date début</h5>
                                 <button type="button" class="d-inline btn btn-sm  btn-outline-light"
-                                    data-bs-toggle="modal" data-bs-target="#ModalPassage">
+                                    data-bs-toggle="modal" data-bs-target="#ModalStartDate">
                                     <i class="far fa-edit"></i>
                                 </button>
-                                <p class="mb-1">Date : {{ $reserv->start_date }}</p>
-                                <p class="mb-1">Heure :{{ $reserv->start_time }}</p>
+                                <p class="mb-1">{{ $sub->start_date }}</p>
+                                {{-- <p class="mb-1">Date fin :{{ $sub->abonnement->date_fin }}</p> --}}
                             </div>
                             <div>
                                 <h5 class="text-bold">Prix</h5>
-                                <p class="mb-1">{{ $reserv->price }} DH</p>
+                                <p class="mb-1">{{ $sub->price }} DH</p>
+                            </div>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <div>
+                                <h5 class="text-bold d-inline">Passages</h5>
+                                <button type="button" class="d-inline btn btn-sm  btn-outline-dark"
+                                    data-bs-toggle="modal" data-bs-target="#ModalPackPassages">
+                                    <i class="far fa-edit"></i>
+                                </button>
+                                <ul>
+                                    @foreach ($sub->passages as $passage)
+                                        <li>{{ $passage['day'] }} : {{ $passage['time'] }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                            <div>
+                                <h5 class="text-bold">Passages par semaine</h5>
+                                <p class="mb-1 text-center">{{ $sub->offer->nbr_passages }}</p>
                             </div>
                         </li>
                         <li class="list-group-item d-flex justify-content-between">
                             <div>
                                 <h5 class="text-bold">Nbr heures</h5>
-                                <p class="mb-1 text-center">{{ $reserv->nbr_hours }}</p>
+                                <p class="mb-1 text-center">{{ $sub->nbr_hours }}</p>
                             </div>
                             <div>
                                 <h5 class="text-bold">Nbr employees</h5>
-                                <p class="mb-1 text-center">{{ $reserv->nbr_employees }}</p>
+                                <p class="mb-1 text-center">{{ $sub->nbr_employees }}</p>
                             </div>
                         </li>
                         <li class="list-group-item d-flex justify-content-between">
                             <div>
                                 <h5 class="text-bold">Adresse</h5>
-                                <p class="mb-1">{{ $reserv->adress }}</p>
-                                <p><a href="">link to location</a></p>
+                                <p class="mb-1 text-center">{{ $sub->adress }}</p>
+                                <p><a href="">link to location </a></p>
                             </div>
                             <div>
                                 <h5 class="text-bold">Ville</h5>
-                                <p class="mb-1">{{ $reserv->city }}</p>
+                                <p class="mb-1 text-center">{{ $sub->city }}</p>
                             </div>
                         </li>
+
                     </ul>
                 </div>
             </div>
@@ -224,11 +336,11 @@
             <div class="card  shadow-sm p-3  bg-white rounded">
                 <h5 class="card-header">Client </h5>
                 <div class="card-body">
-                    @isset($reserv->user)
+                    @isset($sub->user)
                         <h6 class="card-title">
 
-                            Utilisateur inscrit ID : {{ $reserv->user_id }}
-                            <a href="{{ route('admin.users.show', $reserv->user_id) }}" class="edit btn btn-primary btn-sm"
+                            Utilisateur inscrit ID : {{ $sub->user_id }}
+                            <a href="{{ route('admin.users.show', $sub->user_id) }}" class="edit btn btn-primary btn-sm"
                                 target="_blank"><i class="fas fa-eye"></i></a>
 
                         </h6>
@@ -237,7 +349,7 @@
                                 <div>
                                     <h5 class="text-bold">Nom et Prénom</h5>
 
-                                    <p class="mb-1">{{ $reserv->user->name }} </p>
+                                    <p class="mb-1">{{ $sub->user->name }} </p>
 
                                 </div>
                             </li>
@@ -245,14 +357,21 @@
                                 <div>
                                     <h5 class="text-bold">Téléphone</h5>
 
-                                    <p class="mb-1">{{ $reserv->user->phone }}</p>
+                                    <p class="mb-1">{{ $sub->user->phone }}</p>
 
                                 </div>
                             </li>
                             <li class="list-group-item">
                                 <div>
                                     <h5 class="text-bold">Email</h5>
-                                    <p class="mb-1">{{ $reserv->user->email }}</p>
+                                    <p class="mb-1">{{ $sub->user->email }}</p>
+                                </div>
+                            </li>
+
+                            <li class="list-group-item">
+                                <div>
+                                    <h5 class="text-bold">{{ $sub->offer->name }}</h5>
+                                    <p class="mb-1">{{ $sub->offer->description }}</p>
                                 </div>
                             </li>
                         </ul>
@@ -266,7 +385,7 @@
             <div class="card  shadow-sm p-3  bg-white rounded">
                 <h5 class="card-header">Employées planifier
                     <a class="float-end btn btn-primary btn-sm text-decoration-none"
-                        href="{{ route('admin.reserv.edit', $reserv->id) }}">Ajouter / Retirer</a>
+                        href="{{ route('admin.abonmt.edit', $sub->id) }}">Ajouter / Retirer</a>
                 </h5>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -284,7 +403,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($reserv->employees as $employee)
+                                @foreach ($sub->employees as $employee)
                                     <tr>
                                         <td>{{ $employee->id }}</a> </td>
                                         <td>{{ $employee->nom }}</td>
@@ -308,7 +427,7 @@
             </div>
         </div>
     </div>
-    @if ($reserv->emplyHistory()->exists())
+    @if ($sub->emplyHistory()->exists())
         <div class="row my-4">
             <div class="col-md-12">
                 <div class="card  shadow-sm p-3  bg-white rounded">
@@ -329,7 +448,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($reserv->emplyHistory as $employee)
+                                    @foreach ($sub->emplyHistory as $employee)
                                         <tr>
                                             <td>{{ $employee->id }}</a> </td>
                                             <td>{{ $employee->nom }}</td>

@@ -18,7 +18,7 @@ class EmployeeFactory extends Factory
             'first_name' => $this->faker->firstName(),
             'phone' => $this->faker->phoneNumber(),
             'adress' => $this->faker->address(),
-            'city' => 'Mohammedia',
+            'city' => $this->faker->randomElement(['Mohammedia', 'Casablanca']),
             'date_birth' => $this->faker->date(),
             //   'availability' =>  $this->faker->randomElement(['disponible', 'conge', 'autre']),
             'sex' =>  $this->faker->randomElement(['F', 'M']),

@@ -52,7 +52,7 @@
                     </div>
                     <div class="col-md-8">
                         <div class="card-body">
-                            <h5 class="card-title">{{ $employee->nom }} {{ $employee->prenom }}
+                            <h5 class="card-title">{{ $employee->full_name }}
                                 <button type="button" class="float-end btn btn-sm  btn-outline-danger"
                                     data-bs-toggle="modal" data-bs-target="#ModalDelete">
                                     <i class="far fa-trash-alt"></i>
@@ -62,13 +62,13 @@
                                     <i class="far fa-edit"></i></a>
                             </h5>
                             <ul class="list-group list-group-flush">
-                                <li class="list-group-item">Age : {{ $employee->age }}</li>
+                                <li class="list-group-item">Date naissance : {{ $employee->date_birth }}</li>
                                 <li class="list-group-item">Téléphone : {{ $employee->phone }}</li>
-                                <li class="list-group-item">Adresse : {{ $employee->adresse }}</li>
-                                <li class="list-group-item">Ville : {{ $employee->ville }}</li>
-                                <li class="list-group-item">Specialité : {{ $employee->specialite }}</li>
+                                <li class="list-group-item">Adresse : {{ $employee->adress }}</li>
+                                <li class="list-group-item">Ville : {{ $employee->city }}</li>
+                                <li class="list-group-item">Specialité : {{ $employee->speciality }}</li>
                             </ul>
-                            <p class="card-text"><small class="text-muted">{{ $employee->disponibilite }}</small></p>
+                            <p class="card-text"><small class="text-muted">{{ $employee->availability }}</small></p>
                             <a href="{{ route('admin.emply.history', $employee->id) }}">Voire l'historique de toute les
                                 réservations attribué</a>
                         </div>
@@ -107,17 +107,17 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @isset($employee->reservations)
-                                    @foreach ($employee->reservations as $reserv)
-                                        @if ($reserv->type_passage == 'unique')
+                                @isset($employee->subscriptions)
+                                    @foreach ($employee->subscriptions as $reserv)
+                                        @if ($reserv->just_once)
                                             <tr>
                                                 <th scope="row">{{ $reserv->id }}</th>
                                                 <td>{{ $reserv->service }}</td>
-                                                <td>{{ $reserv->ville }}</td>
-                                                <td>{{ $reserv->adresse }}</td>
-                                                <td>{{ $reserv->date_passage }}</td>
-                                                <td>{{ $reserv->heure_passage }}</td>
-                                                <td>{{ $reserv->prix }}</td>
+                                                <td>{{ $reserv->city }}</td>
+                                                <td>{{ $reserv->adress }}</td>
+                                                <td>{{ $reserv->start_date }}</td>
+                                                <td>{{ $reserv->start_time }}</td>
+                                                <td>{{ $reserv->price }}</td>
                                                 <td>
                                                     <a href="{{ route('admin.reserv.show', $reserv->id) }}"
                                                         class="edit btn btn-primary btn-sm" target="_blank"><i
@@ -147,7 +147,7 @@
                             <thead>
                                 <tr>
                                     <th scope="col">Ref</th>
-                                    <th scope="col">pack</th>
+                                    <th scope="col">Offre</th>
                                     <th scope="col">Ville</th>
                                     <th scope="col">Adresse</th>
                                     <th scope="col">Date début</th>
@@ -156,21 +156,21 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @isset($employee->reservations)
-                                    @foreach ($employee->reservations as $reserv)
-                                        @if ($reserv->type_passage == 'abonnement')
+                                @isset($employee->subscriptions)
+                                    @foreach ($employee->subscriptions as $reserv)
+                                        @if (!$reserv->just_once)
                                             <tr>
                                                 <th scope="row">{{ $reserv->id }}</th>
-                                                <td>{{ $reserv->pack->name }}</td>
-                                                <td>{{ $reserv->ville }}</td>
-                                                <td>{{ $reserv->adresse }}</td>
-                                                <td>{{ $reserv->date_debut }}</td>
-                                                <td>{{ $reserv->prix }}</td>
+                                                <td>{{ $reserv->offer->name }}</td>
+                                                <td>{{ $reserv->city }}</td>
+                                                <td>{{ $reserv->adress }}</td>
+                                                <td>{{ $reserv->start_date }}</td>
+                                                <td>{{ $reserv->price }}</td>
                                                 <td>
-                                                    <a href="{{ route('admin.reserv.show', $reserv->id) }}"
+                                                    <a href="{{ route('admin.abonmt.show', $reserv->id) }}"
                                                         class="edit btn btn-primary btn-sm" target="_blank"><i
                                                             class="fas fa-eye"></i></a>
-                                                    <a href="{{ route('admin.reserv.edit', $reserv->id) }}"
+                                                    <a href="{{ route('admin.abonmt.edit', $reserv->id) }}"
                                                         class="edit btn btn-secondary btn-sm"><i class="fas fa-edit"></i></a>
                                                 </td>
                                             </tr>

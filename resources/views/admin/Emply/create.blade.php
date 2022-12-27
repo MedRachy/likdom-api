@@ -18,14 +18,13 @@
                     <form class="needs-validation" method="POST" action="{{ route('admin.emply.store') }}"
                         enctype="multipart/form-data">
                         @csrf
-                        {{-- emply info --}}
-                        {{-- <h4 class="mb-3 mt-4">Client info</h4> --}}
+
                         <div class="row g-3">
                             <div class="col-sm-6">
                                 <label for="firstName" class="form-label">Prénom</label>
-                                <input type="text" class="form-control @error('prenom') is-invalid @enderror"
-                                    id="firstName" name="prenom" value="{{ old('prenom') }}">
-                                @error('prenom')
+                                <input type="text" class="form-control @error('first_name') is-invalid @enderror"
+                                    id="firstName" name="first_name" value="{{ old('first_name') }}">
+                                @error('first_name')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -34,9 +33,9 @@
 
                             <div class="col-sm-6">
                                 <label for="lastName" class="form-label">Nom</label>
-                                <input type="text" class="form-control @error('nom') is-invalid @enderror" id="lastName"
-                                    name="nom" value="{{ old('nom') }}">
-                                @error('nom')
+                                <input type="text" class="form-control @error('last_name') is-invalid @enderror"
+                                    id="lastName" name="last_name" value="{{ old('last_name') }}">
+                                @error('last_name')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -44,10 +43,10 @@
                             </div>
 
                             <div class="col-sm-6">
-                                <label for="age" class="form-label ">Age</label>
-                                <input type="text" class="form-control @error('age') is-invalid @enderror" id="age"
-                                    name="age" value="{{ old('age') }}">
-                                @error('age')
+                                <label for="date_birth" class="form-label ">Date naissance</label>
+                                <input type="date" class="form-control @error('date_birth') is-invalid @enderror"
+                                    id="age" name="date_birth" value="{{ old('date_birth') }}">
+                                @error('date_birth')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -64,7 +63,7 @@
                                 </div>
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" id="homme" name="sex"
-                                        value="H" @if (old('sex') == 'H') checked @endif>
+                                        value="M" @if (old('sex') == 'M') checked @endif>
                                     <label class="form-check-label" for="homme">Homme</label>
                                 </div>
                             </div>
@@ -82,22 +81,22 @@
 
                             <div class="col-sm-6">
                                 <label for="selectSpecialite" class="form-label">specialité</label>
-                                <select class="form-select" id="selectSpecialite" name="specialite"
+                                <select class="form-select" id="selectSpecialite" name="speciality"
                                     aria-label="Default select example">
 
-                                    <option value="menage" @if (old('specialite') == 'menage' || old('specialite') == '') selected @endif>Ménage</option>
-                                    <option value="cuisine" @if (old('specialite') == 'cuisine') selected @endif>Cuisine
+                                    <option value="menage" @if (old('speciality') == 'menage' || old('speciality') == '') selected @endif>Ménage</option>
+                                    <option value="cuisine" @if (old('speciality') == 'cuisine') selected @endif>Cuisine
                                     </option>
-                                    <option value="autre" @if (old('specialite') == 'autre') selected @endif>autre</option>
+                                    <option value="autre" @if (old('speciality') == 'autre') selected @endif>autre</option>
 
                                 </select>
                             </div>
 
                             <div class="col-sm-6">
                                 <label for="addresse" class="form-label">Adresse</label>
-                                <input type="text" class="form-control @error('adresse') is-invalid @enderror"
-                                    id="addresse" name="adresse" value="{{ old('adresse') }}">
-                                @error('adresse')
+                                <input type="text" class="form-control @error('adress') is-invalid @enderror"
+                                    id="addresse" name="adress" value="{{ old('adress') }}">
+                                @error('adress')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -106,16 +105,16 @@
 
 
                             <div class="col-sm-6">
-                                <label for="selectVille" class="form-label">Ville</label>
-                                <select class="form-select" id="selectVille" name="ville"
+                                <label for="selectcity" class="form-label">Ville</label>
+                                <select class="form-select" id="selectcity" name="city"
                                     aria-label="Default select example">
 
-                                    <option value="Rabat" @if (old('ville') == 'Rabat' || old('ville') == '') selected @endif>Rabat
+                                    <option value="Rabat" @if (old('city') == 'Rabat' || old('city') == '') selected @endif>Rabat
                                     </option>
-                                    <option value="Casablanca" @if (old('ville') == 'Casablanca') selected @endif>
+                                    <option value="Casablanca" @if (old('city') == 'Casablanca') selected @endif>
                                         Casablanca
                                     </option>
-                                    <option value="Mohammedia" @if (old('ville') == 'Mohammedia') selected @endif>
+                                    <option value="Mohammedia" @if (old('city') == 'Mohammedia') selected @endif>
                                         Mohammedia</option>
 
                                 </select>

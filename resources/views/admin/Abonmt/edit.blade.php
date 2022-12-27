@@ -2,11 +2,11 @@
 @section('content')
     <div class="row align-items-center">
         <div class="col-md-6">
-            <h1 class="mt-4">Réservations</h1>
+            <h1 class="mt-4">Abonnements</h1>
             <ol class="breadcrumb mb-4">
                 <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Tableau de bord</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('admin.reserv.index') }}">liste</a> </li>
-                <li class="breadcrumb-item"><a href="{{ route('admin.reserv.show', $reserv->id) }}">reservation</a> </li>
+                <li class="breadcrumb-item"><a href="{{ route('admin.abonmt.index') }}">liste</a> </li>
+                <li class="breadcrumb-item"><a href="{{ route('admin.abonmt.show', $sub->id) }}">abonnement</a> </li>
                 <li class="breadcrumb-item active">modifier</li>
             </ol>
         </div>
@@ -18,8 +18,8 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card  border-info shadow-sm p-3  bg-white rounded">
-                <h5 class="card-header">Réservation
-                    @switch($reserv->status)
+                <h5 class="card-header">Abonnement
+                    @switch($sub->status)
                         @case('valid')
                             <span class="badge bg-success">Valider</span>
                         @break
@@ -37,10 +37,10 @@
                 </h5>
                 <div class="card-body">
 
-                    @if ($reserv->confirmed)
-                        <h6 class="card-title "> Reservation confirmer </h6>
+                    @if ($sub->confirmed)
+                        <h6 class="card-title "> abonnement confirmer </h6>
                     @else
-                        <h6 class="card-title bg-danger p-2" style="color: white"> Reservation pas encore confirmer par le
+                        <h6 class="card-title bg-danger p-2" style="color: white"> abonnement pas encore confirmer par le
                             client</h6>
                     @endif
 
@@ -48,29 +48,45 @@
 
                         <li class="list-group-item d-flex justify-content-between active ">
                             <div>
-                                <h5 class="text-bold">Service</h5>
-                                <p class="mb-1">{{ $reserv->service }}</p>
+                                <h5 class="text-bold">Offre</h5>
+                                <p class="mb-1">{{ $sub->offer->name }}</p>
                             </div>
                             <div>
-                                <h5 class="text-bold">Passage</h5>
-                                <p class="mb-1">Date : {{ $reserv->start_date }}</p>
-                                <p class="mb-1">Heure :{{ $reserv->start_time }}</p>
+                                <h5 class="text-bold">Date début</h5>
+                                <p class="mb-1">{{ $sub->start_date }}</p>
                             </div>
                             <div>
                                 <h5 class="text-bold">Prix</h5>
-                                <p class="mb-1">{{ $reserv->price }} DH</p>
+                                <p class="mb-1">{{ $sub->price }} DH</p>
                             </div>
                         </li>
-
+                        <li class="list-group-item d-flex justify-content-between">
+                            <div>
+                                <h5 class="text-bold">Passages</h5>
+                                <ul>
+                                    @foreach ($sub->passages as $passage)
+                                        <li>{{ $passage['day'] }} : {{ $passage['time'] }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                            <div>
+                                <h5 class="text-bold">Nbr heures</h5>
+                                <p class="mb-1 text-center">{{ $sub->nbr_hours }}</p>
+                            </div>
+                            <div>
+                                <h5 class="text-bold">Nbr employees</h5>
+                                <p class="mb-1 text-center">{{ $sub->nbr_employees }}</p>
+                            </div>
+                        </li>
                         <li class="list-group-item d-flex justify-content-between">
                             <div>
                                 <h5 class="text-bold">Adresse</h5>
-                                <p class="mb-1">{{ $reserv->adress }}</p>
+                                <p class="mb-1 text-center">{{ $sub->adress }}</p>
 
                             </div>
                             <div>
                                 <h5 class="text-bold">Ville</h5>
-                                <p class="mb-1">{{ $reserv->city }}</p>
+                                <p class="mb-1 text-center">{{ $sub->city }}</p>
                             </div>
                         </li>
                     </ul>
@@ -83,10 +99,10 @@
             <div class="card  shadow-sm p-3  bg-white rounded">
                 <h5 class="card-header">Employées disponible pour cette réservation</h5>
                 <div class="card-body">
-                    @isset($reserv->Emp_selected)
+                    {{-- @isset($sub->Emp_selected)
                         <h6 class="card-title">Employée selectionner par le client : <span
-                                class="bg-info fw-bold px-2">{{ $reserv->Emp_selected }}</span> </h6>
-                    @endisset
+                                class="bg-info fw-bold px-2">{{ $sub->Emp_selected }}</span> </h6>
+                    @endisset --}}
 
                     <div class="table-responsive">
                         <table class="table table-hover">
@@ -105,27 +121,27 @@
                             </thead>
                             <tbody>
                                 <form id="select_employees" method="POST"
-                                    action="{{ route('admin.reserv.update', $reserv->id) }}">
+                                    action="{{ route('admin.reserv.update', $sub->id) }}">
                                     @method('PUT')
                                     @csrf
                                     <input type="hidden" name="edit_Emp_selected">
                                     {{-- employé déja attribué --}}
-                                    @isset($reserv->employees)
-                                        @foreach ($reserv->employees as $emp_reserv)
+                                    @isset($sub->employees)
+                                        @foreach ($sub->employees as $emp_reserv)
                                             <tr class="table-primary">
                                                 <td>
                                                     <input checked class="form-check-input me-1" type="checkbox"
-                                                        name="Emp_selected[]" value="{{ $emp_reserv->id }}" aria-label="...">
+                                                        name="Emp_selected[]" value="{{ $emp_sub->id }}" aria-label="...">
                                                 </td>
-                                                <td>{{ $emp_reserv->id }} </td>
-                                                <td>{{ $emp_reserv->nom }}</td>
-                                                <td>{{ $emp_reserv->prenom }}</td>
-                                                <td>{{ $emp_reserv->age }}</td>
-                                                <td>{{ $emp_reserv->adresse }}</td>
-                                                <td>{{ $emp_reserv->ville }}</td>
-                                                <td>{{ $emp_reserv->phone }}</td>
+                                                <td>{{ $emp_sub->id }} </td>
+                                                <td>{{ $emp_sub->nom }}</td>
+                                                <td>{{ $emp_sub->prenom }}</td>
+                                                <td>{{ $emp_sub->age }}</td>
+                                                <td>{{ $emp_sub->adresse }}</td>
+                                                <td>{{ $emp_sub->ville }}</td>
+                                                <td>{{ $emp_sub->phone }}</td>
                                                 <td class="text-center">
-                                                    <a href="{{ route('admin.emply.show', $emp_reserv->id) }}" target="_blank"
+                                                    <a href="{{ route('admin.emply.show', $emp_sub->id) }}" target="_blank"
                                                         class="edit btn btn-primary btn-sm"><i class="fas fa-eye"></i></a>
                                                 </td>
                                             </tr>

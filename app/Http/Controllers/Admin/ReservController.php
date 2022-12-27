@@ -4,24 +4,19 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Reservation;
 use App\Models\Employee;
 use App\Models\Subscription;
-use Carbon\Carbon;
-use DataTables;
 
 class ReservController extends Controller
 {
 
     public function index()
     {
-
         return view('Admin.Reserv.index');
     }
 
     public function search(Request $request)
     {
-
         $reservations = Subscription::where('just_once', true)->get();
 
         // filter by params
@@ -128,69 +123,45 @@ class ReservController extends Controller
         return view("Admin.Reserv.create");
     }
 
-
     public function store(Request $request)
     {
-
-        $pieces = [
-            'niveau' => $request->niveau,
-            'chambre' => $request->chambre,
-            'cuisine' => $request->cuisine,
-            'toilette' => $request->toilette,
-            'salon_traditionnel' => $request->salon_traditionnel,
-            'salon_moderne' => $request->salon_moderne,
-            'sejour' => $request->sejour,
-            'coure' => $request->coure,
-            'terasse' => $request->terasse,
-            'buanderie' => $request->buanderie,
-            'garage' => $request->garage,
-        ];
-
-        $reservation = Reservation::create([
-
-            'service' => $request->input('service'),
-            'type_logement' => $request->input('type_logement'),
-            'date_passage' => $request->input('date_passage'),
-            'start_time' => $request->input('start_time'),
-            'pieces' => $pieces,
-            'type_surface' => $request->input('type_surface'),
-            'equipements' => $request->input('equipements'),
-            'produits' => $request->input('produits'),
-            'user_id' => $request->input('user_id'),
-            'ville' => $request->input('ville'),
-            'adresse' => $request->input('adresse'),
-            'confirmed' => $request->input('confirmed')
+        // validation 
+        $request->validate([
+            'start_date' => 'required|date',
+            'start_time' => 'required',
+            'nbr_hours' => 'required',
+            'nbr_employees' => 'required',
+            'city' => 'required',
+            // 'adress' => 'required'
         ]);
+
+        $subscription = Subscription::create([
+            'user_id' =>  $request->user_id,
+            'service' => 'menage',
+            'start_date' => $request->start_date,
+            'start_time' => $request->start_time,
+            'nbr_hours' => $request->nbr_hours,
+            'nbr_employees' => $request->nbr_employees,
+            'city' => $request->city,
+            'just_once' => true,
+            'confirmed' => $request->confirmed,
+        ]);
+
         // update prix 
-        $reservation->update([
-            'prix' => $reservation->getPrix()
-        ]);
+        // $reservation->update([
+        //     'prix' => $reservation->getPrix()
+        // ]);
         return redirect()->action(
             [ReservController::class, 'show'],
-            $reservation->id
+            $subscription->id
         );
     }
 
-
     public function show($id)
     {
-
-        $reserv = Reservation::find($id);
+        $reserv = Subscription::find($id);
         if ($reserv) {
-            // dd($reserv);
-            // dd($reserv->emplyHistory()->exists());
             return view('Admin.Reserv.show')->with('reserv', $reserv);
-        } else {
-            return view('Admin.Reserv.404');
-        }
-    }
-
-    public function code(Request $request)
-    {
-        $code = $request->input('code');
-        $reserv = Reservation::where('code', $code)->first();
-        if ($reserv) {
-            return redirect()->action([ReservController::class, 'show'], $reserv->id);
         } else {
             return view('Admin.Reserv.404');
         }
@@ -198,71 +169,9 @@ class ReservController extends Controller
 
     public function edit($id)
     {
-        $reserv = Reservation::find($id);
-        $empolyees_dispo = Employee::where('ville', $reserv->ville)
-            ->where('disponibilite', 'disponible')->get();
-
-        // if ($reserv->pack()->exists()) {
-
-        //     $date_debut = $reserv->date_debut;
-
-        //     foreach ($reserv->passages as $passage) {
-
-        //         $start_time = $passage['jour'];
-        //         $reserv_dayName = $passage['heure'];
-        //         $empolyees_dispo = $empolyees_dispo->reject(function ($value, $key) use ($date_debut, $reserv_dayName, $start_time) {
-
-        //             foreach ($value->reservations as $reserv) {
-        //                 // vérifie si dispo  par rapport avec les reservations unique  attribué  
-        //                 $dayName = Carbon::parse($reserv->date_passage)->locale('fr')->dayName;
-        //                 if ($date_debut <= $reserv->date_passage ) {
-        //                     if ($dayName == $reserv_dayName && $reserv->start_time == $start_time) {
-        //                         return true;
-        //                     }
-        //                 }
-        //                 //  vérifie si dispo par rapport avec les abonnements attribué
-        //                 if ($reserv->pack) {
-        //                     if ($reserv->date_debut >= $date_debut) {
-
-        //                         foreach ($reserv->abonnement->passages as $passage) {
-        //                             if ($passage["day"] == $reserv_dayName && $passage["time"] == $start_time) {
-        //                                 return true;
-        //                             }
-        //                         }
-        //                     }
-        //                 }
-        //             }
-        //         });
-        //     }
-        // } else {
-
-        //     $date_passage = $reserv->date_passage;
-        //     $start_time = $reserv->start_time;
-        //     $dayName = Carbon::parse($date_passage)->locale('fr')->dayName;
-
-        //     // list des Empolyee disponible pour cette réservation     
-        //     $empolyees_dispo = $empolyees_dispo->reject(function ($value, $key) use ($date_passage, $start_time, $dayName) {
-
-        //         // if($value->reservations()->exists()) { }
-        //         foreach ($value->reservations as $reserv) {
-        //             // vérifie si dispo par rapport avec les reservations unique  attribué   
-        //             if ($reserv->date_passage == $date_passage && $reserv->start_time == $start_time) {
-        //                 return true;
-        //             }
-        //             // vérifie si dispo  par rapport avec les abonnements attribué
-        //             if ($reserv->abonnement) {
-        //                 if ($reserv->abonnement->date_debut <= $date_passage && $reserv->abonnement->date_fin >= $date_passage) {
-
-        //                     foreach ($reserv->abonnement->passages as $passage) {
-        //                         if ($passage["day"] == $dayName && $passage["time"] == $start_time) {
-        //                             return true;
-        //                         }
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //     });
-        // }
+        $reserv = Subscription::find($id);
+        $empolyees_dispo = Employee::where('city', $reserv->city)
+            ->where('availability', 'available')->get();
 
         return view('Admin.Reserv.edit', [
             'reserv' => $reserv,
@@ -270,48 +179,25 @@ class ReservController extends Controller
         ]);
     }
 
-
     public function update(Request $request, $id)
     {
-
-        $reserv = Reservation::find($id);
-        // edit date & heure passage
+        $reserv = Subscription::find($id);
+        // edit date & time passage
         if ($request->has('edit_passage')) {
 
             $request->validate([
-                'date_passage' => 'required_without:date_debut|date',
-                'date_debut' => 'required_without:date_passage|date',
-                'start_time' => 'required_without:date_debut',
+                'start_date' => 'required|date',
+                'start_time' => 'required',
             ]);
             $reserv->update([
-                'date_passage' => $request->input('date_passage'),
-                'start_time' => $request->input('start_time'),
-                'date_debut'  => $request->input('date_debut'),
+                'start_date' => $request->start_date,
+                'start_time' => $request->start_time,
             ]);
         }
+        // update status
+        if ($request->has('edit_status') && $request->filled('status')) {
 
-        // update pack passages 
-        if ($request->has('edit_pack_passages')) {
-
-            $request->validate([
-                'jour' => 'required|array',
-            ]);
-
-            $passages = collect();
-            $journees =  $request->input('jour');
-
-            foreach ($journees as $jour) {
-                $passages->push(["jour" => $jour, "heure" =>  $request->input($jour)]);
-            }
-            $reserv->update([
-                'passages' => $passages
-            ]);
-        }
-
-        // update statut
-        if ($request->has('edit_statut') && $request->filled('statut')) {
-
-            if ($request->input('statut') == 'terminer') {
+            if ($request->input('status') == 'concluded') {
                 // add to table enregistrements 
                 foreach ($reserv->employees as $emply) {
                     $reserv->emplyHistory()->attach($emply->id);
@@ -320,20 +206,18 @@ class ReservController extends Controller
                 $reserv->employees()->detach();
             }
 
-            if ($request->input('statut') == 'annuler') {
+            if ($request->input('status') == 'cancel') {
                 $reserv->employees()->detach();
             }
-            $reserv->update(['statut' => $request->input('statut')]);
+            $reserv->update(['status' => $request->status]);
         }
-
         // add or remove emloyees for a reservation
-        // if a value is present on the request and is not empty
         if ($request->has('edit_Emp_selected')) {
 
             if (!empty($request->input('Emp_selected'))) {
                 // attach to employees_reservations
-                $reserv->employees()->sync($request->input('Emp_selected'));
-                $reserv->update(['statut' => 'valider']);
+                $reserv->employees()->sync($request->Emp_selected);
+                $reserv->update(['status' => 'valid']);
             } else {
                 $reserv->employees()->detach();
             }
@@ -346,8 +230,7 @@ class ReservController extends Controller
 
     public function destroy($id)
     {
-
-        $reserv = Reservation::find($id);
+        $reserv = Subscription::find($id);
         // remove employee from reservation_employee
         $reserv->employees()->detach();
         $reserv->delete();
