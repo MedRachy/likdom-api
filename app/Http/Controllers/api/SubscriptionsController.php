@@ -54,6 +54,9 @@ class SubscriptionsController extends Controller
             'price' => 'required'
         ]);
 
+        // generat the end_date
+        $end_date = Carbon::parse($request->start_date)->addMonths($request->nbr_months);
+
         $subscription = Subscription::create([
             'user_id' => Auth::id(),
             'offer_id' => $request->offer_id,
@@ -63,6 +66,7 @@ class SubscriptionsController extends Controller
             'passages' => json_decode($request->passages),
             'location' => json_decode($request->location),
             'nbr_months' => $request->nbr_months,
+            'end_date' => $end_date,
             'city' => $request->city,
             'price' => $request->price,
         ]);

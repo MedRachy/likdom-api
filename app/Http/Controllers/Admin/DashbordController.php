@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Subscription;
+use App\Models\User;
 // use App\Models\Candidature;
 // use App\Models\Devi;
 use Illuminate\Http\Request;
@@ -14,76 +16,80 @@ class DashbordController extends Controller
 {
     public function index()
     {
-        return view("admin.index");
+
         // today date and name
-        // $today = Carbon::today()->format('Y-m-d');
-        // $todayName = ucfirst(Carbon::parse($today)->locale('fr')->dayName);
+        $today = Carbon::today()->format('Y-m-d');
+        $todayName = ucfirst(Carbon::parse($today)->locale('fr')->dayName);
 
         // // list des reserv en attente de validation
-        // $reservations = Reservation::where('statut', "en_attente")
-        //     ->where('type_passage', 'unique')
-        //     ->orderBy('date_passage')
-        //     ->get();
+        $reservations = Subscription::where('just_once', true)
+            ->where('status', "pending")
+            ->orderBy('start_date')
+            ->get();
 
         // // list des reserv de la journée 
-        // $today_reservations = Reservation::where('date_passage', $today)
-        //     ->orderBy('heure_passage')
-        //     ->get();
+        $today_reservations = Subscription::where('just_once', true)
+            ->where('start_date', $today)
+            ->orderBy('start_time')
+            ->get();
 
         // // list des abonnement en attente 
-        // $abonnements = Reservation::where('statut', "en_attente")
-        //     ->where('type_passage', 'abonnement')
-        //     ->orderBy('date_debut')
-        //     ->get();
+        $abonnements = Subscription::where('just_once', false)
+            ->where('status', "pending")
+            ->orderBy('start_date')
+            ->get();
 
         // // list des abonnement active de la journée 
-        // $today_abonnements = Reservation::where('date_debut', '<=', $today)
-        //     ->get();
-        // // filtrer par dayname
-        // $today_abonnements = $today_abonnements->filter(function ($value) use ($todayName) {
-        //     foreach ($value->passages as $passage) {
-        //         if ($passage["jour"] == $todayName) {
-        //             return true;
-        //         }
-        //     }
-        // });
+        $today_abonnements = Subscription::where('just_once', false)
+            ->where('start_date', '<=', $today)
+            ->get();
+        // filtrer par dayname
+        $today_abonnements = $today_abonnements->filter(function ($value) use ($todayName) {
+            foreach ($value->passages as $passage) {
+                if ($passage["day"] == $todayName) {
+                    return true;
+                }
+            }
+        });
         // // count 
-        // $total_users = User::where('role', 'user')
-        //     ->count();
-        // $reservs_en_attent = $reservations->count();
-        // $reservs_today = $today_reservations->count();
-        // $abonmts_today = $today_abonnements->count();
+        $total_users = User::where('role', 'user')
+            ->count();
+        $reservs_en_attent = $reservations->count();
+        $abonmt_en_attent = $abonnements->count();
+        $reserv_abonmt_pending = $reservs_en_attent + $abonmt_en_attent;
+        $reservs_today = $today_reservations->count();
+        $abonmts_today = $today_abonnements->count();
 
         // // count employee reserv unique    
-        // $employees_reservs = $today_reservations->map(function ($item) {
-        //     if ($item->employees) {
-        //         return $item->employees->count();
-        //     }
-        // });
+        $employees_reservs = $today_reservations->map(function ($item) {
+            if ($item->employees) {
+                return $item->employees->count();
+            }
+        });
 
         // // count employee abonmt
-        // $employees_abonmts = $today_abonnements->map(function ($item) {
-        //     if ($item->employees) {
-        //         return $item->employees->count();
-        //     }
-        // });
-        // $employees_abonmts = $employees_abonmts->sum();
-        // $employees_reservs = $employees_reservs->sum();
-        // $employees_today = $employees_reservs + $employees_abonmts;
+        $employees_abonmts = $today_abonnements->map(function ($item) {
+            if ($item->employees) {
+                return $item->employees->count();
+            }
+        });
+        $employees_abonmts = $employees_abonmts->sum();
+        $employees_reservs = $employees_reservs->sum();
+        $employees_today = $employees_reservs + $employees_abonmts;
 
-        // return view("admin.index", [
-        //     'reservations' => $reservations,
-        //     'abonnements' => $abonnements,
-        //     'today_reservations' => $today_reservations,
-        //     'today_abonnements' => $today_abonnements,
-        //     'today' => $today,
-        //     'todayName' => $todayName,
-        //     'reservs_en_attent' => $reservs_en_attent,
-        //     'reservs_today' => $reservs_today,
-        //     'abonmts_today' => $abonmts_today,
-        //     'employees_today' => $employees_today,
-        //     'total_users' => $total_users
-        // ]);
+        return view("admin.index", [
+            'reservations' => $reservations,
+            'abonnements' => $abonnements,
+            'today_reservations' => $today_reservations,
+            'today_abonnements' => $today_abonnements,
+            'today' => $today,
+            'todayName' => $todayName,
+            'reserv_abonmt_pending' => $reserv_abonmt_pending,
+            'reservs_today' => $reservs_today,
+            'abonmts_today' => $abonmts_today,
+            'employees_today' => $employees_today,
+            'total_users' => $total_users
+        ]);
     }
 
     // public function charts()

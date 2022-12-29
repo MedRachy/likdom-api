@@ -10,6 +10,16 @@
                 <li class="breadcrumb-item active">modifier</li>
             </ol>
         </div>
+        @if ($errors->any())
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
     </div>
     <div class="row">
         <div class="col-md-8 m-auto">
@@ -20,14 +30,13 @@
                         enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
-                        {{-- emply info --}}
-                        {{-- <h4 class="mb-3 mt-4">Client info</h4> --}}
+
                         <div class="row g-3">
                             <div class="col-sm-6">
                                 <label for="firstName" class="form-label">Prénom</label>
-                                <input type="text" class="form-control @error('prenom') is-invalid @enderror"
-                                    id="firstName" name="prenom" value="{{ $employee->prenom }}">
-                                @error('prenom')
+                                <input type="text" class="form-control @error('first_name') is-invalid @enderror"
+                                    id="firstName" name="first_name" value="{{ $employee->first_name }}">
+                                @error('first_name')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -36,9 +45,9 @@
 
                             <div class="col-sm-6">
                                 <label for="lastName" class="form-label">Nom</label>
-                                <input type="text" class="form-control @error('nom') is-invalid @enderror" id="lastName"
-                                    name="nom" value="{{ $employee->nom }}">
-                                @error('nom')
+                                <input type="text" class="form-control @error('last_name') is-invalid @enderror"
+                                    id="lastName" name="last_name" value="{{ $employee->last_name }}">
+                                @error('last_name')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -46,10 +55,10 @@
                             </div>
 
                             <div class="col-sm-6">
-                                <label for="age" class="form-label">Age</label>
-                                <input type="text" class="form-control @error('age') is-invalid @enderror" id="age"
-                                    name="age" value="{{ $employee->age }}">
-                                @error('age')
+                                <label for="date_birth" class="form-label ">Date naissance</label>
+                                <input type="date" class="form-control @error('date_birth') is-invalid @enderror"
+                                    id="age" name="date_birth" value={{ $employee->date_birth }}>
+                                @error('date_birth')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -58,30 +67,17 @@
 
                             <div class="col-sm-6">
                                 <h6>Sex</h6>
-                                @if ($employee->sex == 'F')
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" id="femme" name="sex"
-                                            value="F" checked>
-                                        <label class="form-check-label" for="femme">Femme</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" id="homme" name="sex"
-                                            value="H">
-                                        <label class="form-check-label" for="homme">Homme</label>
-                                    </div>
-                                @else
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" id="femme" name="sex"
-                                            value="F">
-                                        <label class="form-check-label" for="femme">Femme</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" id="homme" name="sex"
-                                            value="H" checked>
-                                        <label class="form-check-label" for="homme">Homme</label>
-                                    </div>
-                                @endif
 
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="femme" name="sex"
+                                        value="F" @if ($employee->sex == 'F') checked @endif>
+                                    <label class="form-check-label" for="femme">Femme</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="homme" name="sex"
+                                        value="M" @if ($employee->sex == 'M') checked @endif>
+                                    <label class="form-check-label" for="homme">Homme</label>
+                                </div>
                             </div>
 
                             <div class="col-sm-6">
@@ -97,53 +93,37 @@
 
                             <div class="col-sm-6">
                                 <label for="selectSpecialite" class="form-label">specialité</label>
-                                <select class="form-select" id="selectSpecialite" name="specialite"
+                                <select class="form-select" id="selectSpecialite" name="speciality"
                                     aria-label="Default select example">
-                                    @if ($employee->specialite == 'menage')
-                                        <option value="menage" selected>Ménage</option>
-                                        <option value="cuisine">Cuisine</option>
-                                        <option value="autre">autre</option>
-                                    @elseif ($employee->specialite == 'cuisine')
-                                        <option value="menage">Ménage</option>
-                                        <option value="cuisine" selected>Cuisine</option>
-                                        <option value="autre">autre</option>
-                                    @endif
-
-
+                                    <option value="menage" @if ($employee->specialite == 'menage') selected @endif>Ménage</option>
+                                    <option value="cuisine" @if ($employee->specialite == 'menage') selected @endif>Cuisine
+                                    </option>
+                                    <option value="autre" @if ($employee->specialite == 'menage') selected @endif>autre</option>
                                 </select>
                             </div>
 
                             <div class="col-sm-6">
-                                <label for="addresse" class="form-label">Adresse</label>
-                                <input type="text" class="form-control @error('adresse') is-invalid @enderror"
-                                    id="addresse" name="adresse" value="{{ $employee->adresse }}">
-                                @error('adresse')
+                                <label for="address" class="form-label">Adresse</label>
+                                <input type="text" class="form-control @error('adress') is-invalid @enderror"
+                                    id="address" name="adress" value="{{ $employee->adress }}">
+                                @error('adress')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
                             </div>
 
-
-                            <div class="col-sm-6">
-                                <label for="selectVille" class="form-label">Ville</label>
-                                <select class="form-select" id="selectVille" name="ville"
-                                    aria-label="Default select example">
-                                    @if ($employee->ville == 'Rabat')
-                                        <option value="Rabat" selected>Rabat</option>
-                                        <option value="Casablanca">Casablanca</option>
-                                        <option value="Mohammedia">Mohammedia</option>
-                                    @elseif ($employee->ville == 'Casablanca')
-                                        <option value="Rabat">Rabat</option>
-                                        <option value="Casablanca" selected>Casablanca</option>
-                                        <option value="Mohammedia">Mohammedia</option>
-                                    @elseif ($employee->ville == 'Mohammedia')
-                                        <option value="Rabat">Rabat</option>
-                                        <option value="Casablanca">Casablanca</option>
-                                        <option value="Mohammedia" selected>Mohammedia</option>
-                                    @endif
-                                </select>
+                            <div class="mb-3">
+                                <label for="ville" class="form-label">Ville</label>
+                                <input type="text" class="form-control w-25" id="ville" name="city"
+                                    placeholder="ville" value="{{ $employee->city }}">
+                                @error('city')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
+
                             <div class="col-sm-6">
                                 <div class="mb-3">
                                     <label for="formFile" class="form-label">Modifier la photo</label>
@@ -160,19 +140,12 @@
                                 <label for="selectDispo" class="form-label">Disponibilité</label>
                                 <select class="form-select" id="selectDispo" name="disponibilite"
                                     aria-label="Default select example">
-                                    @if ($employee->disponibilite == 'disponible')
-                                        <option value="disponibile" selected>Disponibile</option>
-                                        <option value="conge">Congé</option>
-                                        <option value="autre">Autre</option>
-                                    @elseif ($employee->disponibilite == 'conge')
-                                        <option value="disponibile">Disponibile</option>
-                                        <option value="conge" selected>Congé</option>
-                                        <option value="autre">Autre</option>
-                                    @elseif ($employee->disponibilite == 'autre')
-                                        <option value="disponibile">Disponibile</option>
-                                        <option value="conge">Congé</option>
-                                        <option value="autre" selected>Autre</option>
-                                    @endif
+
+                                    <option value="available" @if ($employee->disponibilite == 'available') selected @endif>
+                                        Disponibile</option>
+                                    <option value="unavailable" @if ($employee->disponibilite == 'unavailable') selected @endif>
+                                        Indisponible</option>
+
                                 </select>
                             </div>
                         </div>

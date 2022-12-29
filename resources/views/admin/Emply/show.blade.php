@@ -69,8 +69,10 @@
                                 <li class="list-group-item">Specialité : {{ $employee->speciality }}</li>
                             </ul>
                             <p class="card-text"><small class="text-muted">{{ $employee->availability }}</small></p>
-                            <a href="{{ route('admin.emply.history', $employee->id) }}">Voire l'historique de toute les
-                                réservations attribué</a>
+                            <a href="{{ route('admin.emply.history', $employee->id) }}" class="d-block text-end">
+                                Historique des réservations attribué</a>
+                            <a href="{{ route('admin.emply.historySub', $employee->id) }}" class="d-block text-end">
+                                Historique des abonnements attribué</a>
                         </div>
                     </div>
                 </div>

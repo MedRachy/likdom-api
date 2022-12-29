@@ -112,7 +112,6 @@
                                     <th scope="col">Ref</th>
                                     <th scope="col">Nom</th>
                                     <th scope="col">Prénom</th>
-                                    <th scope="col">Age</th>
                                     <th scope="col">Adresse</th>
                                     <th scope="col">Ville</th>
                                     <th scope="col">Tel</th>
@@ -121,24 +120,23 @@
                             </thead>
                             <tbody>
                                 <form id="select_employees" method="POST"
-                                    action="{{ route('admin.reserv.update', $sub->id) }}">
+                                    action="{{ route('admin.abonmt.update', $sub->id) }}">
                                     @method('PUT')
                                     @csrf
                                     <input type="hidden" name="edit_Emp_selected">
                                     {{-- employé déja attribué --}}
                                     @isset($sub->employees)
-                                        @foreach ($sub->employees as $emp_reserv)
+                                        @foreach ($sub->employees as $emp_sub)
                                             <tr class="table-primary">
                                                 <td>
                                                     <input checked class="form-check-input me-1" type="checkbox"
                                                         name="Emp_selected[]" value="{{ $emp_sub->id }}" aria-label="...">
                                                 </td>
                                                 <td>{{ $emp_sub->id }} </td>
-                                                <td>{{ $emp_sub->nom }}</td>
-                                                <td>{{ $emp_sub->prenom }}</td>
-                                                <td>{{ $emp_sub->age }}</td>
-                                                <td>{{ $emp_sub->adresse }}</td>
-                                                <td>{{ $emp_sub->ville }}</td>
+                                                <td>{{ $emp_sub->last_name }}</td>
+                                                <td>{{ $emp_sub->first_name }}</td>
+                                                <td>{{ $emp_sub->adress }}</td>
+                                                <td>{{ $emp_sub->city }}</td>
                                                 <td>{{ $emp_sub->phone }}</td>
                                                 <td class="text-center">
                                                     <a href="{{ route('admin.emply.show', $emp_sub->id) }}" target="_blank"
@@ -155,11 +153,10 @@
                                                     value="{{ $employee->id }}" aria-label="...">
                                             </td>
                                             <td>{{ $employee->id }} </td>
-                                            <td>{{ $employee->nom }}</td>
-                                            <td>{{ $employee->prenom }}</td>
-                                            <td>{{ $employee->age }}</td>
-                                            <td>{{ $employee->adresse }}</td>
-                                            <td>{{ $employee->ville }}</td>
+                                            <td>{{ $employee->last_name }}</td>
+                                            <td>{{ $employee->first_name }}</td>
+                                            <td>{{ $employee->adress }}</td>
+                                            <td>{{ $employee->city }}</td>
                                             <td>{{ $employee->phone }}</td>
                                             <td class="text-center">
                                                 <a href="{{ route('admin.emply.show', $employee->id) }}" target="_blank"

@@ -83,10 +83,6 @@
             <div class="card  shadow-sm p-3  bg-white rounded">
                 <h5 class="card-header">Employées disponible pour cette réservation</h5>
                 <div class="card-body">
-                    @isset($reserv->Emp_selected)
-                        <h6 class="card-title">Employée selectionner par le client : <span
-                                class="bg-info fw-bold px-2">{{ $reserv->Emp_selected }}</span> </h6>
-                    @endisset
 
                     <div class="table-responsive">
                         <table class="table table-hover">
@@ -96,7 +92,6 @@
                                     <th scope="col">Ref</th>
                                     <th scope="col">Nom</th>
                                     <th scope="col">Prénom</th>
-                                    <th scope="col">Age</th>
                                     <th scope="col">Adresse</th>
                                     <th scope="col">Ville</th>
                                     <th scope="col">Tel</th>
@@ -118,11 +113,10 @@
                                                         name="Emp_selected[]" value="{{ $emp_reserv->id }}" aria-label="...">
                                                 </td>
                                                 <td>{{ $emp_reserv->id }} </td>
-                                                <td>{{ $emp_reserv->nom }}</td>
-                                                <td>{{ $emp_reserv->prenom }}</td>
-                                                <td>{{ $emp_reserv->age }}</td>
-                                                <td>{{ $emp_reserv->adresse }}</td>
-                                                <td>{{ $emp_reserv->ville }}</td>
+                                                <td>{{ $emp_reserv->last_name }}</td>
+                                                <td>{{ $emp_reserv->first_name }}</td>
+                                                <td>{{ $emp_reserv->adress }}</td>
+                                                <td>{{ $emp_reserv->city }}</td>
                                                 <td>{{ $emp_reserv->phone }}</td>
                                                 <td class="text-center">
                                                     <a href="{{ route('admin.emply.show', $emp_reserv->id) }}" target="_blank"
@@ -139,11 +133,10 @@
                                                     value="{{ $employee->id }}" aria-label="...">
                                             </td>
                                             <td>{{ $employee->id }} </td>
-                                            <td>{{ $employee->nom }}</td>
-                                            <td>{{ $employee->prenom }}</td>
-                                            <td>{{ $employee->age }}</td>
-                                            <td>{{ $employee->adresse }}</td>
-                                            <td>{{ $employee->ville }}</td>
+                                            <td>{{ $employee->last_name }}</td>
+                                            <td>{{ $employee->first_name }}</td>
+                                            <td>{{ $employee->adress }}</td>
+                                            <td>{{ $employee->city }}</td>
                                             <td>{{ $employee->phone }}</td>
                                             <td class="text-center">
                                                 <a href="{{ route('admin.emply.show', $employee->id) }}" target="_blank"

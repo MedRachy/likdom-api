@@ -302,8 +302,8 @@
                                 </ul>
                             </div>
                             <div>
-                                <h5 class="text-bold">Passages par semaine</h5>
-                                <p class="mb-1 text-center">{{ $sub->offer->nbr_passages }}</p>
+                                <h5 class="text-bold">Date Fin</h5>
+                                <p class="mb-1 text-center">{{ $sub->end_date }}</p>
                             </div>
                         </li>
                         <li class="list-group-item d-flex justify-content-between">
@@ -395,7 +395,6 @@
                                     <th scope="col">Ref</th>
                                     <th scope="col">Nom</th>
                                     <th scope="col">Prenom</th>
-                                    <th scope="col">Age</th>
                                     <th scope="col">Adresse</th>
                                     <th scope="col">Ville</th>
                                     <th scope="col">Tel</th>
@@ -406,11 +405,10 @@
                                 @foreach ($sub->employees as $employee)
                                     <tr>
                                         <td>{{ $employee->id }}</a> </td>
-                                        <td>{{ $employee->nom }}</td>
-                                        <td>{{ $employee->prenom }}</td>
-                                        <td>{{ $employee->age }}</td>
-                                        <td>{{ $employee->adresse }}</td>
-                                        <td>{{ $employee->ville }}</td>
+                                        <td>{{ $employee->last_name }}</td>
+                                        <td>{{ $employee->first_name }}</td>
+                                        <td>{{ $employee->adress }}</td>
+                                        <td>{{ $employee->city }}</td>
                                         <td>{{ $employee->phone }}</td>
                                         <td class="text-center">
                                             <a href="{{ route('admin.emply.show', $employee->id) }}" target="_blank"
@@ -440,7 +438,6 @@
                                         <th scope="col">Ref</th>
                                         <th scope="col">Nom</th>
                                         <th scope="col">Prenom</th>
-                                        <th scope="col">Age</th>
                                         <th scope="col">Adresse</th>
                                         <th scope="col">Ville</th>
                                         <th scope="col">Tel</th>
@@ -451,11 +448,10 @@
                                     @foreach ($sub->emplyHistory as $employee)
                                         <tr>
                                             <td>{{ $employee->id }}</a> </td>
-                                            <td>{{ $employee->nom }}</td>
-                                            <td>{{ $employee->prenom }}</td>
-                                            <td>{{ $employee->age }}</td>
-                                            <td>{{ $employee->adresse }}</td>
-                                            <td>{{ $employee->ville }}</td>
+                                            <td>{{ $employee->last_name }}</td>
+                                            <td>{{ $employee->first_name }}</td>
+                                            <td>{{ $employee->adress }}</td>
+                                            <td>{{ $employee->city }}</td>
                                             <td>{{ $employee->phone }}</td>
                                             <td class="text-center">
                                                 <a href="{{ route('admin.emply.show', $employee->id) }}" target="_blank"

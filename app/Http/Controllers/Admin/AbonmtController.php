@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 use App\Models\Subscription;
+use Carbon\Carbon;
 
 class AbonmtController extends Controller
 {
@@ -149,13 +150,16 @@ class AbonmtController extends Controller
             'city' => 'required',
             // 'adress' => 'adress'
         ]);
-
+        // generate passages
         $passages = collect();
         $days =  $request->input('day');
 
         foreach ($days as $day) {
             $passages->push(["day" => $day, "time" =>  $request->input($day)]);
         }
+
+        // generat the end_date
+        $end_date = Carbon::parse($request->start_date)->addMonths($request->nbr_months);
 
         $subscription = Subscription::create([
             'user_id' =>  $request->user_id,
@@ -165,6 +169,7 @@ class AbonmtController extends Controller
             'nbr_employees' => $request->nbr_employees,
             'passages' => $passages,
             'nbr_months' => $request->nbr_months,
+            'end_date' => $end_date,
             'city' => $request->city,
             'confirmed' => $request->confirmed,
             // 'adress' => $request->adress,
@@ -212,7 +217,12 @@ class AbonmtController extends Controller
             $request->validate([
                 'start_date' => 'required|date',
             ]);
-            $subscription->update(['start_date' => $request->start_date]);
+            // generat the end_date
+            $end_date = Carbon::parse($request->start_date)->addMonths($subscription->nbr_months);
+            $subscription->update([
+                'start_date' => $request->start_date,
+                'end_date' => $end_date
+            ]);
         }
         // update passages 
         if ($request->has('edit_passages')) {

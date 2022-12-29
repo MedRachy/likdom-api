@@ -11,7 +11,7 @@
                 <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Tableau de bord</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('admin.emply.index') }}">liste</a> </li>
                 <li class="breadcrumb-item"><a href="{{ route('admin.emply.show', $emplyID) }}">employée</a> </li>
-                <li class="breadcrumb-item active">historique</li>
+                <li class="breadcrumb-item active">historique abonnements</li>
             </ol>
         </div>
     </div>
@@ -73,21 +73,42 @@
                                 </div>
 
                             </li>
-
-                            <li class="list-group-item d-flex justify-content-between ">
+                            <li class="list-group-item d-flex justify-content-between">
                                 <div>
-                                    <h6 class="fw-bold">Date & Heure</h6>
-                                    <div class="input-group flex-nowrap m-1">
-                                        <span class="input-group-text" id="labeldate_passage">le</span>
-                                        <input id="date_passage" type="date" class="form-control"
-                                            aria-describedby="labeldate_passage" name="date_passage">
+                                    <h6 class="fw-bold">Offres</h6>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="pack1" name="offer"
+                                            value="offer_1">
+                                        <label class="form-check-label" for="pack1">Offre N°1</label>
                                     </div>
-                                    <div class="input-group flex-nowrap m-1">
-                                        <span class="input-group-text" id="labelstart_time">à</span>
-                                        <input id="start_time" type="time" class="form-control"
-                                            aria-describedby="labelstart_time" name="start_time">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="pack2" name="offer"
+                                            value="offer_2">
+                                        <label class="form-check-label" for="pack2">Offre N°2</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="pack3" name="offer"
+                                            value="offer_3">
+                                        <label class="form-check-label" for="pack3">Offre N°3</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="pack4" name="offer"
+                                            value="offer_4">
+                                        <label class="form-check-label" for="pack4">Offre N°4</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="pack5" name="offer"
+                                            value="offer_5">
+                                        <label class="form-check-label" for="pack5">Offre N°5</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="pack6" name="offer"
+                                            value="offer_6">
+                                        <label class="form-check-label" for="pack6">Offre N°6</label>
                                     </div>
                                 </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between ">
                                 <div>
                                     <h6 class="fw-bold">Période</h6>
                                     <div class="input-group flex-nowrap m-1">
@@ -113,7 +134,6 @@
                                         <input id="max_price" type="number" class="form-control" placeholder=". . ."
                                             aria-label=". . ." aria-describedby="max">
                                     </div>
-
                                 </div>
                             </li>
                             <li class="list-group-item ">
@@ -141,9 +161,9 @@
                             <thead>
                                 <tr>
                                     <th scope="col">Ref</th>
+                                    <th scope="col">Offre</th>
                                     <th scope="col">Ville</th>
-                                    <th scope="col">Date</th>
-                                    <th scope="col">Heure</th>
+                                    <th scope="col">Date debut</th>
                                     <th scope="col">Prix</th>
                                     <th scope="col">Statut</th>
                                     <th scope="col">Action</th>
@@ -171,7 +191,7 @@
 
                 var query = '';
                 var id = @json($emplyID);
-                var url = '/admin/Reservsearch/' + id;
+                var url = '/admin/Subsearch/' + id;
                 // init datatable
                 var datatable = $('#myTable').DataTable({
                     "pageLength": 25,
@@ -202,13 +222,13 @@
                             "data": "id"
                         },
                         {
+                            "data": "offer"
+                        },
+                        {
                             "data": "city"
                         },
                         {
                             "data": "start_date"
-                        },
-                        {
-                            "data": "start_time"
                         },
                         {
                             "data": "price"
@@ -240,12 +260,12 @@
 
                 $("#searchButton").click(function() {
                     query = getinputdata();
-                    url = '/admin/Reservsearch/' + id + '?' + query;
+                    url = '/admin/Subsearch/' + id + '?' + query;
                     // set url params and reload 
                     datatable.ajax.url(url).load();
                 });
                 $("#clearButton").click(function() {
-                    var url = '/admin/Reservsearch/' + id;
+                    var url = '/admin/Subsearch/' + id;
                     datatable.ajax.url(url).load();
                     clearinputs();
                 });
@@ -255,12 +275,17 @@
                     var paramschecked = '';
                     var status = {};
                     var city = {};
+                    var offer = {};
+
                     // get input values 
                     $("input:checkbox[name=status]:checked").each(function(i, e) {
                         status[$(this).val()] = e.checked;
                     });
                     $("input:checkbox[name=city]:checked").each(function(i, e) {
                         city[$(this).val()] = e.checked;
+                    });
+                    $("input:checkbox[name=offer]:checked").each(function(i, e) {
+                        offer[$(this).val()] = e.checked;
                     });
 
                     if ($("#min_price").val()) {
@@ -275,12 +300,6 @@
                     if ($("#end_date").val()) {
                         paramsinput['end_date'] = $("#end_date").val();
                     }
-                    if ($("#date_passage").val()) {
-                        paramsinput['date_passage'] = $("#date_passage").val();
-                    }
-                    if ($("#start_time").val()) {
-                        paramsinput['start_time'] = $("#start_time").val();
-                    }
                     // convert object to string param and concatinate 
                     if (!$.isEmptyObject(status)) {
                         var status_param = $.param(status);
@@ -290,6 +309,10 @@
                         var city_param = $.param(city);
                         paramschecked = paramschecked + city_param + '&';
 
+                    }
+                    if (!$.isEmptyObject(offer)) {
+                        var offer_param = $.param(offer);
+                        paramschecked = paramschecked + offer_param + '&';
                     }
 
                     var paramsinput_string = $.param(paramsinput);

@@ -133,6 +133,7 @@ class SubscriptionFactory extends Factory
             return [
                 'offer_id' => $offer_id,
                 'passages' => $passages,
+                'end_date' => Carbon::parse($attributes['start_date'])->addMonths($attributes['nbr_months']),
             ];
         });
     }

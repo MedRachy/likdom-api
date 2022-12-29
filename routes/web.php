@@ -75,10 +75,14 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'isAdmin']], functio
     Route::get('/Entrepsearch/{query?}', [EntrepsController::class, 'search'], function ($query = null) {
         return $query;
     })->name('admin.Entrepsearch');
-    // search reserv list for an emply
+    // search reserv history list for an emply
+    Route::get('/emply/{id}/history', [EmplyController::class, 'history'])->name('admin.emply.history');
     Route::get('/Reservsearch/{id}/{query?}', [EmplyController::class, 'reservsearch'], function ($query = null) {
         return $query;
     })->name('admin.Reservsearch');
-    // search history list for an emply
-    Route::get('/emply/{id}/history', [EmplyController::class, 'history'])->name('admin.emply.history');
+    // search sub history list for an emply
+    Route::get('/emply/{id}/historySub', [EmplyController::class, 'history_sub'])->name('admin.emply.historySub');
+    Route::get('/Subsearch/{id}/{query?}', [EmplyController::class, 'subsearch'], function ($query = null) {
+        return $query;
+    })->name('admin.Subsearch');
 });
