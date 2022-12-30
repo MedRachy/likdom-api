@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Contract;
 use App\Models\Subscription;
 use App\Models\User;
 use Carbon\Carbon;
@@ -16,29 +17,20 @@ class SubscriptionsSeeder extends Seeder
      */
     public function run()
     {
-        // offer_1
-        Subscription::factory()
-            ->confirmed()
-            ->forOffer(1)
-            ->for(User::factory()->create())
-            ->create([
-                'start_date' =>  Carbon::now()->addDays(2)->format('Y-m-d')
-            ]);
-        // offer_2
-        Subscription::factory()
-            ->confirmed()
-            ->forOffer(2)
-            ->for(User::factory()->create())
-            ->create([
-                'start_date' =>  Carbon::now()->addDays(3)->format('Y-m-d')
-            ]);
-        // offer_3
-        Subscription::factory()
-            ->confirmed()
-            ->forOffer(3)
-            ->for(User::factory()->create())
-            ->create([
-                'start_date' =>  Carbon::now()->addDays(4)->format('Y-m-d')
-            ]);
+        // subscription confirmed with contract 
+        for ($i = 1; $i <= 4; $i++) {
+            $user = User::factory()->create();
+            $sub = Subscription::factory()
+                ->confirmed()
+                ->forOffer($i)
+                ->for($user)
+                ->create([
+                    'start_date' =>  Carbon::now()->addDays(2 + $i)->format('Y-m-d')
+                ]);
+            Contract::factory()
+                ->for($user)
+                ->for($sub)
+                ->create();
+        }
     }
 }

@@ -76,17 +76,18 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <h6 class="fw-bold">Réservations</h6>
+                                    <h6 class="fw-bold">Réservations / Abonnement</h6>
                                     <div class="form-check ">
                                         <input class="form-check-input" type="radio" id="reserv1" name="reserv"
                                             value="1">
-                                        <label class="form-check-label" for="reserv1">au moins une réservation
+                                        <label class="form-check-label" for="reserv1">au moins une (reserv / abonmt)
                                             attribué</label>
                                     </div>
                                     <div class="form-check ">
                                         <input class="form-check-input" type="radio" id="reserv0" name="reserv"
                                             value="0">
-                                        <label class="form-check-label" for="reserv0">aucune réservation attribué</label>
+                                        <label class="form-check-label" for="reserv0">aucune (reserv / abonmt)
+                                            attribué</label>
                                     </div>
                                 </div>
                             </li>

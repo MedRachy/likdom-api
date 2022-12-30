@@ -127,7 +127,9 @@ class AbonmtController extends Controller
                 return $actionBtn;
             })
             ->addColumn('offer', function (Subscription $subscription) {
-                return $subscription->offer->name;
+                if ($subscription->offer()->exists()) {
+                    return $subscription->offer->name;
+                }
             })
             ->toJson();
     }
@@ -148,7 +150,7 @@ class AbonmtController extends Controller
             'nbr_months' => 'required|integer',
             'day' => 'required|array',
             'city' => 'required',
-            // 'adress' => 'adress'
+            'adress' => 'required'
         ]);
         // generate passages
         $passages = collect();
@@ -171,8 +173,8 @@ class AbonmtController extends Controller
             'nbr_months' => $request->nbr_months,
             'end_date' => $end_date,
             'city' => $request->city,
+            'adress' => $request->adress,
             'confirmed' => $request->confirmed,
-            // 'adress' => $request->adress,
         ]);
 
         // TODO : calculate and update price

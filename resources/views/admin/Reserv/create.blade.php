@@ -122,7 +122,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="adresse" class="form-label">Adresse</label>
-                            <input type="text" class="form-control w-25" id="adresse" name="adress"
+                            <input type="text" class="form-control w-75" id="adresse" name="adress"
                                 placeholder="adresse">
                             @error('adress')
                                 <span class="invalid-feedback" role="alert">

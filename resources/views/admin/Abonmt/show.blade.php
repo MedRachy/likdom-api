@@ -272,7 +272,10 @@
                         <li class="list-group-item d-flex justify-content-between active ">
                             <div>
                                 <h5 class="text-bold">Offre</h5>
-                                <p class="mb-1">{{ $sub->offer->name }}</p>
+                                @isset($sub->offer)
+                                    <p class="mb-1">{{ $sub->offer->name }}</p>
+                                @endisset
+
                             </div>
                             <div>
                                 <h5 class="text-bold d-inline ">Date début</h5>
@@ -296,9 +299,12 @@
                                     <i class="far fa-edit"></i>
                                 </button>
                                 <ul>
-                                    @foreach ($sub->passages as $passage)
-                                        <li>{{ $passage['day'] }} : {{ $passage['time'] }}</li>
-                                    @endforeach
+                                    @isset($sub->passages)
+                                        @foreach ($sub->passages as $passage)
+                                            <li>{{ $passage['day'] }} : {{ $passage['time'] }}</li>
+                                        @endforeach
+                                    @endisset
+
                                 </ul>
                             </div>
                             <div>
@@ -367,13 +373,14 @@
                                     <p class="mb-1">{{ $sub->user->email }}</p>
                                 </div>
                             </li>
-
-                            <li class="list-group-item">
-                                <div>
-                                    <h5 class="text-bold">{{ $sub->offer->name }}</h5>
-                                    <p class="mb-1">{{ $sub->offer->description }}</p>
-                                </div>
-                            </li>
+                            @isset($sub->offer)
+                                <li class="list-group-item">
+                                    <div>
+                                        <h5 class="text-bold">{{ $sub->offer->name }}</h5>
+                                        <p class="mb-1">{{ $sub->offer->description }}</p>
+                                    </div>
+                                </li>
+                            @endisset
                         </ul>
                     @endisset
                 </div>

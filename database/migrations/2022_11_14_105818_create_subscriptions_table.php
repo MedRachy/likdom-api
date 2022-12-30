@@ -34,6 +34,7 @@ class CreateSubscriptionsTable extends Migration
             $table->smallInteger('nbr_employees')->nullable();
             $table->json('location')->nullable();
             $table->string('city')->nullable();
+            $table->string('adress')->nullable();
             $table->boolean('products')->nullable()->default(false);
             $table->boolean('confirmed')->nullable()->default(false);
             $table->string('status')->nullable()->default('pending');

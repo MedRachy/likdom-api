@@ -5,7 +5,7 @@ use App\Http\Controllers\Admin\DashbordController;
 use App\Http\Controllers\Admin\EmplyController;
 use App\Http\Controllers\Admin\ReservController;
 use App\Http\Controllers\Admin\UsersController;
-use App\Http\Controllers\api\ContractsController;
+use App\Http\Controllers\Admin\ContraController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,7 +33,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'isAdmin']], functio
     Route::resource('/abonmt', AbonmtController::class, ['names' => 'admin.abonmt']);
     Route::resource('/emply', EmplyController::class, ['names' => 'admin.emply']);
     Route::resource('/users', UsersController::class, ['names' => 'admin.users']);
-    Route::resource('/entreps', EntrepsController::class, ['names' => 'admin.entreps']);
+    Route::resource('/contracts', ContraController::class, ['names' => 'admin.contracts']);
 
     /* -------- Admins list ------- */
     Route::get('/administrateurs', [UsersController::class, 'admins'])->name('admin.users.admins');
@@ -44,17 +44,11 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'isAdmin']], functio
         return $query;
     })->name('admin.dataSearch');
 
-    /* -------- Devis ------- */
-    Route::get('/devis', [DashbordController::class, 'devis'])->name('admin.devis');
-    Route::get('/Devisearch/{query?}', [DashbordController::class, 'devisearch'], function ($query = null) {
-        return $query;
-    })->name('admin.devisearch');
-
     /* -------- Candidatures ------- */
-    Route::get('/candidatures', [DashbordController::class, 'candidatures'])->name('admin.candidatures');
-    Route::get('/Candidatsearch/{query?}', [DashbordController::class, 'candidatsearch'], function ($query = null) {
-        return $query;
-    })->name('admin.candidatsearch');
+    // Route::get('/candidatures', [DashbordController::class, 'candidatures'])->name('admin.candidatures');
+    // Route::get('/Candidatsearch/{query?}', [DashbordController::class, 'candidatsearch'], function ($query = null) {
+    //     return $query;
+    // })->name('admin.candidatsearch');
 
     /* -------- Searching / listing ------- */
     // search reserv list
@@ -71,10 +65,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'isAdmin']], functio
     })->name('admin.Emplysearch');
     // search users list
     Route::get('/Usersearch', [UsersController::class, 'search'])->name('admin.Usersearch');
-    // search entreps list
-    Route::get('/Entrepsearch/{query?}', [EntrepsController::class, 'search'], function ($query = null) {
-        return $query;
-    })->name('admin.Entrepsearch');
+    // search contracts list
+    Route::get('/Contractsearch', [ContraController::class, 'search'])->name('admin.Contractsearch');
     // search reserv history list for an emply
     Route::get('/emply/{id}/history', [EmplyController::class, 'history'])->name('admin.emply.history');
     Route::get('/Reservsearch/{id}/{query?}', [EmplyController::class, 'reservsearch'], function ($query = null) {

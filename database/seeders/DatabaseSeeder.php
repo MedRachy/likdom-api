@@ -18,6 +18,10 @@ class DatabaseSeeder extends Seeder
             AdminUsersSeeder::class,
             // create list of offers 
             OfferSeeder::class,
+            // subscription with offers test
+            SubscriptionsSeeder::class,
+            // reservations 
+            ReservationsSeeder::class
         ]);
     }
 }

@@ -4,12 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Reservation;
 use App\Models\Employee;
 use App\Models\Subscription;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
-use DataTables;
 
 
 class EmplyController extends Controller

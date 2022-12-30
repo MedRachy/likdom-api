@@ -9,6 +9,16 @@
                 <li class="breadcrumb-item active">ajouter</li>
             </ol>
         </div>
+        @if ($errors->any())
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
     </div>
     <div class="row">
         <div class="col-md-8 m-auto">
@@ -218,7 +228,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="adresse" class="form-label">Adresse</label>
-                            <input type="text" class="form-control w-25" id="adresse" name="adress"
+                            <input type="text" class="form-control w-75" id="adresse" name="adress"
                                 placeholder="adresse">
                             @error('adress')
                                 <span class="invalid-feedback" role="alert">

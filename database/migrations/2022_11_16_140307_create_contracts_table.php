@@ -22,6 +22,7 @@ class CreateContractsTable extends Migration
             $table->foreign('subscription_id')->references('id')
                 ->on('subscriptions');
             $table->string('manager_name');
+            $table->string('cin_number');
             $table->string('company_name');
             $table->string('adress');
             $table->string('city');

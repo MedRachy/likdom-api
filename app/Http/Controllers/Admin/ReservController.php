@@ -132,7 +132,7 @@ class ReservController extends Controller
             'nbr_hours' => 'required',
             'nbr_employees' => 'required',
             'city' => 'required',
-            // 'adress' => 'required'
+            'adress' => 'required'
         ]);
 
         $subscription = Subscription::create([
@@ -143,6 +143,7 @@ class ReservController extends Controller
             'nbr_hours' => $request->nbr_hours,
             'nbr_employees' => $request->nbr_employees,
             'city' => $request->city,
+            'adress' => $request->adress,
             'just_once' => true,
             'confirmed' => $request->confirmed,
         ]);

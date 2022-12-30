@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 @section('content')
     <!-- Modal Supprimer -->
-    <div class="modal fade" id="ModalDelete" tabindex="-1" aria-labelledby="ModalLabel3" aria-hidden="true">
+    {{-- <div class="modal fade" id="ModalDelete" tabindex="-1" aria-labelledby="ModalLabel3" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -22,7 +22,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     <div class="row align-items-center">
         <div class="col-md-12">
             <h1 class="mt-4">Utilisateurs</h1>

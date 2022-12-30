@@ -27,6 +27,7 @@ class Subscription extends Model
         'nbr_employees',
         'location',
         'city',
+        'adress',
         'products',
         'confirmed',
         'status',

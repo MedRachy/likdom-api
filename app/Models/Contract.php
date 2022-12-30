@@ -33,6 +33,6 @@ class Contract extends Model
     // a contract belongs to one subscription
     public function subscription()
     {
-        return $this->belongsTo(Subscriptions::class);
+        return $this->belongsTo(Subscription::class);
     }
 }

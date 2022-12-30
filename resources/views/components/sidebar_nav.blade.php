@@ -64,16 +64,22 @@
                     <a class="nav-link" href="{{ route('admin.users.create') }}">Ajouter</a>
                 </nav>
             </div>
-            {{-- Candidatures --}}
-            <a class="nav-link" href="{{ route('admin.candidatures') }}">
-                <div class="sb-nav-link-icon"><i class="far fa-id-card"></i></div>
-                Candidatures
+            {{-- Contracts --}}
+            {{-- <div class="sb-sidenav-menu-heading">Contracts</div> --}}
+            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseContracts"
+                aria-expanded="false" aria-controls="collapseContracts">
+                <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
+                Contrats
+                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
             </a>
-            {{-- Devis --}}
-            <a class="nav-link" href="{{ route('admin.devis') }}">
-                <div class="sb-nav-link-icon"><i class="fas fa-th-list"></i></div>
-                Devis
-            </a>
+            <div class="collapse" id="collapseContracts" aria-labelledby="headingOne"
+                data-bs-parent="#sidenavAccordion">
+                <nav class="sb-sidenav-menu-nested nav">
+                    <a class="nav-link" href="{{ route('admin.contracts.index') }}">Liste</a>
+
+                    <a class="nav-link" href="{{ route('admin.contracts.create') }}">Ajouter</a>
+                </nav>
+            </div>
             {{-- charts --}}
             <a class="nav-link" href="{{ route('admin.charts') }}">
                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
