@@ -34,6 +34,29 @@
     </div>
 
     <div class="row">
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-chart-bar me-1"></i>
+                    Nombre de réservations par service
+                </div>
+                <div class="card-body"><canvas id="serviceChart" width="100%" height="50"></canvas></div>
+                {{-- <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div> --}}
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-chart-bar me-1"></i>
+                    Nombre d'abonnements par offre
+                </div>
+                <div class="card-body"><canvas id="offerChart" width="100%" height="50"></canvas></div>
+                {{-- <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div> --}}
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
         <div class="col-lg-12">
             <div class="card mb-4">
                 <div class="card-header d-flex align-items-center justify-content-between">
@@ -64,28 +87,7 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-lg-6">
-            <div class="card mb-4">
-                <div class="card-header">
-                    <i class="fas fa-chart-bar me-1"></i>
-                    Nombre de réservations par service
-                </div>
-                <div class="card-body"><canvas id="serviceChart" width="100%" height="50"></canvas></div>
-                {{-- <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div> --}}
-            </div>
-        </div>
-        <div class="col-lg-6">
-            <div class="card mb-4">
-                <div class="card-header">
-                    <i class="fas fa-chart-bar me-1"></i>
-                    Nombre d'abonnements par offre
-                </div>
-                <div class="card-body"><canvas id="offerChart" width="100%" height="50"></canvas></div>
-                {{-- <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div> --}}
-            </div>
-        </div>
-    </div>
+
     @push('script')
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"
             integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
@@ -191,6 +193,16 @@
                     };
                     chartService.data = dataservice;
                     chartService.update();
+                    // offer
+                    var dataoffer = {
+                        datasets: [{
+                            label: 'Abonnements',
+                            backgroundColor: 'rgb(255, 193, 7)',
+                            data: data.dataOffer
+                        }]
+                    };
+                    chartOffer.data = dataoffer;
+                    chartOffer.update();
                 }
 
                 function yearUpdate(data) {

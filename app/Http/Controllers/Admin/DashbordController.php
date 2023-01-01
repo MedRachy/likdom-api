@@ -8,8 +8,6 @@ use App\Models\User;
 // use App\Models\Candidature;
 // use App\Models\Devi;
 use Illuminate\Http\Request;
-// use App\Models\Reservation;
-// use App\Models\User;
 use Carbon\Carbon;
 
 class DashbordController extends Controller
@@ -99,12 +97,19 @@ class DashbordController extends Controller
 
     public function dataSearch(Request $request)
     {
+        // init year_start and year_end 
+        $yearstart =  Carbon::today()->startOfYear()->format('Y-m-d');
+        if ($request->has('year')) {
+            $yearstart = $request['year'];
+        }
+        $yearend = Carbon::parse($yearstart)->lastOfYear()->format('Y-m-d');
+        // init date debut
+        $date_debut = Carbon::now()->subMonth()->format('Y-m-d');
 
         $dataService = collect();
+        $dataOffer = collect();
         $dataReserv = collect();
         $dataSub = collect();
-        $yearstart =  Carbon::today()->startOfYear()->format('Y-m-d');
-
         $dataUsers = collect([
             'janvier' => 0, 'février' => 0, 'mars' => 0, 'avril' => 0,
             'mai' => 0, 'juin' => 0, 'juillet' => 0, 'août' => 0, 'septembre' => 0,
@@ -125,21 +130,12 @@ class DashbordController extends Controller
         $reservations = Subscription::where('just_once', true)
             ->orderBy('start_date')
             ->get();
-        $reservs = Subscription::where('just_once', true)
-            ->get();
         // subscriptions
         $subscriptions = Subscription::where('just_once', false)
             ->orderBy('start_date')
             ->get();
-        $subs = Subscription::where('just_once', false)
-            ->get();
         // users
         $users = User::where('role', 'user')->get();
-        // init year_start and year_end
-        if ($request->has('year')) {
-            $yearstart = $request['year'];
-        }
-        $yearend = Carbon::parse($yearstart)->lastOfYear()->format('Y-m-d');
 
         //  users / months of a year   
         $users = $users->filter(function ($value) use ($yearstart, $yearend) {
@@ -153,23 +149,23 @@ class DashbordController extends Controller
         });
 
         // Reserv / months of a year
-        $reservs = $reservs->filter(function ($value) use ($yearstart, $yearend) {
+        $reservsYear = $reservations->filter(function ($value) use ($yearstart, $yearend) {
             if ($value->created_at >= $yearstart && $value->created_at <= $yearend) {
                 return true;
             }
         });
-        $reservs = $reservs->map(function ($value) use ($dataReservYear) {
+        $reservsYear->map(function ($value) use ($dataReservYear) {
             $month = Carbon::parse($value->created_at)->locale('fr')->monthName;
             $dataReservYear[$month] = $dataReservYear[$month] + 1;
         });
 
         // Sub / months of a year
-        $subs = $subs->filter(function ($value) use ($yearstart, $yearend) {
+        $subsYear = $subscriptions->filter(function ($value) use ($yearstart, $yearend) {
             if ($value->created_at >= $yearstart && $value->created_at <= $yearend) {
                 return true;
             }
         });
-        $subs = $subs->map(function ($value) use ($dataSubYear) {
+        $subsYear->map(function ($value) use ($dataSubYear) {
             $month = Carbon::parse($value->created_at)->locale('fr')->monthName;
             $dataSubYear[$month] = $dataSubYear[$month] + 1;
         });
@@ -177,24 +173,14 @@ class DashbordController extends Controller
         // filter by date_debut
         if ($request->has('date_debut')) {
             $date_debut = $request['date_debut'];
-            $reservations = $reservations->filter(function ($value) use ($date_debut) {
-                return $value->start_date >=  $date_debut;
-            });
-            $subscriptions = $subscriptions->filter(function ($value) use ($date_debut) {
-                return $value->start_date >=  $date_debut;
-            });
-        } else {
-            // NOTE : start of the month may be not good idea
-            // $date_debut =  Carbon::now()->startOfMonth()->format('Y-m-d'); 
-            // last month
-            $date_debut = Carbon::now()->subMonth()->format('Y-m-d');
-            $reservations = $reservations->filter(function ($value) use ($date_debut) {
-                return $value->start_date >=  $date_debut;
-            });
-            $subscriptions = $subscriptions->filter(function ($value) use ($date_debut) {
-                return $value->start_date >=  $date_debut;
-            });
         }
+        $reservations = $reservations->filter(function ($value) use ($date_debut) {
+            return $value->start_date >=  $date_debut;
+        });
+        $subscriptions = $subscriptions->filter(function ($value) use ($date_debut) {
+            return $value->start_date >=  $date_debut;
+        });
+
         // filter by date_fin
         if ($request->has('date_fin')) {
             $date_fin = $request['date_fin'];
@@ -222,9 +208,17 @@ class DashbordController extends Controller
         $reservByservice->map(function ($item, $key) use ($dataService) {
             $dataService[$key] = $item->count();
         });
+        // nbr subscription / offer 
+        // TODO :
+        // change offer_id by offer.name 
+        $subByoffer = $subscriptions->groupBy('offer_id');
+        $subByoffer->map(function ($item, $key) use ($dataOffer) {
+            $dataOffer[$key] = $item->count();
+        });
 
         $data = [
             'dataService' => $dataService,
+            'dataOffer' => $dataOffer,
             'dataReserv' => $dataReserv,
             'dataSub' => $dataSub,
             'dataReservYear' => $dataReservYear,
