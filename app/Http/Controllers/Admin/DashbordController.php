@@ -92,103 +92,148 @@ class DashbordController extends Controller
         ]);
     }
 
-    // public function charts()
-    // {
-    //     return view("Admin.charts");
-    // }
+    public function charts()
+    {
+        return view("Admin.charts");
+    }
 
-    // public function dataSearch(Request $request)
-    // {
+    public function dataSearch(Request $request)
+    {
 
-    //     $dataService = collect();
-    //     $dataReserv = collect();
-    //     $yearstart = "2022-01-01";
-    //     $dataUsers = collect([
-    //         'janvier' => 0, 'février' => 0, 'mars' => 0, 'avril' => 0,
-    //         'mai' => 0, 'juin' => 0, 'juillet' => 0, 'août' => 0, 'septembre' => 0,
-    //         'octobre' => 0, 'novembre' => 0, 'décembre' => 0
-    //     ]);
-    //     $dataReservYear = collect([
-    //         'janvier' => 0, 'février' => 0, 'mars' => 0, 'avril' => 0,
-    //         'mai' => 0, 'juin' => 0, 'juillet' => 0, 'août' => 0, 'septembre' => 0,
-    //         'octobre' => 0, 'novembre' => 0, 'décembre' => 0
-    //     ]);
+        $dataService = collect();
+        $dataReserv = collect();
+        $dataSub = collect();
+        $yearstart =  Carbon::today()->startOfYear()->format('Y-m-d');
 
+        $dataUsers = collect([
+            'janvier' => 0, 'février' => 0, 'mars' => 0, 'avril' => 0,
+            'mai' => 0, 'juin' => 0, 'juillet' => 0, 'août' => 0, 'septembre' => 0,
+            'octobre' => 0, 'novembre' => 0, 'décembre' => 0
+        ]);
+        $dataReservYear = collect([
+            'janvier' => 0, 'février' => 0, 'mars' => 0, 'avril' => 0,
+            'mai' => 0, 'juin' => 0, 'juillet' => 0, 'août' => 0, 'septembre' => 0,
+            'octobre' => 0, 'novembre' => 0, 'décembre' => 0
+        ]);
+        $dataSubYear = collect([
+            'janvier' => 0, 'février' => 0, 'mars' => 0, 'avril' => 0,
+            'mai' => 0, 'juin' => 0, 'juillet' => 0, 'août' => 0, 'septembre' => 0,
+            'octobre' => 0, 'novembre' => 0, 'décembre' => 0
+        ]);
 
-    //     $reservations = Reservation::orderBy('date_passage')->get();
-    //     $reservs = Reservation::all();
-    //     $users = User::where('role', 'user')->get();
+        // reservations 
+        $reservations = Subscription::where('just_once', true)
+            ->orderBy('start_date')
+            ->get();
+        $reservs = Subscription::where('just_once', true)
+            ->get();
+        // subscriptions
+        $subscriptions = Subscription::where('just_once', false)
+            ->orderBy('start_date')
+            ->get();
+        $subs = Subscription::where('just_once', false)
+            ->get();
+        // users
+        $users = User::where('role', 'user')->get();
+        // init year_start and year_end
+        if ($request->has('year')) {
+            $yearstart = $request['year'];
+        }
+        $yearend = Carbon::parse($yearstart)->lastOfYear()->format('Y-m-d');
 
-    //     if ($request->has('year')) {
-    //         $yearstart = $request['year'];
-    //     }
-    //     $yearend = Carbon::parse($yearstart)->lastOfYear()->format('Y-m-d');
+        //  users / months of a year   
+        $users = $users->filter(function ($value) use ($yearstart, $yearend) {
+            if ($value->created_at >= $yearstart && $value->created_at <= $yearend) {
+                return true;
+            }
+        });
+        $users = $users->map(function ($value) use ($dataUsers) {
+            $month = Carbon::parse($value->created_at)->locale('fr')->monthName;
+            $dataUsers[$month] = $dataUsers[$month] + 1;
+        });
 
-    //     //  users / months of a year   
-    //     $users = $users->filter(function ($value) use ($yearstart, $yearend) {
-    //         if ($value->created_at >= $yearstart && $value->created_at <= $yearend) {
-    //             return true;
-    //         }
-    //     });
-    //     $users = $users->map(function ($value) use ($dataUsers) {
-    //         $month = Carbon::parse($value->created_at)->locale('fr')->monthName;
-    //         $dataUsers[$month] = $dataUsers[$month] + 1;
-    //     });
+        // Reserv / months of a year
+        $reservs = $reservs->filter(function ($value) use ($yearstart, $yearend) {
+            if ($value->created_at >= $yearstart && $value->created_at <= $yearend) {
+                return true;
+            }
+        });
+        $reservs = $reservs->map(function ($value) use ($dataReservYear) {
+            $month = Carbon::parse($value->created_at)->locale('fr')->monthName;
+            $dataReservYear[$month] = $dataReservYear[$month] + 1;
+        });
 
-    //     // Reserv / months of a year
-    //     $reservs = $reservs->filter(function ($value) use ($yearstart, $yearend) {
-    //         if ($value->created_at >= $yearstart && $value->created_at <= $yearend) {
-    //             return true;
-    //         }
-    //     });
-    //     $reservs = $reservs->map(function ($value) use ($dataReservYear) {
-    //         $month = Carbon::parse($value->created_at)->locale('fr')->monthName;
-    //         $dataReservYear[$month] = $dataReservYear[$month] + 1;
-    //     });
+        // Sub / months of a year
+        $subs = $subs->filter(function ($value) use ($yearstart, $yearend) {
+            if ($value->created_at >= $yearstart && $value->created_at <= $yearend) {
+                return true;
+            }
+        });
+        $subs = $subs->map(function ($value) use ($dataSubYear) {
+            $month = Carbon::parse($value->created_at)->locale('fr')->monthName;
+            $dataSubYear[$month] = $dataSubYear[$month] + 1;
+        });
 
-    //     // filter by date_debut
-    //     if ($request->has('date_debut')) {
-    //         $date_debut = $request['date_debut'];
-    //         $reservations = $reservations->filter(function ($value) use ($date_debut) {
-    //             return $value->date_passage >=  $date_debut;
-    //         });
-    //     } else {
-    //         // NOTE : start of the month may be not good idea
-    //         // $date_debut =  Carbon::now()->startOfMonth()->format('Y-m-d'); 
-    //         // last month
-    //         $date_debut = Carbon::now()->subMonth()->format('Y-m-d');
-    //         $reservations = $reservations->filter(function ($value) use ($date_debut) {
-    //             return $value->date_passage >=  $date_debut;
-    //         });
-    //     }
-    //     // filter by date_fin
-    //     if ($request->has('date_fin')) {
-    //         $date_fin = $request['date_fin'];
-    //         $reservations = $reservations->filter(function ($value) use ($date_fin) {
-    //             return $value->date_passage <=  $date_fin;
-    //         });
-    //     }
-    //     // nbr reserv / jour 
-    //     $reservByday = $reservations->groupBy('date_passage');
-    //     $reservByday->map(function ($item, $key) use ($dataReserv) {
-    //         $date = Carbon::parse($key)->format('d/m/y');
-    //         $dataReserv[$date] = $item->count();
-    //     });
-    //     // nbr reserv / service 
-    //     $reservByservice = $reservations->groupBy('service');
-    //     $reservByservice->map(function ($item, $key) use ($dataService) {
-    //         $dataService[$key] = $item->count();
-    //     });
+        // filter by date_debut
+        if ($request->has('date_debut')) {
+            $date_debut = $request['date_debut'];
+            $reservations = $reservations->filter(function ($value) use ($date_debut) {
+                return $value->start_date >=  $date_debut;
+            });
+            $subscriptions = $subscriptions->filter(function ($value) use ($date_debut) {
+                return $value->start_date >=  $date_debut;
+            });
+        } else {
+            // NOTE : start of the month may be not good idea
+            // $date_debut =  Carbon::now()->startOfMonth()->format('Y-m-d'); 
+            // last month
+            $date_debut = Carbon::now()->subMonth()->format('Y-m-d');
+            $reservations = $reservations->filter(function ($value) use ($date_debut) {
+                return $value->start_date >=  $date_debut;
+            });
+            $subscriptions = $subscriptions->filter(function ($value) use ($date_debut) {
+                return $value->start_date >=  $date_debut;
+            });
+        }
+        // filter by date_fin
+        if ($request->has('date_fin')) {
+            $date_fin = $request['date_fin'];
+            $reservations = $reservations->filter(function ($value) use ($date_fin) {
+                return $value->start_date <=  $date_fin;
+            });
+            $subscriptions = $subscriptions->filter(function ($value) use ($date_fin) {
+                return $value->start_date <=  $date_fin;
+            });
+        }
+        // nbr reserv / jour 
+        $reservByday = $reservations->groupBy('start_date');
+        $reservByday->map(function ($item, $key) use ($dataReserv) {
+            $date = Carbon::parse($key)->format('d/m/y');
+            $dataReserv[$date] = $item->count();
+        });
+        // nbr subscription / jour 
+        $subByday = $subscriptions->groupBy('start_date');
+        $subByday->map(function ($item, $key) use ($dataSub) {
+            $date = Carbon::parse($key)->format('d/m/y');
+            $dataSub[$date] = $item->count();
+        });
+        // nbr reserv / service 
+        $reservByservice = $reservations->groupBy('service');
+        $reservByservice->map(function ($item, $key) use ($dataService) {
+            $dataService[$key] = $item->count();
+        });
 
-    //     $data = [
-    //         'dataService' => $dataService,
-    //         'dataReserv' => $dataReserv,
-    //         'dataReservYear' => $dataReservYear,
-    //         'dataUsers' => $dataUsers,
-    //     ];
+        $data = [
+            'dataService' => $dataService,
+            'dataReserv' => $dataReserv,
+            'dataSub' => $dataSub,
+            'dataReservYear' => $dataReservYear,
+            'dataSubYear' => $dataSubYear,
+            'dataUsers' => $dataUsers,
+        ];
 
-    //     return $data;
-    // }
+        return $data;
+    }
 
     // public function devis()
     // {

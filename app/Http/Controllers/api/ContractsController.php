@@ -4,7 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Contract;
-use Barryvdh\DomPDF\Facade\Pdf;
+// use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -34,17 +34,18 @@ class ContractsController extends Controller
         ]);
 
 
-        view()->share('contract', $contract->toArray());
-        $pdf = Pdf::loadView('pdf.contract', $contract->toArray());
-        return $pdf->download('Likdom_contract.pdf');
+        // view()->share('contract', $contract->toArray());
+        // $pdf = Pdf::loadView('pdf.contract', $contract->toArray());
+        // return $pdf->download('Likdom_contract.pdf');
+        return  response()->json(['message' => 'success'], 200);
     }
 
-    public function get_pdf()
-    {
-        // $data = $contract->toArray();
-        $data = ['name' => 'the name', 'email' => 'the email'];
-        view()->share('data', $data);
-        $pdf = Pdf::loadView('pdf.contract', $data);
-        return $pdf->download('Likdom_contract.pdf');
-    }
+    // public function get_pdf()
+    // {
+    //     // $data = $contract->toArray();
+    //     $data = ['name' => 'the name', 'email' => 'the email'];
+    //     view()->share('data', $data);
+    //     $pdf = Pdf::loadView('pdf.contract', $data);
+    //     return $pdf->download('Likdom_contract.pdf');
+    // }
 }

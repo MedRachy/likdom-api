@@ -1,4 +1,4 @@
-@extends("layouts.admin")
+@extends('layouts.admin')
 @section('content')
     <div class="row align-items-center">
         <div class="col-md-6">
@@ -43,8 +43,12 @@
                     </div>
                     <div class="input-group input-group-sm" style="width: 160px;">
                         <select class="form-select" id="selectyear" name="year" aria-label="select year">
-                            <option value="2022-01-01" selected>2022</option>
-                            <option value="2021-01-01">2021</option>
+                            <option value="2022-01-01">2022</option>
+                            <option value="2023-01-01" selected>2023</option>
+                            <option value="2024-01-01">2024</option>
+                            <option value="2025-01-01">2025</option>
+                            <option value="2026-01-01">2026</option>
+                            <option value="2027-01-01">2027</option>
                         </select>
                         <button id="btnselectyear" class="btn btn-primary" type="button">Afficher</button>
                     </div>
@@ -71,13 +75,23 @@
                 {{-- <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div> --}}
             </div>
         </div>
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-chart-bar me-1"></i>
+                    Nombre d'abonnements par offre
+                </div>
+                <div class="card-body"><canvas id="offerChart" width="100%" height="50"></canvas></div>
+                {{-- <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div> --}}
+            </div>
+        </div>
     </div>
     @push('script')
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"
-                integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"
-                integrity="sha512-TW5s0IT/IppJtu76UbysrBH9Hy/5X41OTAbQuffZFU6lQ1rdcLHzpU5BzVvr/YFykoiMYZVWlr/PX1mDcfM9Qg=="
-                crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            integrity="sha512-TW5s0IT/IppJtu76UbysrBH9Hy/5X41OTAbQuffZFU6lQ1rdcLHzpU5BzVvr/YFykoiMYZVWlr/PX1mDcfM9Qg=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script>
             $(document).ready(function() {
 
@@ -119,7 +133,8 @@
                     options: {}
                 };
                 // init charts
-                const chartservice = new Chart(document.getElementById('serviceChart'), configbarS);
+                const chartService = new Chart(document.getElementById('serviceChart'), configbarS);
+                const chartOffer = new Chart(document.getElementById('offerChart'), configbarS);
                 const chartReserv = new Chart(document.getElementById('reservChart'), configline);
                 const chartUser = new Chart(document.getElementById('userChart'), configbarU);
                 const chartReservYear = new Chart(document.getElementById('reservYearChart'), configbarR);
@@ -151,11 +166,18 @@
                     // reserv
                     var datareserv = {
                         datasets: [{
-                            label: 'Reservations',
-                            backgroundColor: 'rgb(255, 99, 132)',
-                            borderColor: 'rgb(255, 99, 132)',
-                            data: data.dataReserv
-                        }]
+                                label: 'Réservations',
+                                backgroundColor: 'rgb(255, 99, 132)',
+                                borderColor: 'rgb(255, 99, 132)',
+                                data: data.dataReserv
+                            },
+                            {
+                                label: 'Abonnements',
+                                backgroundColor: 'rgb(255, 193, 7)',
+                                borderColor: 'rgb(255, 193, 7)',
+                                data: data.dataSub
+                            }
+                        ]
                     };
                     chartReserv.data = datareserv;
                     chartReserv.update();
@@ -164,12 +186,11 @@
                         datasets: [{
                             label: 'Reservations',
                             backgroundColor: 'rgb(255, 99, 132)',
-                            borderColor: 'rgb(255, 99, 132)',
                             data: data.dataService
                         }]
                     };
-                    chartservice.data = dataservice;
-                    chartservice.update();
+                    chartService.data = dataservice;
+                    chartService.update();
                 }
 
                 function yearUpdate(data) {
@@ -178,7 +199,6 @@
                         datasets: [{
                             label: 'Utilisateurs',
                             backgroundColor: 'rgb(54 162 235)',
-                            borderColor: 'rgb(54 162 235)',
                             data: data.dataUsers
                         }]
                     };
@@ -187,11 +207,16 @@
                     // reservs
                     var dataReservYear = {
                         datasets: [{
-                            label: 'Réservations',
-                            backgroundColor: 'rgb(75 192 192)',
-                            borderColor: 'rgb(75 192 192)',
-                            data: data.dataReservYear
-                        }]
+                                label: 'Réservations',
+                                backgroundColor: 'rgb(255, 99, 132)',
+                                data: data.dataReservYear
+                            },
+                            {
+                                label: 'Abonnements',
+                                backgroundColor: 'rgb(255, 193, 7)',
+                                data: data.dataSubYear
+                            }
+                        ]
                     };
                     chartReservYear.data = dataReservYear;
                     chartReservYear.update();

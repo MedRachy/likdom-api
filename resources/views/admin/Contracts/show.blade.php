@@ -1,13 +1,24 @@
 @extends('layouts.admin')
 @section('content')
     <div class="row align-items-center">
-        <div class="col-md-12">
+        <div class="col-md-6">
             <h1 class="mt-4">Contrats</h1>
             <ol class="breadcrumb mb-4">
                 <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Tableau de bord</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('admin.contracts.index') }}">liste</a> </li>
                 <li class="breadcrumb-item active">contrat</li>
             </ol>
+        </div>
+        <div class="col-md-6">
+            {{-- @isset($contract->storage_path)
+                <a class="float-end btn btn-outline-primary btn-sm text-decoration-none" href="">Voir contrat</a>
+            @endisset --}}
+
+            <form method="POST" action="{{ route('admin.contracts.generate') }}">
+                @csrf
+                <input type="hidden" name="contract_id" value="{{ $contract->id }}">
+                <button class="float-end btn btn-primary btn-sm ">Voir contrat</button>
+            </form>
         </div>
     </div>
     <div class="row">

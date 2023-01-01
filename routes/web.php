@@ -77,4 +77,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'isAdmin']], functio
     Route::get('/Subsearch/{id}/{query?}', [EmplyController::class, 'subsearch'], function ($query = null) {
         return $query;
     })->name('admin.Subsearch');
+    // generate contract
+    Route::post('/GenerateContract', [ContraController::class, 'generate_pdf'])->name('admin.contracts.generate');
 });

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Contract;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ContraController extends Controller
 {
@@ -120,5 +121,18 @@ class ContraController extends Controller
             [ContraController::class, 'show'],
             $contract->id
         );
+    }
+
+    public function generate_pdf(Request $request)
+    {
+        $contract = Contract::find($request->contract_id);
+        $company_name = $contract->company_name;
+        // TODO : 
+        // get all data needed for the contract : user info , sub info ... 
+        $contract = $contract->toArray();
+
+        view()->share('contract', $contract);
+        $pdf = Pdf::loadView('pdf.contract', $contract);
+        return $pdf->stream('Likdom_' . $company_name . '_contract.pdf');
     }
 }

@@ -25,7 +25,7 @@
             {{-- <div class="sb-sidenav-menu-heading">Abonnements</div> --}}
             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseAbonmt"
                 aria-expanded="false" aria-controls="collapseAbonmt">
-                <div class="sb-nav-link-icon"><i class="fas fa-th-list"></i></div>
+                <div class="sb-nav-link-icon"><i class="fas fa-star"></i></div>
                 Abonnements
                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
             </a>
@@ -68,7 +68,7 @@
             {{-- <div class="sb-sidenav-menu-heading">Contracts</div> --}}
             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseContracts"
                 aria-expanded="false" aria-controls="collapseContracts">
-                <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
+                <div class="sb-nav-link-icon"><i class="fas fa-file"></i></div>
                 Contrats
                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
             </a>

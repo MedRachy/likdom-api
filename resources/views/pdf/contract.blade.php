@@ -12,8 +12,9 @@
     <h1>Contract</h1>
     <h2>Header</h2>
     <ul>
-        {{-- <li>{{ $data['name'] }}</li>
-        <li>{{ $data['email'] }}</li> --}}
+        <li>{{ $contract['id'] }}</li>
+        <li>{{ $contract['user_id'] }}</li>
+        <li>{{ $contract['subscription_id'] }}</li>
         <li>{{ $contract['manager_name'] }}</li>
         <li>{{ $contract['company_name'] }}</li>
         <li>{{ $contract['adress'] }}</li>
