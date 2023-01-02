@@ -13,7 +13,7 @@ class AbonmtController extends Controller
 {
     public function index()
     {
-        return view('Admin.Abonmt.index');
+        return view('admin.Abonmt.index');
     }
 
     public function search(Request $request)
@@ -137,7 +137,7 @@ class AbonmtController extends Controller
 
     public function create()
     {
-        return view("Admin.Abonmt.create");
+        return view("admin.Abonmt.create");
     }
 
     public function store(Request $request)
@@ -196,9 +196,9 @@ class AbonmtController extends Controller
     {
         $subscription = Subscription::find($id);
         if ($subscription) {
-            return view('Admin.Abonmt.show')->with('sub', $subscription);
+            return view('admin.Abonmt.show')->with('sub', $subscription);
         } else {
-            return view('Admin.Abonmt.404');
+            return view('admin.Abonmt.404');
         }
     }
 
@@ -209,7 +209,7 @@ class AbonmtController extends Controller
         $empolyees_dispo = Employee::where('city', $subscription->city)
             ->where('availability', 'available')->get();
 
-        return view('Admin.Abonmt.edit', [
+        return view('admin.Abonmt.edit', [
             'sub' => $subscription,
             'employees' => $empolyees_dispo
         ]);

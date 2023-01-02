@@ -92,7 +92,7 @@ class DashbordController extends Controller
 
     public function charts()
     {
-        return view("Admin.charts");
+        return view("admin.charts");
     }
 
     public function dataSearch(Request $request)
@@ -328,7 +328,7 @@ class DashbordController extends Controller
 
     // public function candidatures()
     // {
-    //     return view("Admin.candidatures");
+    //     return view("admin.candidatures");
     // }
 
     // public function candidatsearch(Request $request)

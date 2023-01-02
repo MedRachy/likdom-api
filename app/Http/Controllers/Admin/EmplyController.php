@@ -15,7 +15,7 @@ class EmplyController extends Controller
 
     public function index()
     {
-        return view('Admin.Emply.index');
+        return view('admin.Emply.index');
     }
 
     public function search(Request $request)
@@ -117,7 +117,7 @@ class EmplyController extends Controller
 
     public function create()
     {
-        return view("Admin.Emply.create");
+        return view("admin.Emply.create");
     }
 
     public function store(Request $request)
@@ -240,10 +240,10 @@ class EmplyController extends Controller
                 }
             }
 
-            return view('Admin.Emply.show')->with('employee', $employee)
+            return view('admin.Emply.show')->with('employee', $employee)
                 ->with('events', $events);
         } else {
-            return view('Admin.Emply.404');
+            return view('admin.Emply.404');
         }
     }
 
@@ -252,9 +252,9 @@ class EmplyController extends Controller
         $employee = Employee::find($id);
 
         if ($employee) {
-            return view('Admin.Emply.edit')->with('employee', $employee);
+            return view('admin.Emply.edit')->with('employee', $employee);
         } else {
-            return view('Admin.Emply.404');
+            return view('admin.Emply.404');
         }
     }
 
@@ -300,7 +300,7 @@ class EmplyController extends Controller
 
     public function history($id)
     {
-        return view("Admin.Emply.history")->with('emplyID', $id);
+        return view("admin.Emply.history")->with('emplyID', $id);
     }
 
     public function reservsearch(Request $request, $id)
@@ -411,7 +411,7 @@ class EmplyController extends Controller
 
     public function history_sub($id)
     {
-        return view("Admin.Emply.history_sub")->with('emplyID', $id);
+        return view("admin.Emply.history_sub")->with('emplyID', $id);
     }
 
     public function subsearch(Request $request, $id)

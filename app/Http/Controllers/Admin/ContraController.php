@@ -11,7 +11,7 @@ class ContraController extends Controller
 {
     public function index()
     {
-        return view('Admin.Contracts.index');
+        return view('admin.Contracts.index');
     }
 
     public function search(Request $request)
@@ -35,7 +35,7 @@ class ContraController extends Controller
 
     public function create()
     {
-        return view("Admin.Contracts.create");
+        return view("admin.Contracts.create");
     }
 
     public function store(Request $request)
@@ -74,9 +74,9 @@ class ContraController extends Controller
         $contract = Contract::find($id);
 
         if ($contract) {
-            return view("Admin.Contracts.show", ['contract' => $contract]);
+            return view("admin.Contracts.show", ['contract' => $contract]);
         } else {
-            return view("Admin.Contracts.404");
+            return view("admin.Contracts.404");
         }
     }
 
@@ -85,9 +85,9 @@ class ContraController extends Controller
         $contract = Contract::find($id);
 
         if ($contract) {
-            return view('Admin.Contracts.edit')->with('contract', $contract);
+            return view('admin.Contracts.edit')->with('contract', $contract);
         } else {
-            return view('Admin.Contracts.404');
+            return view('admin.Contracts.404');
         }
     }
 

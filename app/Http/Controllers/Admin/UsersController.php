@@ -15,7 +15,7 @@ class UsersController extends Controller
     {
         $total_users = User::where('role', 'user')
             ->count();
-        return view("Admin.Users.index")->with('total_users', $total_users);
+        return view("admin.Users.index")->with('total_users', $total_users);
     }
 
     public function admins()
@@ -24,7 +24,7 @@ class UsersController extends Controller
         $admins = User::where('role', 'admin')->get();
         $total_admins = $admins->count();
 
-        return view("Admin.Users.admins", ['admins' => $admins, 'total_admins' => $total_admins]);
+        return view("admin.Users.admins", ['admins' => $admins, 'total_admins' => $total_admins]);
     }
 
     public function search()
@@ -42,7 +42,7 @@ class UsersController extends Controller
 
     public function create()
     {
-        return view("Admin.Users.create");
+        return view("admin.Users.create");
     }
 
     public function store(Request $request)
@@ -75,9 +75,9 @@ class UsersController extends Controller
 
         //TODO : point fidelité 
         if ($user) {
-            return view("Admin.Users.show", ['user' => $user]);
+            return view("admin.Users.show", ['user' => $user]);
         } else {
-            return view("Admin.Users.404");
+            return view("admin.Users.404");
         }
     }
 

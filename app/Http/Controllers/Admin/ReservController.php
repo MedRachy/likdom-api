@@ -13,7 +13,7 @@ class ReservController extends Controller
 
     public function index()
     {
-        return view('Admin.Reserv.index');
+        return view('admin.Reserv.index');
     }
 
     public function search(Request $request)
@@ -121,7 +121,7 @@ class ReservController extends Controller
 
     public function create()
     {
-        return view("Admin.Reserv.create");
+        return view("admin.Reserv.create");
     }
 
     public function store(Request $request)
@@ -167,9 +167,9 @@ class ReservController extends Controller
     {
         $reserv = Subscription::find($id);
         if ($reserv) {
-            return view('Admin.Reserv.show')->with('reserv', $reserv);
+            return view('admin.Reserv.show')->with('reserv', $reserv);
         } else {
-            return view('Admin.Reserv.404');
+            return view('admin.Reserv.404');
         }
     }
 
@@ -179,7 +179,7 @@ class ReservController extends Controller
         $empolyees_dispo = Employee::where('city', $reserv->city)
             ->where('availability', 'available')->get();
 
-        return view('Admin.Reserv.edit', [
+        return view('admin.Reserv.edit', [
             'reserv' => $reserv,
             'employees' => $empolyees_dispo
         ]);
