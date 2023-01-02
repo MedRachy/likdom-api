@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\api;
 
+use App\Events\ReservationCreated;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\SubscriptionResource;
 use App\Models\Employee;
@@ -71,6 +72,9 @@ class SubscriptionsController extends Controller
             'price' => $request->price,
         ]);
 
+        // run event 
+        event(new ReservationCreated($subscription->id, 'abonmt'));
+
         return new SubscriptionResource($subscription);
     }
 
@@ -89,7 +93,7 @@ class SubscriptionsController extends Controller
             'price' => 'required'
         ]);
 
-        $subscription = Subscription::create([
+        $reservation = Subscription::create([
             'user_id' => Auth::id(),
             'start_date' => $request->start_date,
             'start_time' => $request->start_time,
@@ -101,7 +105,10 @@ class SubscriptionsController extends Controller
             'price' => $request->price,
         ]);
 
-        return new SubscriptionResource($subscription);
+        // run event 
+        event(new ReservationCreated($reservation->id, 'reserv'));
+
+        return new SubscriptionResource($reservation);
     }
 
     public function recap($id)

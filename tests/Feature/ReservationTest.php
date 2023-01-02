@@ -12,7 +12,7 @@ use Tests\TestCase;
 
 class ReservationTest extends TestCase
 {
-    use RefreshDatabase;
+    // use RefreshDatabase;
     /**
      * test store once subscription.
      *

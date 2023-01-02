@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\ReservationCreated;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Employee;
@@ -135,7 +136,7 @@ class ReservController extends Controller
             'adress' => 'required'
         ]);
 
-        $subscription = Subscription::create([
+        $reservation = Subscription::create([
             'user_id' =>  $request->user_id,
             'service' => 'menage',
             'start_date' => $request->start_date,
@@ -152,9 +153,13 @@ class ReservController extends Controller
         // $reservation->update([
         //     'prix' => $reservation->getPrix()
         // ]);
+
+        // for testing
+        event(new ReservationCreated($reservation->id, 'reserv'));
+
         return redirect()->action(
             [ReservController::class, 'show'],
-            $subscription->id
+            $reservation->id
         );
     }
 

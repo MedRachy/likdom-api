@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\ReservationCreated;
 use App\Http\Controllers\Controller;
 use App\Models\Employee;
 use Illuminate\Http\Request;
@@ -181,6 +182,9 @@ class AbonmtController extends Controller
         // $subscription->update([
         //     'prix' => $subscription->getPrix()
         // ]);
+
+        // for testing
+        event(new ReservationCreated($subscription->id, 'abonmt'));
 
         return redirect()->action(
             [AbonmtController::class, 'show'],
