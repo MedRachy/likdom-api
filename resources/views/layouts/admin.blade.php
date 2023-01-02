@@ -19,10 +19,10 @@
 </head>
 
 <body class="sb-nav-fixed">
-    @include('Components.topnav_admin')
+    @include('components.topnav_admin')
     <div id="layoutSidenav">
         <div id="layoutSidenav_nav">
-            @include('Components.sidebar_nav')
+            @include('components.sidebar_nav')
         </div>
         <div id="layoutSidenav_content">
             <main>
@@ -31,7 +31,7 @@
                 </div>
             </main>
             <footer class="py-4 bg-light mt-auto">
-                @include('Components.footer_admin')
+                @include('components.footer_admin')
             </footer>
         </div>
     </div>
