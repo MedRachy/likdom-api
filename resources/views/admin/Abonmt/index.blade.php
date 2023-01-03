@@ -188,7 +188,7 @@
             $(document).ready(function() {
 
                 var query = '';
-                var url = './Abonmtsearch';
+                var url = "{{ route('admin.Abonmtsearch') }}";
                 // init datatable
                 var datatable = $('#myTable').DataTable({
                     "pageLength": 25,
@@ -260,12 +260,11 @@
 
                 $("#searchButton").click(function() {
                     query = getinputdata();
-                    url = './Abonmtsearch?' + query;
+                    url_query = url + '?' + query;
                     // set url params and reload 
-                    datatable.ajax.url(url).load();
+                    datatable.ajax.url(url_query).load();
                 });
                 $("#clearButton").click(function() {
-                    var url = './Abonmtsearch';
                     datatable.ajax.url(url).load();
                     clearinputs();
                 });
