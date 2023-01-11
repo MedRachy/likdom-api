@@ -4,6 +4,7 @@ use App\Http\Controllers\api\AuthController;
 use App\Http\Controllers\api\ContractsController;
 use App\Http\Controllers\api\OffersController;
 use App\Http\Controllers\api\SubscriptionsController;
+use App\Http\Controllers\api\VerifyMobileController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -48,4 +49,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/confirm/{id}', [SubscriptionsController::class, 'to_confirm']);
     // contracts
     Route::post('/create/contract', [ContractsController::class, 'store']);
+    // verify user phone number
+    Route::get('/send_code/{phone}', [VerifyMobileController::class, 'send_code']);
+    Route::post('/verify_phone', [VerifyMobileController::class, 'verify_phone']);
 });

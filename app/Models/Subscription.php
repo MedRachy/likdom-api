@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Subscription extends Model
 {
@@ -67,5 +69,25 @@ class Subscription extends Model
     public function emplyHistory()
     {
         return $this->belongsToMany(Employee::class, 'records');
+    }
+
+    public function getPassagesPerMonths()
+    {
+        $nbr_passages = 0;
+        // Periode from : start_date until end_date  
+        $period = Carbon::parse($this->start_date)->daysUntil($this->end_date);
+        $dates = $period->toArray();
+        foreach ($this->passages as $passage) {
+
+            for ($i = 0; $i < $period->count(); $i++) {
+                // get the dayname of every date in the periode 
+                $dayName = Carbon::parse($dates[$i])->locale('fr')->dayName;
+                $dayName = Str::ucfirst($dayName);
+                if ($passage['day'] == $dayName) {
+                    $nbr_passages += 1;
+                }
+            }
+        }
+        return $nbr_passages;
     }
 }

@@ -5,11 +5,12 @@
 -   login : api/login
 -   register : api/register
 
-[] user account
+[x] user account
 
 -   update user info (name & email) : api/user/update
 -   update user password : api/user/update-password
--   update phone number :
+-   send verifaction code : api/send_code/{phone}
+-   update phone number : api/verify_phone
 -   delete a user account : api/user/delete
 
 [x] Offers Pages
@@ -38,7 +39,7 @@
 -   get all user pending and valid subscriptions : api/get/subscriptions
 -   get all user concluded subscriptions : api/get/subscriptions/concluded
 
-[] Contract
+[x] Contract
 
 -   create a contract : api/create/contract
--   generate a contract as pdf doc :
+-   generate a contract as pdf doc : done from the front-end
