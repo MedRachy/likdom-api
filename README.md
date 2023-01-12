@@ -5,13 +5,14 @@
 -   login : api/login
 -   register : api/register
 
-[x] user account
+[] user account
 
 -   update user info (name & email) : api/user/update
 -   update user password : api/user/update-password
 -   send verifaction code : api/send_code/{phone}
 -   update phone number : api/verify_phone
 -   delete a user account : api/user/delete
+-   reste password :
 
 [x] Offers Pages
 

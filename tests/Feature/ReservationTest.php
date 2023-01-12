@@ -24,11 +24,10 @@ class ReservationTest extends TestCase
         Sanctum::actingAs($user, ['*']);
 
         $valideDate = Carbon::now()->addDays(2)->format('Y-m-d');
-        $unvalidDate =  Carbon::today()->format('Y-m-d');
 
         $location = [
-            'long' => 1234,
-            'lat' => 5678
+            'lat' => 33.687381,
+            'lng' => -7.3784308
         ];
 
         $this->postJson('/api/create/reservation', [
@@ -55,8 +54,8 @@ class ReservationTest extends TestCase
         $unvalidDate =  Carbon::today()->format('Y-m-d');
 
         $location = [
-            'long' => 1234,
-            'lat' => 5678
+            'lat' => 33.687381,
+            'lng' => -7.3784308
         ];
         $response = $this->postJson('/api/create/reservation', [
             'start_date' => $unvalidDate,

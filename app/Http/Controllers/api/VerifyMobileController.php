@@ -56,4 +56,12 @@ class VerifyMobileController extends Controller
             return  response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
+    public function verify_reset_password(Request $request)
+    {
+        // check code 
+        // access to reset screen 
+        // get the user by phone
+        // update password 
+    }
 }

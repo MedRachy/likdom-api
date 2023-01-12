@@ -209,13 +209,18 @@
                             <div>
                                 <h5 class="text-bold">Adresse</h5>
                                 <p class="mb-1">{{ $reserv->adress }}</p>
-                                <p><a href="">link to location</a></p>
+
                             </div>
                             <div>
                                 <h5 class="text-bold">Ville</h5>
                                 <p class="mb-1">{{ $reserv->city }}</p>
                             </div>
                         </li>
+                        @isset($reserv->location)
+                            <li class="list-group-item">
+                                <div id="map" class="w-100" style="height:250px"></div>
+                            </li>
+                        @endisset
                     </ul>
                 </div>
             </div>
@@ -350,5 +355,34 @@
             </div>
         </div>
     @endif
-
 @endsection
+@isset($reserv->location)
+    @push('script')
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBPTjmXMMIoio28rRoFtbd4cJ_usttf4cc&region=MA&language=fr">
+        </script>
+
+        <script>
+            let map;
+            let marker;
+            // const LatLng = {
+            //     lat: 33.687381,
+            //     lng: -7.3784308
+            // };
+            const LatLng = @json($reserv->location);
+            // console.log(LatLng);
+            // init map
+            map = new google.maps.Map(document.getElementById("map"), {
+                center: LatLng,
+                zoom: 18,
+                gestureHandling: "greedy",
+                disableDefaultUI: true,
+            });
+            // location marker
+            marker = new google.maps.Marker({
+                position: LatLng,
+                map: map,
+                draggable: false,
+            });
+        </script>
+    @endpush
+@endisset

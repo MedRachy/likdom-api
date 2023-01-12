@@ -59,8 +59,8 @@ class SubscriptionsTest extends TestCase
 
         $valideDate = Carbon::now()->addDays(5)->format('Y-m-d');
         $location = [
-            'long' => 1234,
-            'lat' => 5678
+            'lat' => -34.397,
+            'lng' => 150.644
         ];
 
         $passages = [
@@ -100,8 +100,8 @@ class SubscriptionsTest extends TestCase
         $unvalidDate =  Carbon::today()->format('Y-m-d');
 
         $location = [
-            'long' => 1234,
-            'lat' => 5678
+            'lat' => 33.687381,
+            'lng' => -7.3784308
         ];
 
         $passages = [
