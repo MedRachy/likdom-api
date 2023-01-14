@@ -17,7 +17,7 @@ class AdminUsersSeeder extends Seeder
         User::factory()->create([
             'name' => 'admin',
             'email' => 'mohamed@likdom.ma',
-            'phone' => '0644320022',
+            'phone' => '644320022',
             'role' => 'admin'
         ]);
     }

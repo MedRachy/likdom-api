@@ -18,7 +18,7 @@ class RegistrationTest extends TestCase
 
         $response = $this->postJson('/api/register', [
             'name' => 'TestUser',
-            'phone' => '+212644320022',
+            'phone' => '644320021',
             'email' => 'TestUser@example.com',
             'password' => 'password',
             'password_confirmation' => 'password',

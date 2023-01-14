@@ -41,7 +41,7 @@ class AuthController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'phone' => ['required', 'string', 'size:13', 'unique:users'],
+            'phone' => ['required', 'string', 'size:9', 'unique:users'],
             'password' => $this->passwordRules(),
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
         ]);
@@ -63,8 +63,12 @@ class AuthController extends Controller
     {
         // Revoke all tokens...
         // Auth()->user()->tokens()->delete();
-
-        // Revoke the token that was used to authenticate the current request...
-        Auth::user()->currentAccessToken()->delete();
+        if (Auth::check()) {
+            // Revoke the token that was used to authenticate the current request...
+            Auth::user()->currentAccessToken()->delete();
+            return  response()->json(['message' => 'user logout'], 200);
+        } else {
+            return  response()->json(['message' => 'Not authorized.'], 403);
+        }
     }
 }

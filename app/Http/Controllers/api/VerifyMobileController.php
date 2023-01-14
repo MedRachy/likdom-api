@@ -17,6 +17,7 @@ class VerifyMobileController extends Controller
         if ($phone) {
             try {
                 // send code
+                // TODO : test number phone formating
                 $response = Nexmo::verify()->start([
                     'from' => 'LIKDOM',
                     'number' => $phone,
