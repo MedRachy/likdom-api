@@ -160,7 +160,7 @@ class SubscriptionsController extends Controller
             $total_price = $total_price * $nbr_employees;
             return  response()->json(['total_price' => $total_price], 200);
         } else {
-            return  response()->json(['message' => 'unvalid inputs'], 403);
+            return  response()->json(['message' => 'unvalid inputs'], 422);
         }
     }
 
@@ -175,7 +175,7 @@ class SubscriptionsController extends Controller
             $total_price = $total_price * $nbr_employees;
             return  response()->json(['total_price' => $total_price], 200);
         } else {
-            return  response()->json(['message' => 'unvalid inputs'], 403);
+            return  response()->json(['message' => 'unvalid inputs'], 422);
         }
     }
 
@@ -190,7 +190,7 @@ class SubscriptionsController extends Controller
             $total_price = $total_price * $nbr_employees;
             return  response()->json(['total_price' => $total_price], 200);
         } else {
-            return  response()->json(['message' => 'unvalid inputs'], 403);
+            return  response()->json(['message' => 'unvalid inputs'], 422);
         }
     }
 }
