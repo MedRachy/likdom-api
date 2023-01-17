@@ -35,13 +35,18 @@ class UsersController extends Controller
 
     public function update(Request $request)
     {
-        try {
-            $updater = new UpdateUserProfileInformation;
-            return $updater->update(Auth::user(), $request->toArray());
-        } catch (ValidationException $ex) {
-            return response()->json([
-                'message' => $ex->errors()
-            ], 400);
+        // The hasAny method returns true if any of the specified values are present
+        if ($request->hasAny(['name', 'email'])) {
+            try {
+                $updater = new UpdateUserProfileInformation;
+                return $updater->update(Auth::user(), $request->toArray());
+            } catch (ValidationException $ex) {
+                return response()->json([
+                    'message' => $ex->errors()
+                ], 400);
+            }
+        } else {
+            return response()->json(['message' => 'name and email are not present'], 400);
         }
     }
 

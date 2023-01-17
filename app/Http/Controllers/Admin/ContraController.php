@@ -42,13 +42,14 @@ class ContraController extends Controller
     {
         // validation 
         $request->validate([
+            'subscription_id' => 'required',
             'manager_name' => 'required',
             'company_name' => 'required',
             'adress' => 'required',
             'city' => 'required',
             'rc_number' => 'required',
             'capital' => 'required',
-            'cin_number' => 'required'
+            // 'cin_number' => 'required'
         ]);
 
         $contract = Contract::create([
@@ -60,7 +61,7 @@ class ContraController extends Controller
             'city' => $request->city,
             'rc_number' => $request->rc_number,
             'capital' => $request->capital,
-            'cin_number' => $request->cin_number,
+            // 'cin_number' => $request->cin_number,
         ]);
 
         return redirect()->action(
@@ -96,6 +97,7 @@ class ContraController extends Controller
         $contract = Contract::find($id);
         // validation 
         $request->validate([
+            'subscription_id' => 'required',
             'manager_name' => 'required',
             'company_name' => 'required',
             'adress' => 'required',

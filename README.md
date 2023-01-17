@@ -8,6 +8,7 @@
 
 [] user account
 
+-   get logged in user data : api/user
 -   update user info (name & email) : api/user/update
 -   update user password : api/user/update-password
 -   send verifaction code : api/send_code/{phone}

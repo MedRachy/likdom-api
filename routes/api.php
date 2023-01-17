@@ -36,7 +36,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // user account
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [UsersController::class, 'show']);
-    Route::post('/user/update', [UsersController::class, 'update']);
+    Route::put('/user/update', [UsersController::class, 'update']);
     Route::post('/user/update-password', [UsersController::class, 'update_password']);
     Route::post('/user/delete', [UsersController::class, 'destroy']);
     // subscriptions 

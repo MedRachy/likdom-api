@@ -21,7 +21,9 @@ class DatabaseSeeder extends Seeder
             // subscription with offers test
             SubscriptionsSeeder::class,
             // reservations 
-            ReservationsSeeder::class
+            ReservationsSeeder::class,
+            // list of employees
+            EmployeesSeeder::class
         ]);
     }
 }

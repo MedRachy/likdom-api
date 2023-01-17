@@ -19,7 +19,7 @@ class ContractFactory extends Factory
             'adress' => $this->faker->address(),
             'city' => $this->faker->randomElement(['Mohammedia', 'Casablanca']),
             'rc_number' => $this->faker->numberBetween(10000, 70000),
-            'cin_number' => 'xxxxxxxx',
+            // 'cin_number' => 'xxxxxxxx',
             'capital' => $this->faker->numberBetween(30000, 50000),
         ];
     }

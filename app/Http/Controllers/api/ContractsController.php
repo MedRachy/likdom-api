@@ -14,6 +14,7 @@ class ContractsController extends Controller
     {
         // validation 
         $request->validate([
+            'subscription_id' => 'required',
             'manager_name' => 'required',
             'company_name' => 'required',
             'adress' => 'required',
@@ -22,7 +23,7 @@ class ContractsController extends Controller
             'capital' => 'required'
         ]);
 
-        $contract = Contract::create([
+        Contract::create([
             'user_id' => Auth::id(),
             'subscription_id' => $request->subscription_id,
             'manager_name' => $request->manager_name,
@@ -33,11 +34,10 @@ class ContractsController extends Controller
             'capital' => $request->capital,
         ]);
 
-
         // view()->share('contract', $contract->toArray());
         // $pdf = Pdf::loadView('pdf.contract', $contract->toArray());
         // return $pdf->download('Likdom_contract.pdf');
-        return  response()->json(['message' => 'success'], 200);
+        return  response()->json(['message' => 'successfully created'], 200);
     }
 
     // public function get_pdf()

@@ -52,7 +52,7 @@ class VerifyMobileController extends Controller
                     'phone' => $request->phone
                 ]);
             }
-            return  response()->json(['success' => $result["status"]], 200);
+            return  response()->json(['success' => 'phone verified ' . $result["status"]], 200);
         } catch (Exception $e) {
             return  response()->json(['error' => $e->getMessage()], 500);
         }

@@ -19,25 +19,33 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
      */
     public function update($user, array $input)
     {
-        if (isset($input['name']) && isset($input['email'])) {
-            $this->updateNameEmail($user, $input);
+        if (isset($input['name'])) {
+            $this->updateName($user, $input);
         }
-        // elseif (isset($input['ville']) && isset($input['adresse'])) {
-        //     $this->updateAdresseVille($user, $input);
-        // }
+
+        if (isset($input['email'])) {
+            $this->updateEmail($user, $input);
+        }
+
+        return  response()->json(['message' => 'user info updated'], 200);
     }
 
-    protected function updateNameEmail($user, array $input)
+    protected function updateName($user, array $input)
     {
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
-            // 'photo' => ['nullable', 'mimes:jpg,jpeg,png', 'max:1024'],
         ])->validateWithBag('updateProfileInformation');
 
-        // if (isset($input['photo'])) {
-        //     $user->updateProfilePhoto($input['photo']);
-        // }
+        $user->forceFill([
+            'name' => $input['name'],
+        ])->save();
+    }
+
+    protected function updateEmail($user, array $input)
+    {
+        Validator::make($input, [
+            'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+        ])->validateWithBag('updateProfileInformation');
 
         if (
             $input['email'] !== $user->email &&
@@ -46,24 +54,10 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             $this->updateVerifiedUser($user, $input);
         } else {
             $user->forceFill([
-                'name' => $input['name'],
                 'email' => $input['email'],
             ])->save();
         }
     }
-
-    // protected function updateAdresseVille($user, array $input)
-    // {
-    //     Validator::make($input, [
-    //         'adresse' => ['required', 'string', 'max:255'],
-    //         'ville' => ['required', 'string', 'max:255'],
-    //     ])->validateWithBag('updateProfileInformation');
-
-    //     $user->forceFill([
-    //         'adresse' => $input['adresse'],
-    //         'ville' => $input['ville'],
-    //     ])->save();
-    // }
 
     /**
      * Update the given verified user's profile information.

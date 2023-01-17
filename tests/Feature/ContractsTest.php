@@ -12,7 +12,7 @@ use Tests\TestCase;
 class ContractsTest extends TestCase
 {
 
-    use RefreshDatabase;
+    // use RefreshDatabase;
     /**
      * Contracts test.
      *
@@ -33,7 +33,7 @@ class ContractsTest extends TestCase
             'adress' => 'a valid adress',
             'city' => 'Mohammedia',
             'rc_number' => '123 456 789',
-            'capital' => '50000'
+            'capital' => 55890.7
         ]);
 
         $this->assertDatabaseHas('contracts', [

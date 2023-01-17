@@ -131,7 +131,7 @@ class SubscriptionsTest extends TestCase
         $nbr_hours = 2;
         $nbr_employees = 1;
         $nbr_passages = 3;
-        // total expected = 150 
+        // total expected = 1800 
         $response =  $this->getJson('/api/get_pro_total_price/' . $nbr_hours .
             '/' .  $nbr_employees .
             '/' . $nbr_passages);
@@ -139,9 +139,9 @@ class SubscriptionsTest extends TestCase
         $response->assertStatus(200)
             ->assertJsonPath('total_price', 1800);
         // ---------- unvalid inputs : 
-        $nbr_hours = 1;
+        $nbr_hours = 0;
         $nbr_employees = 0;
-        // total expected = 150 
+
         $response =  $this->getJson('/api/get_pro_total_price/' . $nbr_hours .
             '/' .  $nbr_employees .
             '/' . $nbr_passages);
@@ -156,17 +156,17 @@ class SubscriptionsTest extends TestCase
         $nbr_hours = 2;
         $nbr_employees = 1;
         $nbr_passages = 1;
-        // total expected = 150 
-        $response =  $this->getJson('/api/get_pro_total_price/' . $nbr_hours .
+        // total expected = 440 
+        $response =  $this->getJson('/api/get_part_total_price/' . $nbr_hours .
             '/' .  $nbr_employees .
             '/' . $nbr_passages);
 
         $response->assertStatus(200)
-            ->assertJsonPath('total_price', 600);
+            ->assertJsonPath('total_price', 440);
         // ---------- unvalid inputs : 
         $nbr_hours = 1;
         $nbr_employees = 0;
-        // total expected = 150 
+
         $response =  $this->getJson('/api/get_pro_total_price/' . $nbr_hours .
             '/' .  $nbr_employees .
             '/' . $nbr_passages);

@@ -9,13 +9,13 @@ use Tests\TestCase;
 
 class ProfileInformationTest extends TestCase
 {
-    use RefreshDatabase;
+    // use RefreshDatabase;
 
     public function test_api_update_user_name_email()
     {
         Sanctum::actingAs($user = User::factory()->create());
 
-        $response = $this->postJson('/api/user/update', [
+        $response = $this->putJson('/api/user/update', [
             'email' => 'newEmail@gmail.com',
             'name' => 'new-name',
         ]);

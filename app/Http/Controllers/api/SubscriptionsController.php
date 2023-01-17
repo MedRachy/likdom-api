@@ -19,6 +19,7 @@ class SubscriptionsController extends Controller
     {
         // get all pending or valid subscriptions :
         $subscriptions = Subscription::where('user_id', Auth::id())
+            ->where('just_once', false)
             ->where('status', '!=', 'concluded')
             ->with('offer')
             ->latest()
@@ -31,6 +32,7 @@ class SubscriptionsController extends Controller
     {
         // get all pending or valid subscriptions :
         $subscriptions = Subscription::where('user_id', Auth::id())
+            ->where('just_once', false)
             ->where('status', 'concluded')
             ->with('offer')
             ->latest()
@@ -123,7 +125,7 @@ class SubscriptionsController extends Controller
             }
             // only access for confirmation or repeter 
             if ($subscription->confirmed && $subscription->statut != "concluded") {
-                return  response()->json(['message' => 'Not authorized.'], 403);
+                return  response()->json(['message' => 'Already confirmed.'], 403);
             }
             return new SubscriptionResource($subscription);
         } else {
@@ -167,7 +169,7 @@ class SubscriptionsController extends Controller
         $total_price = 0;
         $hour_price = 75;
 
-        if ($nbr_hours >= 2 && $nbr_employees >= 1 && $nbr_passages  >= 1) {
+        if ($nbr_hours >= 1 && $nbr_employees >= 1 && $nbr_passages  >= 1) {
             $total_hours = $nbr_passages * 4;
             $total_price = $nbr_hours * $hour_price * $total_hours;
             $total_price = $total_price * $nbr_employees;
