@@ -46,13 +46,32 @@ class VerifyMobileController extends Controller
             $result =  Nexmo::verify()->check($request->request_id, $request->code);
             // A status value of 0 indicates that your user entered the correct code. 
             if ($result['status'] == "0") {
+                return  response()->json(['success' => 'phone verified ' . $result["status"]], 200);
+            }
+        } catch (Exception $e) {
+            return  response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function update_and_verify_phone(Request $request)
+    {
+        $request->validate([
+            'phone' => 'required',
+            'request_id' => 'required',
+            'code' => ['required', 'string', 'size:4']
+        ]);
+
+        try {
+            $result =  Nexmo::verify()->check($request->request_id, $request->code);
+            // A status value of 0 indicates that your user entered the correct code. 
+            if ($result['status'] == "0") {
                 $user = User::find(Auth::id());
                 $user->update([
                     'phone_verified' => true,
                     'phone' => $request->phone
                 ]);
+                return  response()->json(['success' => 'phone updated ' . $result["status"]], 200);
             }
-            return  response()->json(['success' => 'phone verified ' . $result["status"]], 200);
         } catch (Exception $e) {
             return  response()->json(['error' => $e->getMessage()], 500);
         }

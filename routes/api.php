@@ -6,7 +6,6 @@ use App\Http\Controllers\api\OffersController;
 use App\Http\Controllers\api\SubscriptionsController;
 use App\Http\Controllers\api\VerifyMobileController;
 use App\Http\Controllers\UsersController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,9 +18,13 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
+// auth & register
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
+
+// verify user phone number
+Route::get('/send_code/{phone}', [VerifyMobileController::class, 'send_code']);
+Route::post('/verify_phone', [VerifyMobileController::class, 'verify_phone']);
 
 // get offers 
 Route::get('/offers/pro', [OffersController::class, 'pro_offers']);
@@ -38,6 +41,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [UsersController::class, 'show']);
     Route::put('/user/update', [UsersController::class, 'update']);
     Route::post('/user/update-password', [UsersController::class, 'update_password']);
+    Route::post('/user/update-phone', [VerifyMobileController::class, 'update_and_verify_phone']);
     Route::post('/user/delete', [UsersController::class, 'destroy']);
     // subscriptions 
     Route::get('/get/subscriptions', [SubscriptionsController::class, 'get_all_sub']);
@@ -49,7 +53,4 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/confirm/{id}', [SubscriptionsController::class, 'to_confirm']);
     // contracts
     Route::post('/create/contract', [ContractsController::class, 'store']);
-    // verify user phone number
-    Route::get('/send_code/{phone}', [VerifyMobileController::class, 'send_code']);
-    Route::post('/verify_phone', [VerifyMobileController::class, 'verify_phone']);
 });

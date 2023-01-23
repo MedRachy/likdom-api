@@ -51,6 +51,8 @@ class AuthController extends Controller
             'email' => $request['email'],
             'phone' => $request['phone'],
             'password' => Hash::make($request['password']),
+            // by default registration is after verification  
+            'phone_verified' => true,
         ]);
 
         return [

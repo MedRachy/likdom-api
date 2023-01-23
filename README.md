@@ -5,16 +5,17 @@
 -   login : api/login
 -   register : api/register
 -   logout : api/logout
+-   send verifaction code : api/send_code/{phone}
+-   verify phone number : api/verify_phone
 
 [] user account
 
 -   get logged in user data : api/user
 -   update user info (name & email) : api/user/update
 -   update user password : api/user/update-password
--   send verifaction code : api/send_code/{phone}
--   update phone number : api/verify_phone
+-   update phone number : api/user/update-phone
 -   delete a user account : api/user/delete
--   reste password :
+-   reset password :
 
 [x] Offers Pages
 
