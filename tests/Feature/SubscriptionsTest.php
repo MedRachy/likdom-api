@@ -69,7 +69,7 @@ class SubscriptionsTest extends TestCase
             ["day" => "Vendredi", "time" => '11:00']
         ];
 
-        $response =    $this->postJson('/api/create/subscription', [
+        $response = $this->postJson('/api/create/subscription', [
             'offer_id' => $offer->id,
             'start_date' => $valideDate,
             'nbr_hours' => 2,
@@ -89,6 +89,56 @@ class SubscriptionsTest extends TestCase
             'start_date' => $valideDate
         ]);
     }
+
+    public function test_can_store_subscription_with_contract()
+    {
+        $offer = Offer::factory()->create();
+        $user = User::factory()->create();
+        Sanctum::actingAs($user, ['*']);
+
+        $valideDate = Carbon::now()->addDays(5)->format('Y-m-d');
+        $location = [
+            'lat' => -34.397,
+            'lng' => 150.644
+        ];
+
+        $passages = [
+            ["day" => "Lundi", "time" => '09:00'],
+            ["day" => "Mercredi", "time" => '10:00'],
+            ["day" => "Vendredi", "time" => '11:00']
+        ];
+
+        $response = $this->postJson('/api/create/subscription-with-contract', [
+            'offer_id' => $offer->id,
+            'start_date' => $valideDate,
+            'nbr_hours' => 2,
+            'nbr_employees' => 1,
+            'nbr_months' => 1,
+            'passages' => json_encode($passages),
+            'location' => json_encode($location),
+            'city' => 'Mohammedia',
+            'price' => 300,
+            'manager_name' => 'a manager name',
+            'company_name' => 'my company',
+            'adress' => 'a valid adress',
+            'city' => 'Mohammedia',
+            'rc_number' => '123 456 789',
+            'capital' => 55890.7
+        ]);
+
+        $response->assertJsonMissingValidationErrors('start_date');
+        $this->assertDatabaseHas('subscriptions', [
+            'user_id' => $user->id,
+            'offer_id' => $offer->id,
+            'start_date' => $valideDate
+        ]);
+        $this->assertDatabaseHas('contracts', [
+            'user_id' => $user->id,
+            'manager_name' => 'a manager name',
+        ]);
+        $response->assertStatus(200);
+    }
+
 
     public function test_start_date_must_be_after_tomorrow()
     {

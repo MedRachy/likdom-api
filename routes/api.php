@@ -43,9 +43,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/user/update-password', [UsersController::class, 'update_password']);
     Route::post('/user/update-phone', [VerifyMobileController::class, 'update_and_verify_phone']);
     Route::post('/user/delete', [UsersController::class, 'destroy']);
+    Route::post('/user/password-check', [UsersController::class, 'password_check']);
     // subscriptions 
     Route::get('/get/subscriptions', [SubscriptionsController::class, 'get_all_sub']);
     Route::get('/get/subscriptions/concluded', [SubscriptionsController::class, 'get_all_concluded_sub']);
+    Route::post('/create/subscription-with-contract', [SubscriptionsController::class, 'store_with_contract']);
     Route::post('/create/subscription', [SubscriptionsController::class, 'store_sub']);
     Route::get('/recap/{id}', [SubscriptionsController::class, 'recap']);
     // reservations

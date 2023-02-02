@@ -13,6 +13,7 @@
 -   get logged in user data : api/user
 -   update user info (name & email) : api/user/update
 -   update user password : api/user/update-password
+-   password check : api/user/password-check
 -   update phone number : api/user/update-phone
 -   delete a user account : api/user/delete
 -   reset password :
@@ -25,6 +26,7 @@
 [x] Subscriptions
 
 -   create subscription : api/create/subscription
+-   create subscription with contract : api/create/subscription-with-contract
 -   get pro total price : api/get_pro_total_price/{nbr_hours}/{nbr_employees}/{nbr_passages}
 -   get part total price : api/get_part_total_price/{nbr_hours}/{nbr_employees}/{nbr_passages}
 

@@ -15,7 +15,7 @@ use Laravel\Sanctum\Sanctum;
 
 class UserControllerTest extends TestCase
 {
-    use RefreshDatabase;
+    // use RefreshDatabase;
     /**
      * A basic feature test example.
      *
@@ -35,5 +35,23 @@ class UserControllerTest extends TestCase
 
         $response->assertOk()
             ->assertJsonPath('data.email', 'TesteUser@gmail.com');
+    }
+
+    public function test_api_password_check()
+    {
+        $user = User::factory()->create();
+        Sanctum::actingAs($user,  ['*']);
+
+        // password correct
+        $response = $this->postJson('/api/user/password-check', [
+            'password' => 'password',
+        ]);
+        $response->assertOk();
+
+        // incorrect password
+        $response2 = $this->postJson('/api/user/password-check', [
+            'password' => 'wrong-password',
+        ]);
+        $response2->assertStatus(422);
     }
 }

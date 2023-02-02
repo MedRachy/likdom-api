@@ -5,11 +5,14 @@ namespace App\Http\Controllers\api;
 use App\Events\ReservationCreated;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\SubscriptionResource;
+use App\Models\Contract;
 use App\Models\Employee;
 use App\Models\Subscription;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
 class SubscriptionsController extends Controller
@@ -111,6 +114,69 @@ class SubscriptionsController extends Controller
         event(new ReservationCreated($reservation->id, 'reserv'));
 
         return new SubscriptionResource($reservation);
+    }
+
+    public function store_with_contract(Request $request)
+    {
+        // validation 
+        $request->validate([
+            // sub
+            'offer_id' => 'required',
+            'start_date' => 'required|date|after:tomorrow',
+            'nbr_hours' => 'required|integer',
+            'nbr_employees' => 'required|integer',
+            'nbr_months' => 'required|integer',
+            'passages' => 'required',
+            'location' => 'required',
+            'city' => 'required',
+            'price' => 'required',
+            // contract
+            'manager_name' => 'required',
+            'company_name' => 'required',
+            'adress' => 'required',
+            'city' => 'required',
+            'rc_number' => 'required',
+            'capital' => 'required'
+        ]);
+
+        // generat the end_date
+        $end_date = Carbon::parse($request->start_date)->addMonths($request->nbr_months);
+
+        //  database transactions
+        DB::transaction(function () use ($request, $end_date) {
+            // create subscription
+            $subscription = Subscription::create([
+                'user_id' => Auth::id(),
+                'offer_id' => $request->offer_id,
+                'start_date' => $request->start_date,
+                'nbr_hours' => $request->nbr_hours,
+                'nbr_employees' => $request->nbr_employees,
+                'passages' => json_decode($request->passages),
+                'location' => json_decode($request->location),
+                'nbr_months' => $request->nbr_months,
+                'end_date' => $end_date,
+                'city' => $request->city,
+                'price' => $request->price,
+            ]);
+
+            // throw new Exception("same errors");
+            // run event 
+            event(new ReservationCreated($subscription->id, 'abonmt'));
+
+            // create contract
+            Contract::create([
+                'user_id' => Auth::id(),
+                'subscription_id' => $subscription->id,
+                'manager_name' => $request->manager_name,
+                'company_name' => $request->company_name,
+                'adress' => $request->adress,
+                'city' => $request->city,
+                'rc_number' => $request->rc_number,
+                'capital' => $request->capital,
+            ]);
+
+            return  response()->json(['message' => 'successfully created'], 200);
+        });
     }
 
     public function recap($id)

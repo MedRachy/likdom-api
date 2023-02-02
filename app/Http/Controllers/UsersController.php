@@ -11,6 +11,7 @@ use App\Actions\Fortify\UpdateUserPassword;
 use App\Actions\Fortify\UpdateUserProfileInformation;
 use Laravel\Jetstream\Contracts\DeletesUsers;
 use Illuminate\Contracts\Auth\StatefulGuard;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
 class UsersController extends Controller
@@ -47,6 +48,19 @@ class UsersController extends Controller
             }
         } else {
             return response()->json(['message' => 'name and email are not present'], 400);
+        }
+    }
+
+    public function password_check(Request $request)
+    {
+        $request->validate([
+            'password' => 'required',
+        ]);
+
+        if (Hash::check($request->password, Auth::user()->password)) {
+            return  response()->json(['message' => 'password correct'], 200);
+        } else {
+            return  response()->json(['message' => 'wrong password'], 422);
         }
     }
 

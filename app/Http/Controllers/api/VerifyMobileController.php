@@ -18,12 +18,15 @@ class VerifyMobileController extends Controller
             try {
                 // send code
                 // TODO : test number phone formating
+                // test workflow_id : https://developer.vonage.com/en/verify/guides/workflows-and-events
+                // pin_expiry : default to : 300 seconds
                 $response = Nexmo::verify()->start([
                     'from' => 'LIKDOM',
                     'number' => $phone,
                     'brand'  => 'LIKDOM',
                     'lg' => 'fr-fr',
-                    'country' => 'MA'
+                    'country' => 'MA',
+                    'workflow_id' => 6
                 ]);
                 return  response()->json(['request_id' => $response->getRequestId()], 200);
             } catch (Exception $e) {
