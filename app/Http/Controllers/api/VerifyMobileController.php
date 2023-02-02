@@ -33,7 +33,7 @@ class VerifyMobileController extends Controller
                 return  response()->json(['error' => $e->getMessage()], 500);
             }
         } else {
-            return  response()->json(['message' => 'unvalid phone number'], 403);
+            return  response()->json(['message' => 'unvalid phone number'], 422);
         }
     }
 
@@ -78,13 +78,5 @@ class VerifyMobileController extends Controller
         } catch (Exception $e) {
             return  response()->json(['error' => $e->getMessage()], 500);
         }
-    }
-
-    public function verify_reset_password(Request $request)
-    {
-        // check code 
-        // access to reset screen 
-        // get the user by phone
-        // update password 
     }
 }

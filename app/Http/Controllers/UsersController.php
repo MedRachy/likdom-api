@@ -13,9 +13,13 @@ use Laravel\Jetstream\Contracts\DeletesUsers;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Nexmo\Laravel\Facade\Nexmo;
+use App\Actions\Fortify\PasswordValidationRules;
+use Exception;
 
 class UsersController extends Controller
 {
+    use PasswordValidationRules;
 
     public function show()
     {
@@ -61,6 +65,65 @@ class UsersController extends Controller
             return  response()->json(['message' => 'password correct'], 200);
         } else {
             return  response()->json(['message' => 'wrong password'], 422);
+        }
+    }
+
+    public function send_reset_code($phone)
+    {
+        if ($phone) {
+
+            $user = User::firstWhere('phone', $phone);
+            if (!$user) {
+                return  response()->json(['message' => "no user found with this phone number"], 422);
+            }
+            try {
+                // send code
+                // TODO : test number phone formating
+                // test workflow_id : https://developer.vonage.com/en/verify/guides/workflows-and-events
+                // pin_expiry : default to : 300 seconds
+                $response = Nexmo::verify()->start([
+                    'from' => 'LIKDOM',
+                    'number' => $phone,
+                    'brand'  => 'LIKDOM',
+                    'lg' => 'fr-fr',
+                    'country' => 'MA',
+                    'workflow_id' => 6
+                ]);
+                return  response()->json(['request_id' => $response->getRequestId()], 200);
+            } catch (Exception $e) {
+                return  response()->json(['error' => $e->getMessage()], 500);
+            }
+        } else {
+            return  response()->json(['message' => 'unvalid phone number'], 422);
+        }
+    }
+
+    public function verify_reset_password(Request $request)
+    {
+        $request->validate([
+            'phone' => 'required',
+            'request_id' => 'required',
+            'code' => ['required', 'string', 'size:4'],
+            'password' => $this->passwordRules(),
+        ]);
+
+        $user = User::firstWhere('phone', $request->phone);
+        if (!$user) {
+            return  response()->json(['message' => "no user found with this phone number"], 422);
+        }
+
+        try {
+            $result =  Nexmo::verify()->check($request->request_id, $request->code);
+            // A status value of 0 indicates that your user entered the correct code. 
+            if ($result['status'] == "0") {
+                $user->update([
+                    'password' => Hash::make($request->password),
+                ]);
+                $user->tokens()->delete();
+                return  response()->json(['message' => 'reset password successful' . $result["status"]], 200);
+            }
+        } catch (Exception $e) {
+            return  response()->json(['error' => $e->getMessage()], 500);
         }
     }
 

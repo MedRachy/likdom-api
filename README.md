@@ -8,7 +8,7 @@
 -   send verifaction code : api/send_code/{phone}
 -   verify phone number : api/verify_phone
 
-[] user account
+[x] user account
 
 -   get logged in user data : api/user
 -   update user info (name & email) : api/user/update
@@ -16,7 +16,8 @@
 -   password check : api/user/password-check
 -   update phone number : api/user/update-phone
 -   delete a user account : api/user/delete
--   reset password :
+-   send reset code by sms : api/send_reset_code
+-   reset password : api/verify_reset_password
 
 [x] Offers Pages
 

@@ -35,6 +35,10 @@ Route::get('/get_total_price/{nbr_hours}/{nbr_employees}', [SubscriptionsControl
 Route::get('/get_pro_total_price/{nbr_hours}/{nbr_employees}/{nbr_passages}', [SubscriptionsController::class, 'get_pro_total_price']);
 Route::get('/get_part_total_price/{nbr_hours}/{nbr_employees}/{nbr_passages}', [SubscriptionsController::class, 'get_part_total_price']);
 
+// reset password
+Route::get('/send_reset_code/{phone}', [UsersController::class, 'send_reset_code']);
+Route::post('/verify_reset_password', [UsersController::class, 'verify_reset_password']);
+
 Route::middleware('auth:sanctum')->group(function () {
     // user account
     Route::post('/logout', [AuthController::class, 'logout']);

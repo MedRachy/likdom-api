@@ -36,7 +36,7 @@ class CreateSubscriptionsTable extends Migration
             $table->string('city')->nullable();
             $table->string('adress')->nullable();
             $table->boolean('products')->nullable()->default(false);
-            $table->boolean('confirmed')->nullable()->default(false);
+            $table->boolean('confirmed')->nullable()->default(true);
             $table->string('status')->nullable()->default('pending');
             $table->smallInteger('nbr_months')->nullable();
             $table->float('price')->nullable();
