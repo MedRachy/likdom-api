@@ -13,6 +13,7 @@ return [
     |
     */
 
+    // 'default' => env('MAIL_DRIVER', 'smtp'),
     'default' => env('MAIL_MAILER', 'smtp'),
 
     /*
@@ -43,6 +44,10 @@ return [
             'password' => env('MAIL_PASSWORD'),
             'timeout' => null,
             'auth_mode' => null,
+        ],
+
+        'mailjet' => [
+            'transport' => 'mailjet',
         ],
 
         'ses' => [

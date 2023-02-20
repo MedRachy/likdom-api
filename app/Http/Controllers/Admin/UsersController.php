@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Hash;
 // use DataTables;
 
@@ -62,12 +63,13 @@ class UsersController extends Controller
             'password' => Hash::make($request['password']),
         ]);
 
+        event(new Registered($user));
+
         return redirect()->action(
             [UsersController::class, 'show'],
             $user->id
         );
     }
-
 
     public function show($id)
     {

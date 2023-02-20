@@ -15,7 +15,10 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Nexmo\Laravel\Facade\Nexmo;
 use App\Actions\Fortify\PasswordValidationRules;
+use App\Mail\WelcomeEmail;
 use Exception;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Mail;
 
 class UsersController extends Controller
 {
@@ -132,5 +135,12 @@ class UsersController extends Controller
         // $user = User::find(Auth::id());
 
         $deleter->delete(Auth::user()->fresh());
+    }
+
+    public function send_email(Request $request)
+    {
+        $user = User::where('email', $request->email)->first();
+
+        event(new Registered($user));
     }
 }

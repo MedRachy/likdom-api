@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fd35739525ea275ab32d7dfe713df774",
+    "content-hash": "72f01da3cfe48974d8782a793885b049",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3035,6 +3035,120 @@
                 }
             ],
             "time": "2022-11-25T18:57:19+00:00"
+        },
+        {
+            "name": "mailjet/mailjet-apiv3-php",
+            "version": "v1.5.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mailjet/mailjet-apiv3-php.git",
+                "reference": "747518ce0eebf64d27e9903441a255c85472a139"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mailjet/mailjet-apiv3-php/zipball/747518ce0eebf64d27e9903441a255c85472a139",
+                "reference": "747518ce0eebf64d27e9903441a255c85472a139",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "guzzlehttp/guzzle": "^7.4.4",
+                "php": "^7.2|^8.0",
+                "psr/http-client": "^1.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.4",
+                "php-coveralls/php-coveralls": "^2.0",
+                "phpunit/phpunit": "^8|^9"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Mailjet": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mailjet",
+                    "email": "dev@mailjet.com",
+                    "homepage": "https://dev.mailjet.com"
+                }
+            ],
+            "description": "PHP wrapper for the Mailjet API",
+            "homepage": "https://github.com/mailjet/mailjet-apiv3-php/",
+            "keywords": [
+                "Mailjet",
+                "api",
+                "email",
+                "php",
+                "v3"
+            ],
+            "support": {
+                "issues": "https://github.com/mailjet/mailjet-apiv3-php/issues",
+                "source": "https://github.com/mailjet/mailjet-apiv3-php/tree/v1.5.8"
+            },
+            "time": "2022-10-15T16:24:08+00:00"
+        },
+        {
+            "name": "mailjet/mailjet-swiftmailer",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mailjet/MailjetSwiftMailer.git",
+                "reference": "300eb931b8b36c7f55349b54a41bfd763a182bff"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mailjet/MailjetSwiftMailer/zipball/300eb931b8b36c7f55349b54a41bfd763a182bff",
+                "reference": "300eb931b8b36c7f55349b54a41bfd763a182bff",
+                "shasum": ""
+            },
+            "require": {
+                "mailjet/mailjet-apiv3-php": "^1.2",
+                "php": ">=7.0",
+                "swiftmailer/swiftmailer": "~6.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^5.7",
+                "symfony/config": ">=2.0|~3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Mailjet\\MailjetSwiftMailer\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Titouan BENOIT",
+                    "email": "titouan.benoit@gmx.fr",
+                    "homepage": "https://github.com/Nightbr"
+                },
+                {
+                    "name": "Mailjet API",
+                    "email": "api@mailjet.com",
+                    "homepage": "https://dev.mailjet.com/"
+                }
+            ],
+            "description": "A SwiftMailer transport implementation for Mailjet",
+            "homepage": "https://github.com/mailjet/MailjetSwiftMailer",
+            "keywords": [
+                "Mailjet",
+                "swiftmailer"
+            ],
+            "support": {
+                "issues": "https://github.com/mailjet/MailjetSwiftMailer/issues",
+                "source": "https://github.com/mailjet/MailjetSwiftMailer/tree/2.0.0"
+            },
+            "time": "2019-06-13T12:40:37+00:00"
         },
         {
             "name": "markbaker/complex",
@@ -7448,6 +7562,102 @@
                 }
             ],
             "time": "2022-07-20T13:00:38+00:00"
+        },
+        {
+            "name": "thedoctor0/laravel-mailjet-driver",
+            "version": "1.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/TheDoctor0/laravel-mailjet-driver.git",
+                "reference": "33cb7006817364ed46a944d9b90f50f01ba8953b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/TheDoctor0/laravel-mailjet-driver/zipball/33cb7006817364ed46a944d9b90f50f01ba8953b",
+                "reference": "33cb7006817364ed46a944d9b90f50f01ba8953b",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "~5.1|^6.0|^7.0|^8.0|^9.0",
+                "mailjet/mailjet-apiv3-php": "^1.2",
+                "mailjet/mailjet-swiftmailer": "^2.0"
+            },
+            "require-dev": {
+                "fzaninotto/faker": "~1.9",
+                "mockery/mockery": "~1.3",
+                "orchestra/testbench": "~3.5|^4.0|^5.0|^6.0|^7.0",
+                "phpunit/phpunit": "~6.5|^7.0|^8.0|^9.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Mailjet\\LaravelMailjet\\MailjetServiceProvider",
+                        "Mailjet\\LaravelMailjet\\MailjetMailServiceProvider"
+                    ],
+                    "aliases": {
+                        "Mailjet": "Mailjet\\LaravelMailjet\\Facades\\Mailjet"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Mailjet\\LaravelMailjet\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dawid Janik",
+                    "email": "dawid.janik95@gmail.com",
+                    "homepage": "https://github.com/TheDoctor0",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Gaetan Delbart",
+                    "email": "gaetan@moltencore.io",
+                    "homepage": "https://github.com/gagaXD"
+                },
+                {
+                    "name": "Titouan Benoit",
+                    "email": "titouan.benoit@gmx.fr",
+                    "homepage": "https://github.com/Nightbr"
+                },
+                {
+                    "name": "Mailjet API",
+                    "email": "api@mailjet.com",
+                    "homepage": "https://dev.mailjet.com/"
+                }
+            ],
+            "description": "Laravel mail driver package for Mailjet and wrapper for its API. Supports Laravel 5.x, 6.x, 7.x, 8.x and 9.x",
+            "homepage": "https://github.com/TheDoctor0/laravel-mailjet-driver",
+            "keywords": [
+                "Mailjet",
+                "driver",
+                "framework",
+                "laravel",
+                "mailjet API",
+                "transport",
+                "wrapper"
+            ],
+            "support": {
+                "issues": "https://github.com/TheDoctor0/laravel-mailjet-driver/issues",
+                "source": "https://github.com/TheDoctor0/laravel-mailjet-driver/tree/1.0.4"
+            },
+            "funding": [
+                {
+                    "url": "https://www.paypal.me/thedoctor0",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/thedoctor0",
+                    "type": "github"
+                }
+            ],
+            "time": "2022-02-09T15:36:54+00:00"
         },
         {
             "name": "tijsverkoyen/css-to-inline-styles",

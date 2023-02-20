@@ -10,7 +10,10 @@ use Illuminate\Validation\ValidationException;
 use Laravel\Jetstream\Jetstream;
 use App\Http\Resources\UserResource;
 use App\Actions\Fortify\PasswordValidationRules;
+use App\Mail\WelcomeEmail;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
@@ -54,6 +57,8 @@ class AuthController extends Controller
             // by default registration is after verification  
             'phone_verified' => true,
         ]);
+
+        event(new Registered($user));
 
         return [
             'access-token' =>  $user->createToken('access-token')->plainTextToken,

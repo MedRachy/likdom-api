@@ -6,6 +6,7 @@ use App\Http\Controllers\api\OffersController;
 use App\Http\Controllers\api\SubscriptionsController;
 use App\Http\Controllers\api\VerifyMobileController;
 use App\Http\Controllers\UsersController;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -39,6 +40,15 @@ Route::get('/get_part_total_price/{nbr_hours}/{nbr_employees}/{nbr_passages}', [
 Route::get('/send_reset_code/{phone}', [UsersController::class, 'send_reset_code']);
 Route::post('/verify_reset_password', [UsersController::class, 'verify_reset_password']);
 
+// get date and time
+Route::get('/get_date_time', function () {
+
+    $date = Carbon::today()->tz("Africa/Casablanca")->format('Y-m-d');
+    $time = Carbon::now()->tz("Africa/Casablanca")->format('H:i');
+
+    return  response()->json(['date' => $date, 'time' => $time], 200);
+});
+
 Route::middleware('auth:sanctum')->group(function () {
     // user account
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -60,3 +70,6 @@ Route::middleware('auth:sanctum')->group(function () {
     // contracts
     Route::post('/create/contract', [ContractsController::class, 'store']);
 });
+
+
+Route::post('/send_email', [UsersController::class, 'send_email']);
