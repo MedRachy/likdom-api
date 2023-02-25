@@ -9,46 +9,42 @@ use App\Http\Controllers\UsersController;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
-// auth & register
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/register', [AuthController::class, 'register']);
 
-// verify user phone number
-// Route::get('/send_code/{phone}', [VerifyMobileController::class, 'send_code']);
-// Route::post('/verify_phone', [VerifyMobileController::class, 'verify_phone']);
 
-// get offers 
-Route::get('/offers/pro', [OffersController::class, 'pro_offers']);
-Route::get('/offers/part', [OffersController::class, 'part_offers']);
+Route::middleware('isAppClient')->group(function () {
+    // auth & register
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/register', [AuthController::class, 'register']);
 
-// get total price 
-Route::get('/get_total_price/{nbr_hours}/{nbr_employees}', [SubscriptionsController::class, 'get_total_price']);
-Route::get('/get_pro_total_price/{nbr_hours}/{nbr_employees}/{nbr_passages}', [SubscriptionsController::class, 'get_pro_total_price']);
-Route::get('/get_part_total_price/{nbr_hours}/{nbr_employees}/{nbr_passages}', [SubscriptionsController::class, 'get_part_total_price']);
+    // verify user phone number
+    // Route::get('/send_code/{phone}', [VerifyMobileController::class, 'send_code']);
+    // Route::post('/verify_phone', [VerifyMobileController::class, 'verify_phone']);
 
-// reset password
-Route::post('/reset-password', [UsersController::class, 'reset_password']);
+    // get offers 
+    Route::get('/offers/pro', [OffersController::class, 'pro_offers']);
+    Route::get('/offers/part', [OffersController::class, 'part_offers']);
 
-// get date and time
-Route::get('/get_date_time', function () {
+    // get total price 
+    Route::get('/get_total_price/{nbr_hours}/{nbr_employees}', [SubscriptionsController::class, 'get_total_price']);
+    Route::get('/get_pro_total_price/{nbr_hours}/{nbr_employees}/{nbr_passages}', [SubscriptionsController::class, 'get_pro_total_price']);
+    Route::get('/get_part_total_price/{nbr_hours}/{nbr_employees}/{nbr_passages}', [SubscriptionsController::class, 'get_part_total_price']);
 
-    $date = Carbon::today()->tz("Africa/Casablanca")->format('Y-m-d');
-    $time = Carbon::now()->tz("Africa/Casablanca")->format('H:i');
+    // reset password
+    Route::post('/reset-password', [UsersController::class, 'reset_password']);
 
-    return  response()->json(['date' => $date, 'time' => $time], 200);
+    // get date and time
+    Route::get('/get_date_time', function () {
+
+        $date = Carbon::today()->tz("Africa/Casablanca")->format('Y-m-d');
+        $time = Carbon::now()->tz("Africa/Casablanca")->format('H:i');
+
+        return  response()->json(['date' => $date, 'time' => $time], 200);
+    });
 });
 
-Route::middleware('auth:sanctum')->group(function () {
+
+
+Route::middleware(['auth:sanctum', 'isAppClient'])->group(function () {
     // user account
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [UsersController::class, 'show']);
@@ -70,5 +66,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/create/contract', [ContractsController::class, 'store']);
 });
 
-
+// testing
 Route::post('/send_email', [UsersController::class, 'send_email']);
