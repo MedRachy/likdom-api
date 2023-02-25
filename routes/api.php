@@ -4,7 +4,7 @@ use App\Http\Controllers\api\AuthController;
 use App\Http\Controllers\api\ContractsController;
 use App\Http\Controllers\api\OffersController;
 use App\Http\Controllers\api\SubscriptionsController;
-use App\Http\Controllers\api\VerifyMobileController;
+// use App\Http\Controllers\api\VerifyMobileController;
 use App\Http\Controllers\UsersController;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Route;
@@ -24,8 +24,8 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 
 // verify user phone number
-Route::get('/send_code/{phone}', [VerifyMobileController::class, 'send_code']);
-Route::post('/verify_phone', [VerifyMobileController::class, 'verify_phone']);
+// Route::get('/send_code/{phone}', [VerifyMobileController::class, 'send_code']);
+// Route::post('/verify_phone', [VerifyMobileController::class, 'verify_phone']);
 
 // get offers 
 Route::get('/offers/pro', [OffersController::class, 'pro_offers']);
@@ -37,8 +37,7 @@ Route::get('/get_pro_total_price/{nbr_hours}/{nbr_employees}/{nbr_passages}', [S
 Route::get('/get_part_total_price/{nbr_hours}/{nbr_employees}/{nbr_passages}', [SubscriptionsController::class, 'get_part_total_price']);
 
 // reset password
-Route::get('/send_reset_code/{phone}', [UsersController::class, 'send_reset_code']);
-Route::post('/verify_reset_password', [UsersController::class, 'verify_reset_password']);
+Route::post('/reset-password', [UsersController::class, 'reset_password']);
 
 // get date and time
 Route::get('/get_date_time', function () {
@@ -55,7 +54,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [UsersController::class, 'show']);
     Route::put('/user/update', [UsersController::class, 'update']);
     Route::post('/user/update-password', [UsersController::class, 'update_password']);
-    Route::post('/user/update-phone', [VerifyMobileController::class, 'update_and_verify_phone']);
+    Route::put('/user/update-phone', [UsersController::class, 'update_phone']);
     Route::post('/user/delete', [UsersController::class, 'destroy']);
     Route::post('/user/password-check', [UsersController::class, 'password_check']);
     // subscriptions 

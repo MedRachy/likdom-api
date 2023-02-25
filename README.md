@@ -5,8 +5,6 @@
 -   login : api/login
 -   register : api/register
 -   logout : api/logout
--   send verifaction code : api/send_code/{phone}
--   verify phone number : api/verify_phone
 
 [x] user account
 
@@ -16,8 +14,7 @@
 -   password check : api/user/password-check
 -   update phone number : api/user/update-phone
 -   delete a user account : api/user/delete
--   send reset code by sms : api/send_reset_code
--   reset password : api/verify_reset_password
+-   reset password : api/reset-password
 
 [x] Offers Pages
 

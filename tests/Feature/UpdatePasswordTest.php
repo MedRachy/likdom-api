@@ -10,7 +10,7 @@ use Tests\TestCase;
 
 class UpdatePasswordTest extends TestCase
 {
-    use RefreshDatabase;
+    // use RefreshDatabase;
 
     public function test_api_password_can_be_updated()
     {
