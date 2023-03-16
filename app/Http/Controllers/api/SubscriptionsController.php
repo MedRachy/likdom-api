@@ -31,11 +31,23 @@ class SubscriptionsController extends Controller
         return new SubscriptionResource($subscriptions);
     }
 
-    public function get_all_concluded_sub()
+    public function get_all_reserv()
+    {
+        // get all pending or valid reservations :
+        $subscriptions = Subscription::where('user_id', Auth::id())
+            ->where('just_once', true)
+            ->where('status', '!=', 'concluded')
+            ->with('offer')
+            ->latest()
+            ->get();
+
+        return new SubscriptionResource($subscriptions);
+    }
+
+    public function get_all_concluded()
     {
         // get all pending or valid subscriptions :
         $subscriptions = Subscription::where('user_id', Auth::id())
-            ->where('just_once', false)
             ->where('status', 'concluded')
             ->with('offer')
             ->latest()

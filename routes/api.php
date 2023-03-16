@@ -55,11 +55,12 @@ Route::middleware(['auth:sanctum', 'isAppClient'])->group(function () {
     Route::post('/user/password-check', [UsersController::class, 'password_check']);
     // subscriptions 
     Route::get('/get/subscriptions', [SubscriptionsController::class, 'get_all_sub']);
-    Route::get('/get/subscriptions/concluded', [SubscriptionsController::class, 'get_all_concluded_sub']);
+    Route::get('/get/concluded', [SubscriptionsController::class, 'get_all_concluded']);
     Route::post('/create/subscription-with-contract', [SubscriptionsController::class, 'store_with_contract']);
     Route::post('/create/subscription', [SubscriptionsController::class, 'store_sub']);
     Route::get('/recap/{id}', [SubscriptionsController::class, 'recap']);
     // reservations
+    Route::get('/get/reservations', [SubscriptionsController::class, 'get_all_reserv']);
     Route::post('/create/reservation', [SubscriptionsController::class, 'store_reserv']);
     Route::put('/confirm/{id}', [SubscriptionsController::class, 'to_confirm']);
     // contracts
