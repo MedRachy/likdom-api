@@ -39,6 +39,19 @@ class AuthController extends Controller
         ];
     }
 
+    public function validate_register(Request $request)
+    {
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'phone' => ['required', 'string', 'size:9', 'unique:users'],
+            'password' => $this->passwordRules(),
+            'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
+        ]);
+
+        return response()->json(['message' => 'user validated'], 200);
+    }
+
     public function register(Request $request)
     {
         $request->validate([

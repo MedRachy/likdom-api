@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('isAppClient')->group(function () {
     // auth & register
     Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/validate-register', [AuthController::class, 'validate_register']);
     Route::post('/register', [AuthController::class, 'register']);
 
     // verify user phone number
@@ -50,6 +51,7 @@ Route::middleware(['auth:sanctum', 'isAppClient'])->group(function () {
     Route::get('/user', [UsersController::class, 'show']);
     Route::put('/user/update', [UsersController::class, 'update']);
     Route::post('/user/update-password', [UsersController::class, 'update_password']);
+    Route::get('/user/validate-phone', [UsersController::class, 'validate_phone']);
     Route::put('/user/update-phone', [UsersController::class, 'update_phone']);
     Route::post('/user/delete', [UsersController::class, 'destroy']);
     Route::post('/user/password-check', [UsersController::class, 'password_check']);

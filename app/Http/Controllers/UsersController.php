@@ -56,13 +56,13 @@ class UsersController extends Controller
             'phone' => ['required', 'size:9', Rule::unique('users')->ignore($user->id)],
         ]);
 
-        if($user) {
+        if ($user) {
             $user->update([
                 'phone_verified' => true,
                 'phone' => $request->phone
-             ]);
+            ]);
             return  response()->json(['success' => 'phone updated '], 200);
-        } 
+        }
         return  response()->json(['message' => "no user found with this phone number"], 422);
     }
 
@@ -76,6 +76,15 @@ class UsersController extends Controller
                 'message' => $ex->errors()
             ], 400);
         }
+    }
+
+    public function validate_phone(Request $request)
+    {
+        $request->validate([
+            'phone' => ['required', 'size:9', 'unique:users'],
+        ]);
+
+        return response()->json(['message' => 'phone validated'], 200);
     }
 
     public function password_check(Request $request)
