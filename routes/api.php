@@ -31,6 +31,7 @@ Route::middleware('isAppClient')->group(function () {
     Route::get('/get_part_total_price/{nbr_hours}/{nbr_employees}/{nbr_passages}', [SubscriptionsController::class, 'get_part_total_price']);
 
     // reset password
+    Route::get('/phone-check', [UsersController::class, 'phone_check']);
     Route::post('/reset-password', [UsersController::class, 'reset_password']);
 
     // get date and time

@@ -10,6 +10,7 @@ use Illuminate\Validation\ValidationException;
 use Laravel\Jetstream\Jetstream;
 use App\Http\Resources\UserResource;
 use App\Actions\Fortify\PasswordValidationRules;
+use App\Http\Requests\StoreUserRequest;
 use App\Mail\WelcomeEmail;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
@@ -39,29 +40,15 @@ class AuthController extends Controller
         ];
     }
 
-    public function validate_register(Request $request)
+    public function validate_register(StoreUserRequest $request)
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'phone' => ['required', 'string', 'size:9', 'unique:users'],
-            'password' => $this->passwordRules(),
-            'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
-        ]);
-
+        // The incoming form request is validated before the controller method is called
+        // $validated_data = $request->validated();
         return response()->json(['message' => 'user validated'], 200);
     }
 
-    public function register(Request $request)
+    public function register(StoreUserRequest $request)
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'phone' => ['required', 'string', 'size:9', 'unique:users'],
-            'password' => $this->passwordRules(),
-            'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
-        ]);
-
         $user = User::create([
             'name' => $request['name'],
             'email' => $request['email'],

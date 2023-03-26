@@ -13,9 +13,10 @@
 -   update user info (name & email) : api/user/update
 -   update user password : api/user/update-password
 -   password check : api/user/password-check
--   validate phone : api/user/validate-phone
+-   validate phone : api/user/validate-phone/{phone}
 -   update phone number : api/user/update-phone
 -   delete a user account : api/user/delete
+-   check phone exists : api/phone-check/{phone}
 -   reset password : api/reset-password
 
 [x] Offers Pages

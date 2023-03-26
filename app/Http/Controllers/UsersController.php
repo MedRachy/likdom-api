@@ -87,6 +87,15 @@ class UsersController extends Controller
         return response()->json(['message' => 'phone validated'], 200);
     }
 
+    public function phone_check(Request $request)
+    {
+        $request->validate([
+            'phone' => ['required', 'size:9', 'exists:users'],
+        ]);
+
+        return response()->json(['message' => 'phone exists'], 200);
+    }
+
     public function password_check(Request $request)
     {
         $request->validate([
