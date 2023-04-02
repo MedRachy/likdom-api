@@ -12,7 +12,7 @@ use Tests\TestCase;
 class ContractsTest extends TestCase
 {
 
-    // use RefreshDatabase;
+    use RefreshDatabase;
     /**
      * Contracts test.
      *

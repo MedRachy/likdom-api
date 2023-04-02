@@ -13,7 +13,6 @@ use Laravel\Jetstream\Contracts\DeletesUsers;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
-use Nexmo\Laravel\Facade\Nexmo;
 use Illuminate\Validation\Rule;
 use App\Actions\Fortify\PasswordValidationRules;
 use App\Mail\WelcomeEmail;
@@ -40,10 +39,10 @@ class UsersController extends Controller
             } catch (ValidationException $ex) {
                 return response()->json([
                     'message' => $ex->errors()
-                ], 400);
+                ], 422);
             }
         } else {
-            return response()->json(['message' => 'name and email are not present'], 400);
+            return response()->json(['message' => 'name and email are not present'], 422);
         }
     }
 
@@ -63,7 +62,7 @@ class UsersController extends Controller
             ]);
             return  response()->json(['success' => 'phone updated '], 200);
         }
-        return  response()->json(['message' => "no user found with this phone number"], 422);
+        return  response()->json(['message' => "no user found"], 404);
     }
 
     public function update_password(Request $request)
@@ -74,7 +73,7 @@ class UsersController extends Controller
         } catch (ValidationException $ex) {
             return response()->json([
                 'message' => $ex->errors()
-            ], 400);
+            ], 422);
         }
     }
 
@@ -112,7 +111,7 @@ class UsersController extends Controller
     public function reset_password(Request $request)
     {
         $request->validate([
-            'phone' => 'required',
+            'phone' => ['required', 'size:9'],
             'password' => $this->passwordRules(),
         ]);
 

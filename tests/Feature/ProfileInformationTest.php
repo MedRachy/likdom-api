@@ -10,17 +10,19 @@ use Tests\TestCase;
 
 class ProfileInformationTest extends TestCase
 {
-    // use RefreshDatabase;
+    use RefreshDatabase;
     use WithFaker;
 
-    public function test_api_update_user_name_email()
+    public function test_update_user_name_and_email()
     {
         Sanctum::actingAs($user = User::factory()->create());
 
         $newName = $this->faker->name();
         $newEmail = $this->faker->email();
 
-        $response = $this->putJson('/api/user/update', [
+        $response = $this->withHeaders([
+            'X-API-KEY' => env('CLIENT_API_KEY'),
+        ])->putJson('/api/user/update', [
             'email' => $newEmail,
             'name' => $newName,
         ]);
@@ -30,28 +32,32 @@ class ProfileInformationTest extends TestCase
         $this->assertEquals($newEmail, $user->fresh()->email);
     }
 
-    public function test_api_update_user_email_must_be_unique()
+    public function test_user_email_must_be_unique()
     {
-        Sanctum::actingAs($user = User::factory()->create());
+        Sanctum::actingAs(User::factory()->create());
         $Testuser = User::factory()->create();
         $emailTaken = $Testuser->email;
 
-        $response = $this->putJson('/api/user/update', [
+        $response = $this->withHeaders([
+            'X-API-KEY' => env('CLIENT_API_KEY'),
+        ])->putJson('/api/user/update', [
             'email' => $emailTaken,
             'name' => 'new-name',
         ]);
 
-        $response->assertStatus(400);
-        $response->assertJsonPath('message.email.0', 'The email has already been taken.');
+        $response->assertStatus(422)
+            ->assertJsonPath('message.email.0', 'The email has already been taken.');
     }
 
-    public function test_api_update_user_phone()
+    public function test_update_user_phone()
     {
         Sanctum::actingAs($user = User::factory()->create());
 
         $newphone = $this->faker->randomNumber(9);
 
-        $response = $this->putJson('/api/user/update-phone', [
+        $response = $this->withHeaders([
+            'X-API-KEY' => env('CLIENT_API_KEY'),
+        ])->putJson('/api/user/update-phone', [
             'phone' => $newphone
         ]);
 
@@ -59,16 +65,29 @@ class ProfileInformationTest extends TestCase
         $this->assertEquals($newphone, $user->fresh()->phone);
     }
 
-    public function test_api_update_user_phone_must_be_unique()
+    public function test_user_phone_must_be_valid()
     {
         Sanctum::actingAs($user = User::factory()->create());
         $Testuser = User::factory()->create();
         $phoneTaken = $Testuser->phone;
+        $phone_unvalid = '61122334455';
 
-        $response = $this->putJson('/api/user/update-phone', [
+        // phone unvalid : must be unique
+        $response = $this->withHeaders([
+            'X-API-KEY' => env('CLIENT_API_KEY'),
+        ])->putJson('/api/user/update-phone', [
             'phone' => $phoneTaken
         ]);
+        $response->assertStatus(422)
+            ->assertJsonValidationErrorFor('phone');
 
-        $response->assertStatus(422);
+        // phone unvalid : size:9
+        $response = $this->withHeaders([
+            'X-API-KEY' => env('CLIENT_API_KEY'),
+        ])->putJson('/api/user/update-phone', [
+            'phone' => $phone_unvalid
+        ]);
+        $response->assertStatus(422)
+            ->assertJsonValidationErrorFor('phone');
     }
 }

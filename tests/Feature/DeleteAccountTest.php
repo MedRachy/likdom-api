@@ -4,10 +4,10 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Laravel\Jetstream\Features;
-use Laravel\Jetstream\Http\Livewire\DeleteUserForm;
+// use Laravel\Jetstream\Features;
+// use Laravel\Jetstream\Http\Livewire\DeleteUserForm;
 use Laravel\Sanctum\Sanctum;
-use Livewire\Livewire;
+// use Livewire\Livewire;
 use Tests\TestCase;
 
 class DeleteAccountTest extends TestCase
@@ -20,7 +20,9 @@ class DeleteAccountTest extends TestCase
         $user = User::factory()->create();
         Sanctum::actingAs($user, ['*']);
 
-        $this->postJson('/api/user/delete');
+        $this->withHeaders([
+            'X-API-KEY' => env('CLIENT_API_KEY'),
+        ])->postJson('/api/user/delete');
 
         $this->assertNull($user->fresh());
     }

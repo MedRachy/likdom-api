@@ -28,6 +28,9 @@ class ReservationCreated implements ShouldBroadcast
         $this->type = $type;
     }
 
+    // If you would like to broadcast your event using the sync queue instead of the default queue driver,
+    //  you can implement the ShouldBroadcastNow interface instead of ShouldBroadcast
+
     /**
      * Get the channels the event should broadcast on.
      *
@@ -35,7 +38,11 @@ class ReservationCreated implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        // return new PrivateChannel('new-reservation-created');
-        return new Channel('reservation-created-channel');
+        return [
+            // public channel for admin listeners
+            new Channel('reservation-created-channel'),
+            // private channel for user notification
+            // new PrivateChannel('user-12')
+        ];
     }
 }

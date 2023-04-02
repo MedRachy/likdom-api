@@ -12,53 +12,59 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
 class SubscriptionsController extends Controller
 {
 
+    private function get_cached_data()
+    {
+        return  Cache::remember('user_' . Auth::id() . 'subscriptions', Carbon::now()->addDays(3), function () {
+            // get all pending or valid subscriptions :
+            return Subscription::where('user_id', Auth::id())
+                ->with('offer')
+                ->latest()
+                ->get();
+        });
+    }
+
     public function get_all_sub()
     {
-        // get all pending or valid subscriptions :
-        $subscriptions = Subscription::where('user_id', Auth::id())
-            ->where('just_once', false)
-            ->where('status', '!=', 'concluded')
-            ->with('offer')
-            ->latest()
-            ->get();
+        $subscriptions = $this->get_cached_data();
+
+        $subscriptions = $subscriptions->filter(function ($value) {
+            return !$value->just_once && $value->status != 'concluded';
+        });
 
         return new SubscriptionResource($subscriptions);
     }
 
     public function get_all_reserv()
     {
-        // get all pending or valid reservations :
-        $subscriptions = Subscription::where('user_id', Auth::id())
-            ->where('just_once', true)
-            ->where('status', '!=', 'concluded')
-            ->with('offer')
-            ->latest()
-            ->get();
+        $subscriptions = $this->get_cached_data();
 
-        return new SubscriptionResource($subscriptions);
+        $reservations = $subscriptions->filter(function ($value) {
+            return $value->just_once && $value->status != 'concluded';
+        });
+
+        return new SubscriptionResource($reservations);
     }
 
     public function get_all_concluded()
     {
-        // get all pending or valid subscriptions :
-        $subscriptions = Subscription::where('user_id', Auth::id())
-            ->where('status', 'concluded')
-            ->with('offer')
-            ->latest()
-            ->get();
+        $subscriptions = $this->get_cached_data();
+
+        $subscriptions = $subscriptions->filter(function ($value) {
+            return $value->status == 'concluded';
+        });
 
         return new SubscriptionResource($subscriptions);
     }
 
     public function store_sub(Request $request)
     {
-
         // validation 
         $request->validate([
             'offer_id' => 'required',
@@ -92,6 +98,9 @@ class SubscriptionsController extends Controller
         // run event 
         event(new ReservationCreated($subscription->id, 'abonmt'));
 
+        // delete user cached subscriptions 
+        Cache::forget('user_' . Auth::id() . 'subscriptions');
+
         return new SubscriptionResource($subscription);
     }
 
@@ -124,6 +133,9 @@ class SubscriptionsController extends Controller
 
         // run event 
         event(new ReservationCreated($reservation->id, 'reserv'));
+
+        // delete user cached subscriptions 
+        Cache::forget('user_' . Auth::id() . 'subscriptions');
 
         return new SubscriptionResource($reservation);
     }
@@ -270,5 +282,20 @@ class SubscriptionsController extends Controller
         } else {
             return  response()->json(['message' => 'unvalid inputs'], 422);
         }
+    }
+
+    public function get_notification_state()
+    {
+        $state = false;
+        // get cached data  
+        $subscriptions = $this->get_cached_data();
+        // check for pending subscriptions 
+        foreach ($subscriptions as $subscription) {
+            if ($subscription->status === 'pending') {
+                $state = true;
+                break;
+            }
+        }
+        return response()->json(['state' => $state], 200);
     }
 }

@@ -8,6 +8,7 @@ use App\Models\Employee;
 use Illuminate\Http\Request;
 use App\Models\Subscription;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 
 class AbonmtController extends Controller
 {
@@ -186,6 +187,9 @@ class AbonmtController extends Controller
         // for testing
         event(new ReservationCreated($subscription->id, 'abonmt'));
 
+        // delete user cached subscriptions 
+        Cache::forget('user_' . $subscription->user_id . 'subscriptions');
+
         return redirect()->action(
             [AbonmtController::class, 'show'],
             $subscription->id
@@ -273,6 +277,9 @@ class AbonmtController extends Controller
                 $subscription->employees()->detach();
             }
         }
+        // delete user cached subscriptions 
+        Cache::forget('user_' . $subscription->user_id . 'subscriptions');
+
         return redirect()->action(
             [AbonmtController::class, 'show'],
             $id
@@ -285,6 +292,9 @@ class AbonmtController extends Controller
         // remove employee from subscription_employee
         $subscription->employees()->detach();
         $subscription->delete();
+        // delete user cached subscriptions 
+        Cache::forget('user_' . $subscription->user_id . 'subscriptions');
+
         return redirect()->action([AbonmtController::class, 'index']);
     }
 }

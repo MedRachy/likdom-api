@@ -2,27 +2,30 @@
 
 namespace Tests\Feature;
 
-use App\Providers\RouteServiceProvider;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Laravel\Fortify\Features;
-use Laravel\Jetstream\Jetstream;
 use Illuminate\Testing\Fluent\AssertableJson;
+use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class RegistrationTest extends TestCase
 {
     use RefreshDatabase;
+    use WithFaker;
 
-    public function test_api_new_user_can_register()
+    public function test_new_user_can_register()
     {
+        $name =  $this->faker->name();
 
-        $response = $this->postJson('/api/register', [
-            'name' => 'TestUser',
-            'phone' => '644320021',
-            'email' => 'TestUser@example.com',
+        $response = $this->withHeaders([
+            'X-API-KEY' => env('CLIENT_API_KEY'),
+        ])->postJson('/api/register', [
+            'name' =>  $name,
+            'phone' =>  '644320000',
+            'email' =>  $this->faker->email(),
             'password' => 'password',
             'password_confirmation' => 'password',
-            'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature(),
+            // 'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature(),
         ]);
 
         $response->assertOk(200)
@@ -31,7 +34,30 @@ class RegistrationTest extends TestCase
                 $json->has('access-token')
                     ->has('user')
             )
-            ->assertJsonPath('user.name', 'TestUser');
+            ->assertJsonPath('user.name', $name);
         // $this->assertAuthenticated('sanctum');
+    }
+
+    public function test_check_register_validation()
+    {
+        $user = User::factory()->create([
+            'phone' => '644320011',
+            'email' => 'email_test@teste.com'
+        ]);
+
+        $response = $this->withHeaders([
+            'X-API-KEY' => env('CLIENT_API_KEY'),
+        ])->postJson('/api/register', [
+            'name' =>   $this->faker->name(),
+            'phone' =>  $user->phone,
+            'email' =>  $user->email,
+            'password' => 'password',
+            'password_confirmation' => 'wrong-password',
+            // 'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature(),
+        ]);
+        $response->assertStatus(422)
+            ->assertJsonValidationErrorFor('phone')
+            ->assertJsonValidationErrorFor('email')
+            ->assertJsonValidationErrorFor('password');
     }
 }

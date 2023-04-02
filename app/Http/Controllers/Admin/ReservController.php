@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Employee;
 use App\Models\Subscription;
+use Illuminate\Support\Facades\Cache;
 
 class ReservController extends Controller
 {
@@ -157,6 +158,9 @@ class ReservController extends Controller
         // for testing
         event(new ReservationCreated($reservation->id, 'reserv'));
 
+        // delete user cached subscriptions 
+        Cache::forget('user_' . $reservation->user_id . 'subscriptions');
+
         return redirect()->action(
             [ReservController::class, 'show'],
             $reservation->id
@@ -228,6 +232,9 @@ class ReservController extends Controller
                 $reserv->employees()->detach();
             }
         }
+        // delete user cached subscriptions 
+        Cache::forget('user_' . $reserv->user_id . 'subscriptions');
+
         return redirect()->action(
             [ReservController::class, 'show'],
             $id
@@ -240,6 +247,9 @@ class ReservController extends Controller
         // remove employee from reservation_employee
         $reserv->employees()->detach();
         $reserv->delete();
+        // delete user cached subscriptions 
+        Cache::forget('user_' . $reserv->user_id . 'subscriptions');
+
         return redirect()->action([ReservController::class, 'index']);
     }
 }
