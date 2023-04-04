@@ -80,6 +80,22 @@
                     <a class="nav-link" href="{{ route('admin.contracts.create') }}">Ajouter</a>
                 </nav>
             </div>
+            {{-- Offers --}}
+            {{-- <div class="sb-sidenav-menu-heading">Offres</div> --}}
+            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseOffers"
+                aria-expanded="false" aria-controls="collapseOffers">
+                <div class="sb-nav-link-icon"><i class="fa fa-gift"></i></div>
+                Offres
+                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+            </a>
+            <div class="collapse" id="collapseOffers" aria-labelledby="headingOne"
+                data-bs-parent="#sidenavAccordion">
+                <nav class="sb-sidenav-menu-nested nav">
+                    <a class="nav-link" href="{{ route('admin.offer.index') }}">Liste</a>
+
+                    <a class="nav-link" href="{{ route('admin.offer.create') }}">Ajouter</a>
+                </nav>
+            </div>
             {{-- charts --}}
             <a class="nav-link" href="{{ route('admin.charts') }}">
                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>

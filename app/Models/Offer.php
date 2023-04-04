@@ -19,7 +19,8 @@ class Offer extends Model
         'name',
         'description',
         'nbr_passages',
-        'start_price'
+        'start_price',
+        'user_type'
     ];
 
     // an offer have many subscriptions

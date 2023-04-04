@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\EmplyController;
 use App\Http\Controllers\Admin\ReservController;
 use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\Admin\ContraController;
+use App\Http\Controllers\Admin\OfferController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -34,6 +35,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'isAdmin']], functio
     Route::resource('/emply', EmplyController::class, ['names' => 'admin.emply']);
     Route::resource('/users', UsersController::class, ['names' => 'admin.users']);
     Route::resource('/contracts', ContraController::class, ['names' => 'admin.contracts']);
+    Route::resource('/offers', OfferController::class, ['names' => 'admin.offer']);
 
     /* -------- Admins list ------- */
     Route::get('/administrateurs', [UsersController::class, 'admins'])->name('admin.users.admins');
