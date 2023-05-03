@@ -134,9 +134,10 @@ class UsersController extends Controller
         $deleter->delete(Auth::user()->fresh());
     }
 
-    public function send_email(Request $request)
+    public function send_email()
     {
-        $user = User::where('email', $request->email)->first();
+
+        $user = User::find(1);
 
         event(new Registered($user));
     }
