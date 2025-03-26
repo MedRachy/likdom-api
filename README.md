@@ -1,4 +1,4 @@
-# Backend API for Likdom's mobile application and admin panel.
+# Likdom Backend: Mobile API Service & Admin Panel Web Application.
 [Hackathon Winner – Digital Solutions for Domestic Services in Morocco.](https://www.linkedin.com/posts/medrachy_domesticemployees-morocco-hackathon-activity-6810628329696198657-QjYo?utm_source=share&utm_medium=member_desktop&rcm=ACoAACZzI_MBNDvXyL2a6XSIMZfEihlD7pdJ_8Y)
 ## 📌 Project Overview
 Likdom is a startup aimed at driving the digitization of domestic services through a mobile application designed for both individuals and professionals. Initially focusing on cleaning services, the platform plans to expand to include other domestic services in the future.
@@ -20,11 +20,11 @@ Likdom is a startup aimed at driving the digitization of domestic services throu
   - Analytics Dashboard: Render graphical charts with filter options using Chart.js for insightful data visualization.
 
 ## 🛠 Tech Stack
-**Backend Framework**: Laravel 8  
-**Database**: MySQL | Redis (Caching)  
-**Mobile Frontend**: Flutter 3.x  
-**Admin Panel**: Laravel with Bootsrap  
-**APIs**: RESTful with JSON responses  
+- **Backend Framework**: Laravel 8  
+- **Database**: MySQL | Redis (Caching)  
+- **Mobile Frontend**: Flutter 3.x  
+- **Admin Panel**: Laravel with Bootsrap  
+- **APIs**: RESTful with JSON responses  
 
 ## 📚 API Documentation
 [![Postman](https://img.shields.io/badge/Postman-API%20Documentation-FF6C37?style=flat&logo=postman)](https://documenter.getpostman.com/view/1635876/2s8ZDR9RvG)
