@@ -41,4 +41,7 @@ Likdom is a startup aimed at driving the digitization of domestic services throu
 - **Chart.js**:  [Chart.js](https://www.chartjs.org/)
 - **DataTables**:  [DataTables](https://datatables.net/)
 
-## Mobile App Screensshots 
+## Screenshots 
+![Untitled](https://github.com/MedRachy/likdom-api/blob/master/screenshots/1.PNG)
+![Untitled](https://github.com/MedRachy/likdom-api/blob/master/screenshots/2.PNG)
+![Untitled](https://github.com/MedRachy/likdom-api/blob/master/screenshots/3.PNG)
